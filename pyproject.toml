@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quack"
+version = "0.1.0"
+description = "Uma biblioteca de exemplo"
+authors = [
+    { name="Gilberto Barbosa", email="medeiros.gilberto.br@gmail.com" }
+]
+readme = "README.md"
+license = { text = "MIT" }
+dependencies = []
+requires-python = ">=3.8"
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov"]

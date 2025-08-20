@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+quack/__init__.py
+quack/core.py
+quack.egg-info/PKG-INFO
+quack.egg-info/SOURCES.txt
+quack.egg-info/dependency_links.txt
+quack.egg-info/requires.txt
+quack.egg-info/top_level.txt
+quack/datasets/__init__.py
+quack/datasets/_data_loaders.py
+quack/datasets/_uci_datasets.py
+quack/utils/__init__.py
+quack/utils/_file_manager.py
+tests/test_core.py
+tests/test_file_manager.py
