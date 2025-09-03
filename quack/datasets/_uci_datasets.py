@@ -32,3 +32,33 @@ UCI_BINARY_DATASETS = [
     'wine-q-white',
     'yeast',
 ]
+
+#################
+### CONSTANTS ###
+#################
+
+# Identifiers used on UCI API to retrieve the datasets
+IDENTIFIERS = {
+    "acute.a": 184, "acute.b": 184,
+    "balance.1": 12, "balance.2": 12, "balance.3": 12,
+    "breast-cancer": 15,
+    "cmc.1": 30, "cmc.2": 30, "cmc.3": 30,
+    # "ctg.1": , "ctg.2": , "ctg.3": , "german": ,  # not python importable
+    "haberman": 43,
+    "ionosphere": 52,
+    "iris.1": 53, "iris.2": 53, "iris.3": 53,
+    "mammographic": 161,
+    "pageblocks.5": 78,
+    # "semeion": ,  # not python importable
+    "sonar": 151,
+    "spambase": 94,
+    "spectf": 96,
+    "tictactoe": 101,
+    "transfusion": 176,
+    "wdbc": 17,
+    "wine.1": 109, "wine.2": 109, "wine.3": 109,
+    "wine-q-red": 186, "wine-q-white": 186,
+    "yeast": 110,
+}
+
+
