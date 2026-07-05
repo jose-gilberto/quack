@@ -1,0 +1,14 @@
+site_name: quack
+site_description: Quantification Kit for Python
+theme:
+  name: readthedocs
+
+nav:
+  - Home: index.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]

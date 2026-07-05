@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from quack.utils import get_quack_home, download_file
+from src.quack.utils import get_quack_home, download_file
 
 
 REVIEWS_SENTIMENT_DATASETS: list[str] = ['hp', 'kindle', 'imdb']

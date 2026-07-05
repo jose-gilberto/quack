@@ -1,4 +1,4 @@
-from quack import hello
+from quack import get_version
 
-def test_hello():
-    assert hello() == "Hello, world from nome_da_biblioteca!"
+def test_get_version():
+    assert get_version() == "0.1.0"
