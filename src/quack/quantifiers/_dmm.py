@@ -77,10 +77,6 @@ class FormanMM(BaseCalibratedQuantifier):
     h_test, _ = np.histogram(pos_probs_test, bins=self.bins_)
     # h_test represents the agg distribution observed in the test set
     h_test = h_test / (np.sum(h_test) + 1e-12)
-
-    # =====================================================================
-    # CONVEX OPTIMIZATION (CVXPY)
-    # =====================================================================
     
     # mixture matrix (M) stores the calibration columns (D-, D+)
     # (n_bins, 2)
@@ -121,103 +117,161 @@ class FormanMM(BaseCalibratedQuantifier):
 
 class GAC(BaseCalibratedQuantifier):
   """
-  GAC (Generalized Area Correction).
-  
-  Implementação alinhada ao framework QFY e formulação original de Bella et al.
-  Diferente do FormanMM, o GAC suporta problemas multiclasse concatenando os 
-  histogramas de todas as colunas de probabilidade e resolve a otimização 
-  utilizando a norma L1 (distância de Manhattan).
-  """
-  _strictly_binary = False  # GAC suporta nativamente 2, 3 ou mais classes.
+  GAC (Generalized Adjusted Classify and Count).
 
-  def __init__(self, classifier=None, cv=5, n_bins=10):
+  GAC extends the multiclass problem for ACC (Adjusted Classify and Count).
+  Works with hard predictions (crisp labels via predict call) to build the
+  confusion matrix CxC normalized.
+
+  Refs
+  [1] Aykut Firat. Unified framework for quantification.
+      arXiv preprint arXiv:1606.00868, 2016.
+  """
+  _strictly_binary = False
+
+  def __init__(self, classifier: BaseEstimator = None, cv: int = 5):
     super().__init__(classifier=classifier, cv=cv)
-    self.n_bins = n_bins
+
+  def _get_oof_method(self) -> str:
+    return "predict"
+
+  def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
+    """
+    Build the Confusion Matrix (M).
+    Each column j represents the distribution of predictions given that the real class
+    is c_j. The resulting matrix have the shape (n_classes, n_classes).
+    """
+    n_classes = self.n_classes_
+    self.cm_ = np.zeros((n_classes, n_classes))
+
+    for j, true_class in enumerate(self.classes_):
+      # we isolate the instances where the validation ground truth is the class 'true class'
+      mask = (y_true_oof == true_class)
+      total_true = np.sum(mask)
+      
+      if total_true > 0:
+        for i, pred_class in enumerate(self.classes_):
+          # M[i, j] = P(Y_pred = c_i | Y_true = c_j)
+          self.cm_[i, j] = np.sum(y_pred_oof[mask] == pred_class) / total_true
+      else:
+        # guardrail for cases where a rare class isnt found in the fold
+        self.cm_[:, j] = 1.0 / n_classes
+
+  def _quantify(self, X: np.ndarray) -> np.ndarray:
+    if not hasattr(self.classifier_, "predict"):
+      raise AttributeError(
+        f"The base classifier '{self.classifier_.__class__.__name__}' "
+        f"do not have the method 'predict' required for GAC."
+      )
+
+    
+    y_pred_test = self.classifier_.predict(X) # direct count for test bag (using CC)
+    # prevalence vector
+    p_cc = np.zeros(self.n_classes_)
+    total_test = len(y_pred_test)
+    for i, pred_class in enumerate(self.classes_):
+      p_cc[i] = np.sum(y_pred_test == pred_class) / (total_test + 1e-12)
+
+    # alpha represent the vector of real prevalences adjusted that
+    # we want to estimate
+    alpha = cp.Variable(self.n_classes_)
+
+    # GAC solve by minimum squares (L2) the linear sistem M @ alpha = p_cc
+    objective = cp.Minimize(cp.sum_squares(p_cc - self.cm_ @ alpha))
+
+    # restrictions are 1-the sum must be 1.0, and 2-none can be negative
+    constraints = [cp.sum(alpha) == 1, alpha >= 0]
+
+    problem = cp.Problem(objective, constraints)
+    problem.solve()
+    
+    p_adjusted = alpha.value
+    if p_adjusted is None:
+      # fallback if the solver didnt solve the problem
+      return self.train_prevalence_.copy()
+
+    # handle noise in p_adjusted
+    p_adjusted = np.clip(p_adjusted, 0.0, 1.0)
+    p_adjusted /= np.sum(p_adjusted)
+
+    return p_adjusted
+
+
+class GPAC(BaseCalibratedQuantifier):
+  """
+  GPAC (Generalized Probabilistic Adjusted Classify and Count).
+  
+  GPAC is the multiclass extension for PACC (Probabilistic Adjusted Classify and Count)
+  Its replace the confusion matrix built with hard labels with the mean of predicted 
+  probabilities, avoiding the threshold impact that hard labels have.
+  
+  Refs
+  [1] Aykut Firat. Unified framework for quantification.
+      arXiv preprint arXiv:1606.00868, 2016.
+  """
+  _strictly_binary = False
+
+  def __init__(self, classifier: BaseEstimator = None, cv: int = 5):
+      super().__init__(classifier=classifier, cv=cv)
 
   def _get_oof_method(self) -> str:
     return "predict_proba"
 
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
     """
-    PASSO 1 DO QFY (MULTICLASSE): Construção da Matriz de Perfis de Distribuição.
-    Para cada classe real, geramos um vetor característico concatenando os 
-    histogramas de probabilidade de cada uma das colunas do classificador.
+    Build the probabilities confusion matrix (M)
+    Each element M[i, j] stores the mean of predicted probabilities for class i given
+    that the real ground truth is the class j.
+    Shape of M is (n_classes, n_classes)
     """
-    self.bins_ = np.linspace(0.0, 1.0, self.n_bins + 1)
-    calib_cols = []
+    n_classes = self.n_classes_
+    self.cm_ = np.zeros((n_classes, n_classes))
 
-    # Varre cada classe presente no conjunto de treinamento
-    for c_idx, c in enumerate(self.classes_):
-      # Filtra as predições fora do fold pertencentes estritamente à classe real 'c'
-      preds_c = y_pred_oof[y_true_oof == c]
+    # loop for each real class j (columns for the matrix)
+    for j, true_class in enumerate(self.classes_):
+      # isolate the scores for each instance that real belong to that class (true class)
+      mask = (y_true_oof == true_class)
+      total_true = np.sum(mask)
       
-      class_hist_components = []
-      # EQUIVALENTE AO QFY MULTICLASSE: Varre todas as colunas de probabilidade preditas
-      for col in range(self.n_classes_):
-        h, _ = np.histogram(preds_c[:, col], bins=self.bins_)
-        # Normalização local do bin para representar a densidade de probabilidade da coluna
-        h = h / (np.sum(h) + 1e-12)
-        class_hist_components.append(h)
-      
-      # Concatena os histogramas de todas as colunas em um único vetor longo de tamanho (n_classes * n_bins)
-      super_histogram_c = np.concatenate(class_hist_components)
-      calib_cols.append(super_histogram_c)
-
-    # EQUIVALENTE AO ARTIGO: Matriz M de calibração global. 
-    # Dimensões: (n_classes * n_bins, n_classes)
-    self.calib_matrix_ = np.column_stack(calib_cols)
+      if total_true > 0:
+        # loop each prob column i (rows for M)
+        for i in range(n_classes):
+          # M[i, j] = mean( P(Y_pred = c_i | Y_true = c_j) )
+          self.cm_[i, j] = np.mean(y_pred_oof[mask, i])
+      else:
+        # guardrail: uniform att in case that the class do not appear in this fold
+        self.cm_[:, j] = 1.0 / n_classes
 
   def _quantify(self, X: np.ndarray) -> np.ndarray:
     if not hasattr(self.classifier_, "predict_proba"):
       raise AttributeError(
-        f"O classificador base '{self.classifier_.__class__.__name__}' "
-        f"não possui o método 'predict_proba' exigido pelo GAC."
+        f"The base classifier '{self.classifier_.__class__.__name__}' "
+        f"do not have the method 'predict_proba' required for GPAC."
       )
 
-    # PASSO 2 DO QFY: Captura do perfil misto do lote de teste
+    # step-2 calculate the prevalence probability in this test bag using PCC
     y_pred_test = self.classifier_.predict_proba(X)
     
-    test_hist_components = []
-    # Constrói o super-histograma do teste seguindo o exato mesmo espelhamento do treino
-    for col in range(self.n_classes_):
-      h, _ = np.histogram(y_pred_test[:, col], bins=self.bins_)
-      h = h / (np.sum(h) + 1e-12)
-      test_hist_components.append(h)
-    
-    # Vetor contínuo observado no teste. Dimensão: (n_classes * n_bins)
-    h_test = np.concatenate(test_hist_components)
+    # Array containing the mean probabilities predicted for each class in the test bag
+    # p_pcc = [ mean(P(c_0)), mean(P(c_1)), ..., mean(P(c_C)) ]
+    p_pcc = np.mean(y_pred_test, axis=0)
 
-    # =====================================================================
-    # ENGINE DE CONVEX OPTIMIZATION (CVXPY) - FORMULAÇÃO NORMA L1 DO GAC
-    # =====================================================================
-    
-    # 1. Vetor de Decisão (alpha): Contém as prevalências latentes para cada classe
-    # Dimensão correspondente ao número total de classes do problema (C)
+    # alpha is the decision array containing the real prevalences adjusted (C,)
     alpha = cp.Variable(self.n_classes_)
 
-    # 2. Função Objetivo Estrita do GAC: Minimizar a Norma L1 (Erro Absoluto)
-    # No CVXPY, cp.norm(..., 1) calcula: Sum( | h_test - (M @ alpha) | )
-    # Essa formulação matemática caracteriza o método "Generalized Area Correction"
-    objective = cp.Minimize(cp.norm(h_test - self.calib_matrix_ @ alpha, 1))
+    # GPAC solves using minimum squares (L2) the linear system M @ alpha = p_pcc
+    objective = cp.Minimize(cp.sum_squares(p_pcc - self.cm_ @ alpha))
 
-    # 3. Restrições do Simplex de Probabilidade Multiclasse
-    # Garante que a soma de todas as prevalências estimadas seja exatamente 1.0 
-    # e nenhuma classe receba atribuição de prevalência negativa.
+    # restrictions: sum of prevalences must be 1.0 and only have positive values
     constraints = [cp.sum(alpha) == 1, alpha >= 0]
-
-    # 4. Resolução Convexa via Solver
     problem = cp.Problem(objective, constraints)
     problem.solve()
 
-    # Extração do vetor de prevalências ótimas ajustadas
     p_adjusted = alpha.value
 
-    # --- Salvaguardas e Estabilização Numérica ---
     if p_adjusted is None:
-        # Fallback seguro para as proporções originais do treino caso o solver falhe
-        return self.train_prevalence_.copy()
+      return self.train_prevalence_.copy()
 
-    # Sanatização de resíduos numéricos infinitesimais de ponto flutuante
     p_adjusted = np.clip(p_adjusted, 0.0, 1.0)
     p_adjusted /= np.sum(p_adjusted)
 
