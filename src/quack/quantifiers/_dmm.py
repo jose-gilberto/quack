@@ -276,3 +276,100 @@ class GPAC(BaseCalibratedQuantifier):
     p_adjusted /= np.sum(p_adjusted)
 
     return p_adjusted
+
+
+class HDy(BaseCalibratedQuantifier):
+  """
+  HDy (Hellinger Distance on y-scores).
+  
+  minimizes the hellinger distance between probabilities histograms on tests bags
+  and the linear combinations of validations.
+  """
+  _strictly_binary = False
+
+  def __init__(self, classifier=None, cv=5, n_bins=10):
+    super().__init__(classifier=classifier, cv=cv)
+    self.n_bins = n_bins
+
+  def _get_oof_method(self) -> str:
+    return "predict_proba"
+
+  def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
+    """
+    Build the calibration matrix of scores (M).
+    For each real class, we create a histogram of the predicted probabilities.
+    In a multi-class scenario, we concatenate the histograms of all columns of probabilities.
+    """
+    # fixed bins in the space of probs[0, 1]
+    self.bin_edges_ = np.linspace(0.0, 1.0, self.n_bins + 1)
+    
+    calib_cols = []
+    # loop over each real class j (columns of M)
+    for j, true_class in enumerate(self.classes_):
+      mask = (y_true_oof == true_class)
+      class_components = []
+      
+      if np.sum(mask) > 0:
+        # loop over each column of pred probs c
+        for c in range(self.n_classes_):
+          scores_c = y_pred_oof[mask, c]
+          h, _ = np.histogram(scores_c, bins=self.bin_edges_)
+          # local histogram normalization for each column
+          h = h / (np.sum(h) + 1e-12)
+          class_components.append(h)
+      else:
+        # guardrail uniform if a class do not appear in the validation fold
+        for _ in range(self.n_classes_):
+          class_components.append(np.ones(self.n_bins) / self.n_bins)
+
+      # concatenate the histograms of all probabilities of class j
+      # result (n_classes * n_bins, )
+      super_vector_j = np.concatenate(class_components)
+      calib_cols.append(super_vector_j)
+
+    # Matrix M (n_classes * n_bins, n_classes)
+    self.calib_matrix_ = np.column_stack(calib_cols)
+
+  def _quantify(self, X: np.ndarray) -> np.ndarray:
+    if not hasattr(self.classifier_, "predict_proba"):
+      raise AttributeError(
+        f"The base classifier '{self.classifier_.__class__.__name__}' "
+        f"do not have the method 'predict_proba' required for HDy."
+      )
+
+    y_pred_test = self.classifier_.predict_proba(X)
+    
+    test_components = []
+    for c in range(self.n_classes_):
+      h, _ = np.histogram(y_pred_test[:, c], bins=self.bin_edges_)
+      h = h / (np.sum(h) + 1e-12)
+      test_components.append(h)
+        
+    # continuous vector for test (n_classes * n_bins,)
+    h_test = np.concatenate(test_components)
+
+
+    alpha = cp.Variable(self.n_classes_)
+
+    # Transformação matemática crucial para conformidade DCP:
+    # minimize Hellinger is equivalent to maximize the afinity (Bhattacharyya)
+    # sum(sqrt(h_test) * sqrt(M @ alpha))
+    predicted_mixture = self.calib_matrix_ @ alpha
+    
+    objective = cp.Maximize(
+      cp.sum(cp.multiply(np.sqrt(h_test), cp.sqrt(predicted_mixture)))
+    )
+    constraints = [cp.sum(alpha) == 1, alpha >= 0]
+
+    problem = cp.Problem(objective, constraints)
+    problem.solve()
+
+    p_adjusted = alpha.value
+
+    if p_adjusted is None:
+      return self.train_prevalence_.copy()
+
+    p_adjusted = np.clip(p_adjusted, 0.0, 1.0)
+    p_adjusted /= np.sum(p_adjusted)
+
+    return p_adjusted

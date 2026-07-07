@@ -131,7 +131,7 @@ class ReadMe(BaseEstimator, QuantifierMixin):
         American Journal of Political Science, 54(1):229-247, 2010.
 
   """
-  def __init__(self, n_bins=10):
+  def __init__(self, n_bins: int = 10):
     self.n_bins = n_bins
 
   def fit(self, X: np.ndarray, y: np.ndarray):
