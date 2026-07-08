@@ -1,141 +1,562 @@
 import numpy as np
+from typing import TypeVar
+from sklearn.base import BaseEstimator, clone
+from sklearn.utils.validation import check_X_y, check_is_fitted, check_array
+from sklearn.linear_model import LogisticRegression
 from quack.quantifiers.base import BaseQuantifier, BaseCalibratedQuantifier
-from sklearn.metrics import confusion_matrix
 
+T_CC = TypeVar('T_CC', bound='CC')
+T_PCC = TypeVar('T_PCC', bound='PCC')
+T_ACC = TypeVar('T_ACC', bound='ACC')
+T_PACC = TypeVar('T_PACC', bound='PACC')
 
 class CC(BaseQuantifier):
-  """Basic Classify & Count method.
-  """
+  """Classify and Count (CC) quantifier.
+  
+  The CC method is the simplest baseline in quantification. It works by
+  classifying all unlabeled instances in the test bag using a hard (crisp)
+  classifier, and then computing the relative frequency (prevalence) of
+  each class based on those predictions.
+  
+  Parameters
+  ----------
+  classifier : estimator object, default = None
+    The classifier to be used as the base for quantification.
+    If None, an instance of `LogisticRegression()` will be created.
+    
+  Attributes
+  ----------
+  classes_ : ndarray of shape (n_classes,)
+    The distinct class labels found during training.
+  
+  n_classes_ : int
+    The number of distinct classes.
+      
+  train_prevalence_ : ndarray of shape (n_classes,)
+    The prevalence of each class in the training dataset.
+      
+  y_prevs_ : ndarray of shape (n_classes,)
+    Alias for train_prevalence_ kept for backward compatibility.
+      
+  classifier_ : estimator object
+    The fitted base classifier trained on the entire dataset.
+  
+  Notes
+  -----
+  The Classify and Count method does not adjust for misclassifications
+  made by the base classifier (false positives and false negatives). Therefore,
+  its performance is highly dependent on the classification accuracy. 
+  
+  The estimated prevalence for class 'c' is given by the formula:
+  
+    p_hat(c) = (1 / |X|) * sum( I( f(x) == c ) )
+      
+  where f(x) is the crisp prediction of the classifier for instance x,
+  and I() is the indicator function.
 
-  def _quantify(self, X: np.ndarray) -> np.ndarray:
-    predictions = self.classifier_.predict(X)
+  References
+  ----------
+  George Forman. Counting positives accurately despite inaccurate classification.
+  In Proceedings of the 16th European Conference on Machine Learning, pages 564-575,
+  Porto, Portugal, 2005.
+  
+  Examples
+  --------
+  >>> from sklearn.datasets import make_classification
+  >>> X, y = make_classification(n_samples=1000, n_classes=2, random_state=42)
+  >>> quantifier = CC()
+  >>> quantifier.fit(X, y)
+  >>> X_test, _ = make_classification(n_samples=200, n_classes=2, random_state=7)
+  >>> prevalences = quantifier.predict(X_test)
+  >>> print(prevalences)
+  """
+  
+  def __init__(self, classifier: BaseEstimator = None):
+    super().__init__(classifier)
+
+  def fit(self, X: np.ndarray, y: np.ndarray) -> T_CC:
+    """Adjusts the CC quantifier by fitting the base classifier.
     
-    # calculate the prevalence for each known class
-    prevalences = np.zeros(self.n_classes_)
-    for i, c in enumerate(self.classes_):
-      prevalences[i] = np.sum(predictions == c) / len(predictions)
+    Parameters
+    ----------
+    X : {array-like, sparse matrix} of shape (n_samples, n_features)
+      Training data.
+    y : array-like of shape (n_samples,)
+      Labels for the corresponding classes.
+        
+    Returns
+    -------
+    self : object
+        Returns the fitted estimator instance itself.
+    """
+    X, y = check_X_y(X, y, accept_sparse=True)
     
-    return prevalences
+    # self.classes_ = self.Y 
+    self.classes_, counts = np.unique(y, return_counts=True)
+    self.n_classes_ = len(self.classes_)
+    self.train_prevalence_ = counts / len(y)
+    self.y_prevs_ = self.train_prevalence_ # Compatibility purposes
+    # lazy validation of the classifier
+    base_classifier = self.classifier if self.classifier is not None else LogisticRegression()
+    self.classifier_ = clone(base_classifier)
+    self.classifier_.fit(X, y) # fit the classifier with all training data
+
+    return self
+  
+  def predict(self, X: np.ndarray) -> np.ndarray:
+    """Estimate the class prevalences for the test bag X.
+    
+    Parameters
+    ----------
+    X : {array-like, sparse matrix} of shape (n_samples, n_features)
+      The test bag with unlabelled instances.
+  
+    Returns
+    -------
+    p_adjusted : ndarray of shape (n_classes,)
+      An array with the estimated prevalences for each class,
+      normalized to sum up to 1.0.
+    """
+    check_is_fitted(self)
+    X = check_array(X, accept_sparse=True)
+    
+    y_pred = self.classifier_.predict(X)
+
+    unique_pred, counts_pred = np.unique(y_pred, return_counts=True)
+    pred_counts = dict(zip(unique_pred, counts_pred))
+    # maps back to self.classes_ in order to handle unpredicted classes
+    p_pred = np.array([pred_counts.get(c, 0) for c in self.classes_], dtype=float)
+    
+    # geometrical normalization
+    p_pred = np.clip(p_pred, 0.0, 1.0)
+    p_sum = np.sum(p_pred)
+    
+    if p_sum > 0:
+      p_pred /= p_sum
+    else:
+      p_pred = np.ones(self.n_classes_) / self.n_classes_
+
+    return p_pred
 
 
 class PCC(BaseQuantifier):
-  """Probabilistic Classify & Count method.
-  """
+  """Probabilistic Classify and Count (PCC) quantifier.
   
-  def _quantify(self, X) -> np.ndarray:
-    if not hasattr(self.classifier_, "predict_proba"):
-      raise AttributeError(
-        f"Base classifier '{self.classifier_.__class__.__name__}' "
-        f"do not support predict_proba."
+  The PCC method extends the classical Classify and Count (CC) by using the
+  posterior probabilities generated by a classifier instead of its crisp (hard) 
+  predictions. The estimated prevalence for each class is computed as the 
+  expected value (average) of the predicted probabilities across all instances 
+  in the test bag.
+  
+  Parameters
+  ----------
+  classifier : estimator object, default = None
+    The classifier to be used as the base for quantification.
+    Must implement the `predict_proba` method. If None, an instance of 
+    `LogisticRegression()` will be created.
+    
+  Attributes
+  ----------
+  classes_ : ndarray of shape (n_classes,)
+    The distinct class labels found during training.
+  
+  n_classes_ : int
+    The number of distinct classes.
+      
+  train_prevalence_ : ndarray of shape (n_classes,)
+    The prevalence of each class in the training dataset.
+      
+  y_prevs_ : ndarray of shape (n_classes,)
+    Alias for train_prevalence_ kept for backward compatibility.
+      
+  classifier_ : estimator object
+    The fitted base classifier trained on the entire dataset.
+    
+  Notes
+  -----
+  Unlike CC, PCC accounts for the classifier's confidence in its predictions, 
+  which often leads to better quantification performance, especially when 
+  the classifier is well-calibrated. However, like CC, it is an "unadjusted" 
+  method, meaning it does not explicitly correct for systematic classification 
+  errors via a confusion matrix.
+
+  The estimated prevalence for class 'c' is given by the formula:
+  
+    p_hat(c) = (1 / |X|) * sum( P(c | x) )
+      
+  where P(c | x) is the probability that instance x belongs to class c, 
+  estimated by the base classifier's `predict_proba` method.
+  
+  References
+  ----------
+  Antonio Bella, Cesar Ferri, José Hernández-Orallo, and María José Ramírez-Quintana.
+  Quantification via probability estimators. In 2010 IEEE International Conference on
+  Data Mining, pages 737-742, Sydney, Australia, 2010.
+  
+  Examples
+  --------
+  >>> from sklearn.datasets import make_classification
+  >>> X, y = make_classification(n_samples=1000, n_classes=2, random_state=42)
+  >>> quantifier = PCC()
+  >>> quantifier.fit(X, y)
+  >>> X_test, _ = make_classification(n_samples=200, n_classes=2, random_state=7)
+  >>> prevalences = quantifier.predict(X_test)
+  >>> print(prevalences)
+  """
+  def __init__(self, classifier: BaseEstimator = None):
+    super().__init__(classifier=classifier)
+    
+  def fit(self, X: np.ndarray, y: np.ndarray) -> T_PCC:
+    """Adjusts the PCC quantifier by fitting the probabilistic base classifier.
+    
+    Parameters
+    ----------
+    X : {array-like, sparse matrix} of shape (n_samples, n_features)
+      Training data.
+    y : array-like of shape (n_samples,)
+      Labels for the corresponding classes.
+        
+    Returns
+    -------
+    self : object
+      Returns the fitted estimator instance itself.
+        
+    Raises
+    ------
+    TypeError
+      If the provided classifier does not support probability estimation 
+      (i.e., lacks a `predict_proba` method).
+    """
+    X, y = check_X_y(X, y, accept_sparse=True)
+    
+    self.classes_, counts = np.unique(y, return_counts=True)
+    self.n_classes_ = len(self.classes_)
+    self.train_prevalence_ = counts / len(y)
+    self.y_prevs_ = self.train_prevalence_ # Compatibility purposes
+    
+    base_classifier = self.classifier if self.classifier is not None else LogisticRegression()
+    
+    if not hasattr(base_classifier, "predict_proba"):
+      raise TypeError(
+        f"The classifier {base_classifier.__class__.__name__} does not "
+        "support probability estimation. PCC requires 'predict_proba'."
       )
+    
+    self.classifier_ = clone(base_classifier)
+    self.classifier_.fit(X, y)     
 
-    # Get the probabilities matrix (n_samples, n_classes)
-    probabilities = self.classifier_.predict_proba(X)
+    return self
+  
+  def predict(self, X: np.ndarray) -> np.ndarray:
+    """Estimate the class prevalences for the test bag X using soft probabilities.
+    
+    Parameters
+    ----------
+    X : {array-like, sparse matrix} of shape (n_samples, n_features)
+      The test bag with unlabelled instances.
+        
+    Returns
+    -------
+    p_adjusted : ndarray of shape (n_classes,)
+      An array with the estimated prevalences for each class,
+      normalized to sum up to 1.0.
+    """
+    check_is_fitted(self)
+    X = check_array(X, accept_sparse=True)
+    # obtain the soft probability matrix (n_samples, n_classes)
+    y_probas = self.classifier_.predict_proba(X)
+    
+    p_pred = np.mean(y_probas, axis=0)
+    p_pred = np.clip(p_pred, 0.0, 1.0)
+    p_sum = np.sum(p_pred)
 
-    # The prevalence calculus is the mean of each column
-    return np.mean(probabilities, axis=0)
+    if p_sum > 0:
+      p_pred /= p_sum
+    else:
+      p_pred = np.ones(self.n_classes_) / self.n_classes_
+
+    return p_pred
   
   
 class ACC(BaseCalibratedQuantifier):
-  """Adjusted Classify & Count method.
+  """Adjusted Classify and Count (ACC) quantifier for binary problems.
+
+  ACC is a calibrated quantification method that adjusts the simple Classify 
+  and Count (CC) estimates. It uses Out-of-Fold (OOF) predictions to calculate 
+  the True Positive Rate (TPR) and False Positive Rate (FPR) of the base classifier. 
+  Then, it mathematically corrects the final prevalence using the classical 
+  binary adjustment formula.
+  
+  Parameters
+  ----------
+  classifier : estimator object, default=None
+    The classifier to be used as the base for quantification.
+    If None, an instance of `LogisticRegression()` will be created.
+  cv : int, cross-validation generator or an iterable, default = 10
+    Determines the cross-validation splitting strategy to generate the 
+    Out-of-Fold predictions used for calibration.
+    
+  Attributes
+  ----------
+  classes_ : ndarray of shape (2,)
+    The distinct class labels found during training.
+  
+  n_classes_ : int
+    The number of distinct classes (expected to be 2).
+      
+  train_prevalence_ : ndarray of shape (2,)
+    The prevalence of each class in the training dataset.
+      
+  tpr_ : float
+    The True Positive Rate (Sensitivity) estimated out-of-fold.
+      
+  fpr_ : float
+    The False Positive Rate (1 - Specificity) estimated out-of-fold.
+      
+  classifier_ : estimator object
+    The fitted base classifier trained on the entire dataset.
+
+  Notes
+  -----
+  The ACC method adjusts the observed crisp prevalence (p_pred) using the 
+  following analytical equation for the positive class:
+  
+    p_adjusted = (p_pred - fpr) / (tpr - fpr)
+      
+  The prevalence for the negative class is then derived as 1 - p_corrected.
+  If TPR equals FPR, the denominator becomes zero, and the method falls back 
+  to the unadjusted p_pred.
+  
+  References
+  ----------
+  George Forman. Counting positives accurately despite inaccurate classification.
+  In Proceedings of the 16th European Conference on Machine Learning, pages 564-575,
+  Porto, Portugal, 2005.
+  
+  Examples
+  --------
+  >>> from sklearn.datasets import make_classification
+  >>> X, y = make_classification(n_samples=1000, n_classes=2, random_state=42)
+  >>> quantifier = ACC()
+  >>> quantifier.fit(X, y)
+  >>> X_test, _ = make_classification(n_samples=200, n_classes=2, random_state=7)
+  >>> prevalences = quantifier.predict(X_test)
+  >>> print(prevalences)
   """
   
-  _strictly_binary = True
+  def __init__(self, classifier: BaseEstimator = None, cv: int = 10):
+    super().__init__(classifier=classifier, cv=cv)
 
   def _get_oof_method(self) -> str:
     return "predict"
   
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
-    # Maps each class using the scikit-learn pattern (asc format)
-    neg_class = self.classes_[0]
-    pos_class = self.classes_[1]
+    """Calculates TPR and FPR using the Out-of-Fold predictions.
+  
+    Parameters
+    ----------
+    y_true_oof : ndarray of shape (n_samples,)
+      True labels collected out-of-fold.
+    y_pred_oof : ndarray of shape (n_samples,)
+      Crisp predictions generated out-of-fold.
+    """
+    # maps each class using the scikit-learn pattern (asc format)
+    neg_label = self.classes_[0]
+    pos_label = self.classes_[1]
 
-    actual_pos_mask = (y_true_oof == pos_class)
-    actual_neg_mask = (y_true_oof == neg_class)
+    is_true_pos = (y_true_oof == pos_label)
+    is_true_neg = (y_true_oof == neg_label)
 
-    # TPR (sensibility), proportion of true positives predicted as positives
-    if np.sum(actual_pos_mask) > 0:
-      self.tpr_ = np.mean(y_pred_oof[actual_pos_mask] == pos_class)
-    else:
-      self.tpr_ = 1.0
-
-    # FPR (1 - specificity), proportion of true negatives predicted as positives
-    if np.sum(actual_neg_mask) > 0:
-      self.fpr_ = np.mean(y_pred_oof[actual_neg_mask] == pos_class)
-    else:
-      self.fpr_ = 0.0
+    tp = np.sum(is_true_pos & (y_pred_oof == pos_label))
+    fn = np.sum(is_true_pos & (y_pred_oof == neg_label))
+    fp = np.sum(is_true_neg & (y_pred_oof == pos_label))
+    tn = np.sum(is_true_neg & (y_pred_oof == neg_label))
+    
+    self.tpr_ = tp / (tp + fn) if (tp + fn) > 0 else 1.0
+    self.fpr_ = fp / (fp + tn) if (fp + tn) > 0 else 0.0
 
   def _quantify(self, X: np.ndarray) -> np.ndarray:
-    predictions = self.classifier_.predict(X)
-    # Calculate the predicted raw prevalence obtained by the classifier
-    pos_class = self.classes_[1]
-    p_raw_pos = np.mean(predictions == pos_class)
-    
-    # Apply the math formula from Forman (2005)
-    denominator = self.tpr_ - self.fpr_
-    if np.abs(denominator) > 1e-12:
-      p_adj_pos = (p_raw_pos - self.fpr_) / denominator
-    else:
-      # if tpr == fpr, the model isnt able to distinguish between classes.
-      # we maintain the raw prevalence as fallback to avoid the division by 0.
-      p_adj_pos = p_raw_pos
-    
-    # guardrails: clipping
-    p_adj_pos = np.clip(p_adj_pos, 0.0, 1.0)
-    p_adj_neg = 1.0 - p_adj_pos
+    """Applies the binary ACC equation to adjust the predicted prevalence.
 
-    return np.array([p_adj_neg, p_adj_pos])
+    Parameters
+    ----------
+    X : ndarray of shape (n_samples, n_features)
+      Raw data from test bags.
+        
+    Returns
+    -------
+    p_acc : ndarray of shape (2,)
+      The adjusted prevalences for [negative_class, positive_class].
+    """
+    y_pred = self.classifier_.predict(X)
+    pos_label = self.classes_[1]
+
+    p_pred = np.mean(y_pred == pos_label)
+
+    denominator = self.tpr_ - self.fpr_
+    if denominator == 0:
+      p_pos_adjusted = p_pred
+    else:
+      p_pos_adjusted = (p_pred - self.fpr_) / denominator
+
+    # guardrails: clipping
+    p_pos_adjusted = np.clip(p_pos_adjusted, 0.0, 1.0)
+    p_neg_adjusted = 1.0 - p_pos_adjusted
+
+    return np.array([p_neg_adjusted, p_pos_adjusted])
+
+  def fit(self, X: np.ndarray, y: np.ndarray) -> T_ACC:
+    if len(np.unique(y)) > 2:
+      return ValueError(
+        "ACC method only works for binary quantification. Multiclass "
+        "quantification is possible via OVR strategies, but not recommended due to "
+        "theoretical issues with that approach."
+      )
+
+    return super().fit(X, y)
 
 
 class PACC(BaseCalibratedQuantifier):
-  """Probabilistic Adjusted Classify & Count (soft-labels)."""
+  """Probabilistic Adjusted Classify and Count (PACC) quantifier for binary problems.
+  
+  PACC is a calibrated quantification method that refines the Probabilistic 
+  Classify and Count (PCC) by correcting for the base classifier's systematic 
+  probabilistic bias. Using Out-of-Fold (OOF) predictions, it computes the 
+  expected predicted probability for the positive class given the true class labels. 
+  It then applies an analytical correction formula similar to ACC but entirely 
+  based on continuous probability scores.
+  
+  Parameters
+  ----------
+  classifier : estimator object, default = None
+    The classifier to be used as the base for quantification.
+    Must implement the `predict_proba` method. If None, an instance of 
+    `LogisticRegression()` will be created.
+  cv : int, cross-validation generator or an iterable, default = 10
+    Determines the cross-validation splitting strategy to generate the 
+    Out-of-Fold predictions used for calibration.  
+    
+  Attributes
+  ----------
+  classes_ : ndarray of shape (2,)
+    The distinct class labels found during training.
+  
+  n_classes_ : int
+    The number of distinct classes (expected to be 2).
+      
+  train_prevalence_ : ndarray of shape (2,)
+    The prevalence of each class in the training dataset.
+      
+  y_prevs_ : ndarray of shape (2,)
+    Alias for train_prevalence_ kept for backward compatibility.
+      
+  mu_pos_pos_ : float
+    The mean probability assigned to the positive class for instances that 
+    are truly positive, estimated out-of-fold. Analogue to TPR.
+      
+  mu_neg_pos_ : float
+    The mean probability assigned to the positive class for instances that 
+    are truly negative, estimated out-of-fold. Analogue to FPR.
+      
+  classifier_ : estimator object
+    The fitted base classifier trained on the entire dataset.
+    
+  Notes
+  -----
+  The PACC method adjusts the observed probabilistic prevalence (p_pcc) using 
+  the following analytical equation for the positive class:
+  
+    p_corrected = (p_pcc - mu_neg_pos) / (mu_pos_pos - mu_neg_pos)
+      
+  where 'p_pcc' is the average predicted probability of the positive class 
+  in the test bag. The prevalence for the negative class is then derived as 
+  1 - p_corrected. If the denominator evaluates to zero, the method falls 
+  back to the unadjusted p_pcc.
+  
+  References
+  ----------
+  Antonio Bella, Cesar Ferri, José Hernández-Orallo, and María José Ramírez-Quintana.
+  Quantification via probability estimators. In 2010 IEEE International Conference on
+  Data Mining, pages 737-742, Sydney, Australia, 2010.
+  
+  Examples
+  --------
+  >>> from sklearn.datasets import make_classification
+  >>> X, y = make_classification(n_samples=1000, n_classes=2, random_state=42)
+  >>> quantifier = PACC()
+  >>> quantifier.fit(X, y)
+  >>> X_test, _ = make_classification(n_samples=200, n_classes=2, random_state=7)
+  >>> prevalences = quantifier.predict(X_test)
+  >>> print(prevalences)
+  """
 
-  _strictly_binary = True
+  def __init__(self, classifier: BaseEstimator = None, cv: int = 10):
+    super().__init__(classifier=classifier, cv=cv)
+
+  def fit(self, X: np.ndarray, y: np.ndarray) -> T_PACC:
+    base_clf = self.classifier if self.classifier is not None else LogisticRegression()
+    
+    if not hasattr(base_clf, "predict_proba"):
+      raise TypeError(
+        f"The classifier {base_clf.__class__.__name__} does not "
+        "support probability estimation. PACC requires 'predict_proba'."
+      )
+    
+    if len(np.unique(y)) > 2:
+      return ValueError(
+        "PACC method only works for binary quantification. Multiclass "
+        "quantification is possible via OVR strategies, but not recommended due to "
+        "theoretical issues with that approach."
+      )
+
+    return super().fit(X, y)
 
   def _get_oof_method(self) -> str:
     return "predict_proba"
 
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
-    neg_class = self.classes_[0]
-    pos_class = self.classes_[1]
+    """Calculates the expected continuous scores (mu) using Out-of-Fold probabilities.
+    
+    Parameters
+    ----------
+    y_true_oof : ndarray of shape (n_samples,)
+      True labels collected out-of-fold.
+    y_pred_oof : ndarray of shape (n_samples, 2)
+      Continuous probability matrices generated out-of-fold.
+    """
+    neg_label = self.classes_[0]
+    pos_label = self.classes_[1]
 
-    actual_pos_mask = (y_true_oof == pos_class)
-    actual_neg_mask = (y_true_oof == neg_class)
-
-    # mu_pos: probabilities mean attributed to the positive class
-    if np.sum(actual_pos_mask) > 0:
-      self.mu_pos_ = np.mean(y_pred_oof[actual_pos_mask, 1])
-    else:
-      self.mu_pos_ = 1.0
+    prob_pos_oof = y_pred_oof[:, 1]
+    
+    is_truly_pos = (y_true_oof == pos_label)
+    is_truly_neg = (y_true_oof == neg_label)
 
     # mu_neg: probabilities mean attributed to the negative class
-    if np.sum(actual_neg_mask) > 0:
-      self.mu_neg_ = np.mean(y_pred_oof[actual_neg_mask, 1])
-    else:
-      self.mu_neg_ = 0.0
+    self.mu_pos_pos_ = np.mean(prob_pos_oof[is_truly_pos]) if np.any(is_truly_pos) else 1.0
+    self.mu_neg_pos_ = np.mean(prob_pos_oof[is_truly_neg]) if np.any(is_truly_neg) else 0.0
 
   def _quantify(self, X: np.ndarray) -> np.ndarray:
-    if not hasattr(self.classifier_, "predict_proba"):
-      raise AttributeError(
-        f"The base classifier '{self.classifier_.__class__.__name__}' "
-        f"dont have the method 'predict_proba' required for PACC."
-      )
-    # get probabilities for the batch
-    probabilities = self.classifier_.predict_proba(X)
-
-    # probabilities mean for the positive class in test bag
-    p_raw_pos = np.mean(probabilities[:, 1])
-
-    # apply the adjust formula
-    denominator = self.mu_pos_ - self.mu_neg_
+    """Applies the analytical continuous equation to adjust the probabilistic prevalence.
     
-    if np.abs(denominator) > 1e-12:
-      p_adj_pos = (p_raw_pos - self.mu_neg_) / denominator
+    Parameters
+    ----------
+    X : ndarray of shape (n_samples, n_features)
+      Raw data from test bags.
+        
+    Returns
+    -------
+    p_pacc : ndarray of shape (2,)
+      The adjusted prevalences for [negative_class, positive_class].
+    """
+    y_probas = self.classifier_.predict_proba(X)
+    p_pcc = np.mean(y_probas[:, 1])
+    
+    denominator = self.mu_pos_pos_ - self.mu_neg_pos_
+    
+    if denominator == 0:
+      p_pos_adjusted = p_pcc
     else:
-      p_adj_pos = p_raw_pos
+      p_pos_adjusted = (p_pcc - self.mu_neg_pos_) / denominator
 
-    # guardrails
-    p_adj_pos = np.clip(p_adj_pos, 0.0, 1.0)
-    p_adj_neg = 1.0 - p_adj_pos
-
-    return np.array([p_adj_neg, p_adj_pos])
+    return np.array([1.0 - p_pos_adjusted, p_pos_adjusted])

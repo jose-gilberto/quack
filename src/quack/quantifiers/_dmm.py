@@ -373,3 +373,84 @@ class HDy(BaseCalibratedQuantifier):
     p_adjusted /= np.sum(p_adjusted)
 
     return p_adjusted
+
+
+class FM(BaseCalibratedQuantifier):
+  """
+  FM (Friedman's Method para Class Distribution Estimation).
+  
+  This method solves the linear equation system based in the expected value
+  for posterior probs, by adjust the distribution under the suposition of
+  Prior Probability Shift.
+  
+  Refs
+  
+  """
+  _strictly_binary = False  # Suporta nativamente cenários multiclasse
+
+  def __init__(self, classifier=None, cv=5):
+    super().__init__(classifier=classifier, cv=cv)
+
+  def _get_oof_method(self) -> str:
+    return "predict_proba"
+
+  def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
+    """
+    PASSO 1: Construção da Matriz de Calibração de Expectâncias (M).
+    Cada coluna 'j' armazena a média das probabilidades preditas pelo modelo
+    para todas as instâncias que pertencem de fato à classe 'j'.
+    Dimensão da matriz: (n_classes, n_classes)
+    """
+    self.calib_matrix_ = np.zeros((self.n_classes_, self.n_classes_))
+    
+    # Varre cada classe real 'j' (colunas de M)
+    for j, true_class in enumerate(self.classes_):
+      mask = (y_true_oof == true_class)
+      
+      if np.sum(mask) > 0:
+        # Calcula a média das probabilidades preditas para cada classe 'i'
+        # m_ij = E_P [ P(Y=i | X) | Y=j ]
+        self.calib_matrix_[:, j] = np.mean(y_pred_oof[mask], axis=0)
+      else:
+        # Fallback caso a classe não tenha amostras no Out-Of-Fold
+        self.calib_matrix_[:, j] = 1.0 / self.n_classes_
+
+  def _quantify(self, X: np.ndarray) -> np.ndarray:
+    if not hasattr(self.classifier_, "predict_proba"):
+      raise AttributeError(
+        f"O classificador base '{self.classifier_.__class__.__name__}' "
+        f"precisa obrigatoriamente do método 'predict_proba'."
+      )
+
+    # PASSO 2: Construção do Vetor de Previsões Médias do Teste (h_test)
+    # h_test[i] = E_Q [ P(Y=i | X) ]
+    y_pred_test = self.classifier_.predict_proba(X)
+    h_test = np.mean(y_pred_test, axis=0)
+
+    # =====================================================================
+    # ENGINE DE OTIMIZAÇÃO CONVEXA (CVXPY)
+    # =====================================================================
+    # Buscamos o vetor alpha (prevalências) que minimize a norma L2 do sistema:
+    # M @ alpha = h_test
+    alpha = cp.Variable(self.n_classes_)
+
+    # Objetivo: Mínimos Quadrados para aproximar a igualdade linear
+    objective = cp.Minimize(cp.sum_squares(self.calib_matrix_ @ alpha - h_test))
+
+    # Restrições do Simplex: as prevalências devem somar 1 e ser não-negativas
+    constraints = [cp.sum(alpha) == 1, alpha >= 0]
+
+    problem = cp.Problem(objective, constraints)
+    problem.solve()
+
+    p_adjusted = alpha.value
+
+    # --- Proteção para falhas de convergência do solver ---
+    if p_adjusted is None:
+      return self.train_prevalence_.copy()
+
+    # Garante limites numéricos rígidos [0, 1] pós-otimização
+    p_adjusted = np.clip(p_adjusted, 0.0, 1.0)
+    p_adjusted /= np.sum(p_adjusted)
+
+    return p_adjusted

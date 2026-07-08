@@ -13,6 +13,9 @@ class EM(BaseCalibratedQuantifier):
     solving it dinamically in scenarios with Prior Probability Shift.
     
     Refs
+      [1] Marco Saerens, Patrice Latinne, and Christine Decaestecker. Adjusting
+      the outputs of a classifier to new a priori probabilities: A simple procedure.
+      Neural Computation, 14(1): 21-41, 2002.
     """
     _strictly_binary = False
 
