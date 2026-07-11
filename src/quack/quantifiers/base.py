@@ -1,4 +1,7 @@
 import numpy as np
+import math
+import warnings
+import cvxpy as cvx
 from abc import ABC, abstractmethod
 from typing import TypeVar
 from sklearn.base import BaseEstimator, clone
@@ -221,3 +224,233 @@ class BaseCalibratedQuantifier(BaseQuantifier, ABC):
       p_adjusted = np.ones(self.n_classes_) / self.n_classes_
       
     return p_adjusted
+
+
+class BaseMixtureQuantifier(BaseQuantifier, ABC):
+  """Base class for Distance-based Mixture Models (DMM) for quantification.
+
+  This abstract class manages the core optimization engine (via cvxpy) and 
+  the Golden Section Search (GSS) binary fallback mechanism for quantifiers 
+  that estimate class prevalences by minimizing statistical distances between 
+  training and test feature/score distributions.
+
+  Parameters
+  ----------
+  classifier : estimator object, default=None
+    The underlying base classifier. Can be None for feature-based mixture 
+    models (e.g., HDx, ReadMe) or an instance of a classifier for prediction-based 
+    mixture models (e.g., HDy, EDy).
+
+  distance_metric : str, default='L1'
+    The mathematical distance metric to minimize. Supported metrics:
+    - 'L1': Manhattan Distance (Sum of absolute errors).
+    - 'L2': Euclidean Distance (Root of the sum of squared errors).
+    - 'HD': Hellinger Divergence (Measures overlap between probability distributions).
+    - 'TS': Topsoe Distance (Symmetric version of Kullback-Leibler Divergence).
+
+  use_convex_solver : bool, default=True
+    If True, attempts to find the exact global minimum using `cvxpy`.
+    If False or if the convex solver fails, automatically activates the 
+    Golden Section Search numerical fallback mechanism.
+
+  Attributes
+  ----------
+  classes_ : ndarray of shape (n_classes,)
+    The distinct class labels found during the training phase.
+
+  n_classes_ : int
+    The total number of unique classes.
+
+  train_prevalence_ : ndarray of shape (n_classes,)
+    The baseline prevalence proportion of each class observed in the training data.
+
+  conditional_matrix_ : ndarray of shape (n_components, n_classes)
+    The conditional probability matrix built during the `fit` phase.
+    Represents the expected distribution profile for each class from the training set.
+  """
+  def __init__(self,
+               classifier: BaseEstimator = None,
+               distance_metric: str = 'L1',
+               use_convex_solver: bool = True):
+    super().__init__(classifier=classifier)
+    self.distance_metric = distance_metric
+    self.use_convex_solver = use_convex_solver
+    self.conditional_matrix_ = None
+
+  def _compute_distance(self,
+                        candidate_prevalence: np.ndarray,
+                        test_frequencies: np.ndarray) -> float:
+    """Computes the selected distance error for a given prevalence candidate.
+
+    Simulates how the test dataset should look if the true prevalence matched 
+    `candidate_prevalence`, comparing the result against the actual observed 
+    `test_frequencies`. Used primarily as a cost function for the GSS optimizer.
+    """
+    # project the candidate prevalence using the training distribution profile (CM * p)
+    projected_frequencies = self.conditional_matrix_.dot(candidate_prevalence)
+
+    if self.distance_metric == 'L1':
+      return np.linalg.norm(projected_frequencies - test_frequencies, ord=1)
+    if self.distance_metric == 'L2':
+      return np.linalg.norm(projected_frequencies - test_frequencies)
+    if self.distance_metric == 'HD':
+      return np.sqrt(np.sum((np.sqrt(projected_frequencies) - np.sqrt(test_frequencies)) ** 2))
+
+    if self.distance_metric == 'TS':
+      term_projected = sum(projected_frequencies[i] * np.log(2 * projected_frequencies[i] / (projected_frequencies[i] + test_frequencies[i])) 
+                           if projected_frequencies[i] != 0 else 0 for i in range(projected_frequencies.shape[0]))
+      term_test = sum(test_frequencies[i] * np.log(2 * test_frequencies[i] / (projected_frequencies[i] + test_frequencies[i])) 
+                      if test_frequencies[i] != 0 else 0 for i in range(projected_frequencies.shape[0]))
+      return term_projected + term_test
+
+    raise ValueError(f"Unknown distance metric: {self.distance_metric}")
+
+  def _solve_via_convex_programming(self, test_frequencies: np.ndarray) -> np.ndarray:
+    """Solves the constrained mixture problem using exact convex optimization."""
+    # define the target optimization variable: the estimated prevalence vector
+    estimated_prevalence = cvx.Variable(self.conditional_matrix_.shape[1])
+
+    # proportions cannot be negative and must sum to exactly 1.0
+    constraints = [estimated_prevalence >= 0, cvx.sum(estimated_prevalence) == 1.0]
+    
+    # map the selected distance metric to CVXPY objective functions
+    if self.distance_metric == 'L1':
+      objective_function = cvx.Minimize(cvx.norm1(self.conditional_matrix_ @ estimated_prevalence - test_frequencies))
+    elif self.distance_metric == 'L2':
+      objective_function = cvx.Minimize(cvx.norm(self.conditional_matrix_ @ estimated_prevalence - test_frequencies))
+    elif self.distance_metric == 'HD':
+      # maximizing affinity is mathematically equivalent to minimizing Hellinger Distance
+      objective_function = cvx.Maximize(cvx.sum(cvx.sqrt(cvx.multiply(test_frequencies, self.conditional_matrix_ @ estimated_prevalence))))
+    elif self.distance_metric == 'TS':
+      objective_function = cvx.Minimize(cvx.sum(cvx.kl_div(2 * self.conditional_matrix_ @ estimated_prevalence, test_frequencies) + 
+                                                cvx.kl_div(2 * test_frequencies, self.conditional_matrix_ @ estimated_prevalence)))
+    else:
+      raise ValueError(f"Distance metric not supported by the convex solver: {self.distance_metric}")
+
+    # construct and solve the mathematical problem globally
+    problem = cvx.Problem(objective_function, constraints)
+    problem.solve()
+
+    return estimated_prevalence.value
+  
+  def _golden_section_search_fallback(self, test_frequencies: np.ndarray, tolerance: float = 1e-04) -> np.ndarray:
+    """Golden Section Search (GSS) algorithm for binary optimization fallback.
+
+    Approximates the minimum point of the distance function by narrowing down 
+    the search window based on the Golden Ratio (phi). Automatically triggered 
+    if the convex solver fails or is disabled.
+    """
+    # golden Section mathematical constants (1/phi and 1/phi^2)
+    inverse_phi = (math.sqrt(5) - 1) / 2
+    inverse_phi_squared = (3 - math.sqrt(5)) / 2
+    
+    # initial search boundaries for the positive class prevalence: between 0% and 100%
+    lower_bound, upper_bound = 0.0, 1.0
+    interval_width = 1.0
+    
+    # calculate the required number of steps to satisfy the target tolerance threshold
+    total_steps = int(math.ceil(math.log(tolerance / interval_width) / math.log(inverse_phi)))
+
+    # define the two initial internal sampling probe points
+    probe_point_1 = lower_bound + inverse_phi_squared * interval_width
+    probe_point_2 = lower_bound + inverse_phi * interval_width
+    
+    # evaluate distance errors at both sample probes (assuming binary scenario: [p, 1-p])
+    error_at_probe_1 = self._compute_distance(np.array([probe_point_1, 1.0 - probe_point_1]), test_frequencies)
+    error_at_probe_2 = self._compute_distance(np.array([probe_point_2, 1.0 - probe_point_2]), test_frequencies)
+
+    # iteratively shrink the search window
+    for _ in range(total_steps - 1):
+      if error_at_probe_1 < error_at_probe_2:
+        # the minimum lies in the left segment; discard the rightmost region
+        upper_bound = probe_point_2
+        probe_point_2 = probe_point_1
+        error_at_probe_2 = error_at_probe_1
+        interval_width = inverse_phi * interval_width
+        probe_point_1 = lower_bound + inverse_phi_squared * interval_width
+        error_at_probe_1 = self._compute_distance(np.array([probe_point_1, 1.0 - probe_point_1]), test_frequencies)
+      else:
+        # the minimum lies in the right segment; discard the leftmost region
+        lower_bound = probe_point_1
+        probe_point_1 = probe_point_2
+        error_at_probe_1 = error_at_probe_2
+        interval_width = inverse_phi * interval_width
+        probe_point_2 = lower_bound + inverse_phi * interval_width
+        error_at_probe_2 = self._compute_distance(np.array([probe_point_2, 1.0 - probe_point_2]), test_frequencies)
+
+    # select the absolute best prevalence candidate within the finalized narrow window
+    if error_at_probe_1 < error_at_probe_2:
+      error_at_lower = self._compute_distance(np.array([lower_bound, 1.0 - lower_bound]), test_frequencies)
+      mid_point = (lower_bound + probe_point_2) / 2
+      error_at_mid = self._compute_distance(np.array([mid_point, 1.0 - mid_point]), test_frequencies)
+      best_positive_prevalence = [lower_bound, mid_point, probe_point_2][int(np.argmin([error_at_lower, error_at_mid, error_at_probe_2]))]
+    else:
+      error_at_upper = self._compute_distance(np.array([upper_bound, 1.0 - upper_bound]), test_frequencies)
+      mid_point = (upper_bound + probe_point_1) / 2
+      error_at_mid = self._compute_distance(np.array([mid_point, 1.0 - mid_point]), test_frequencies)
+      best_positive_prevalence = [upper_bound, mid_point, probe_point_1][int(np.argmin([error_at_upper, error_at_mid, error_at_probe_1]))]
+
+    return np.array([best_positive_prevalence, 1.0 - best_positive_prevalence])
+
+  @abstractmethod
+  def _compute_score(self, X: np.ndarray) -> np.ndarray:
+    """Extracts the empirical frequency distribution of the test batch X.
+
+    Must be implemented by specific sub-quantifiers (e.g., HDx, HDy, ReadMe) 
+    to map the testing data into the matching distribution space.
+    """
+    pass
+  
+  def predict(self, X: np.ndarray) -> np.ndarray:
+    """Estimates the class prevalences for the given test data.
+
+    Parameters
+    ----------
+    X : ndarray of shape (n_samples, n_features)
+      The testing data matrix.
+
+    Returns
+    -------
+    estimated_prevalences : ndarray of shape (n_classes,)
+      A normalized probability vector indicating the estimated prevalence 
+      proportions for each class.
+    """
+    # validate that the quantifier has been fitted and parse input data
+    check_is_fitted(self)
+    X = check_array(X, accept_sparse=False)
+    
+    # calculate the test score distribution/frequencies
+    test_frequencies = self._compute_score(X)
+
+    # bypass the convex solver entirely if use_convex_solver is explicitly turned off
+    if not self.use_convex_solver:
+      return self._golden_section_search_fallback(test_frequencies)
+
+    # Primary route: Attempt exact programming via convex optimization
+    try:
+      prevalence_solution = self._solve_via_convex_programming(test_frequencies)
+      
+      if prevalence_solution is None:
+        warnings.warn("Convex optimization returned an empty result. Falling back to GSS search.")
+        return self._golden_section_search_fallback(test_frequencies)
+          
+      estimated_prevalences = np.array(prevalence_solution).squeeze()
+        
+    except cvx.SolverError:
+      # Catch mathematical instabilities or convergence issues triggered by CVXPY
+      warnings.warn("CVXPY SolverError encountered. Falling back to GSS search as a safety measure.")
+      return self._golden_section_search_fallback(test_frequencies)
+
+    # --- Geometric Post-Processing Pipeline ---
+    # Clip edge values into the strict [0.0, 1.0] range to fix floating-point precision noise
+    estimated_prevalences = np.clip(estimated_prevalences, 0.0, 1.0)
+    
+    # Enforce probability closure (The final vector elements must sum to exactly 1.0)
+    total_sum = np.sum(estimated_prevalences)
+    if total_sum > 0:
+      estimated_prevalences /= total_sum
+    else:
+      # Safe boundary fallback: apply a uniform distribution if everything collapsed to zero
+      estimated_prevalences = np.ones(self.n_classes_) / self.n_classes_
+        
+    return estimated_prevalences
