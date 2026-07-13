@@ -97,6 +97,34 @@ class HDx(BaseMixtureQuantifier):
     self.conditional_matrix_ = np.vstack(conditional_blocks)
     
     return self
+  
+  def _compute_score(self, X: np.ndarray) -> np.ndarray:
+    """Extracts the empirical marginal test frequencies across all features.
+
+    Calculates the relative sample distribution frequency over the saved 
+    training feature spaces for the incoming test batch.
+
+    Parameters
+    ----------
+    X : ndarray of shape (n_samples, n_features)
+      The testing feature matrix.
+
+    Returns
+    -------
+    test_frequencies : ndarray of shape (n_total_unique_bins,)
+      The stacked vector representing empirical marginal frequencies of the test batch.
+    """
+    n_samples = X.shape[0]
+    n_features = X.shape[1]
+    frequencies_list = []
+    
+    # compute marginal frequencies matching the exact bins established during training
+    for j in range(n_features):
+      feature_counts = np.array([np.count_nonzero(X[:, j] == val) for val in self.feature_spaces_[j]])
+      frequencies_list.append((1.0 / n_samples) * feature_counts)
+        
+    # combine the individual frequency vectors horizontally and transpose to match the solver interface
+    return np.hstack(frequencies_list).T
 
 
 class _RawSubspaceMixture(BaseMixtureQuantifier):
@@ -112,6 +140,9 @@ class _RawSubspaceMixture(BaseMixtureQuantifier):
                      distance_metric=distance_metric,
                      use_convex_solver=use_convex_solver)
     self.unique_rows_ = None
+
+  def fit(self, X: np.ndarray, y: np.ndarray) -> '_RawSubspaceMixture':
+    pass
 
   @staticmethod
   def _binary_search_row(row: np.ndarray,
