@@ -1,456 +1,468 @@
+import math
+import warnings
+import cvxpy as cvx
 import numpy as np
-import cvxpy as cp
-from quack.quantifiers.base import BaseCalibratedQuantifier
 from sklearn.base import BaseEstimator
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from quack.quantifiers.base import BaseCalibratedQuantifier, BaseMixtureQuantifier
 
 
-class FormanMM(BaseCalibratedQuantifier):
+class DyS(BaseCalibratedQuantifier, BaseMixtureQuantifier):
+  """Distribution y-Similarity (DyS) Quantifier.
+
+  An adjusting prediction mixture model built strictly for binary quantification. 
+  It partitions out-of-fold continuous classification scores into a specified number 
+  of histograms bins to match training and testing distributions.
+
+  Parameters
+  ----------
+  classifier : estimator object, default=None
+    The underlying base classifier. If None, defaults to `SVC()`.
+
+  distance_metric : str, default='TS'
+    The distance metric minimized ('L1', 'L2', 'HD', 'TS').
+
+  n_bins : int, default=10
+    The total number of histogram bins used to slice the distribution profiles.
+
+  cv : int, default=10
+    The number of cross-validation folds for out-of-fold scoring.
+
+  use_convex_solver : bool, default=True
+    If True, optimizes via CVXPY.
+
+  predict_proba : bool, default=False
+    If True, forces the model to use probabilistic `predict_proba` outputs. 
+    If False, falls back to raw decision boundary scores.
+
+  Attributes
+  ----------
+  classes_ : ndarray of shape (n_classes,)
+    The distinct class labels found during the training phase.
+
+  n_classes_ : int
+    The total number of unique classes.
+
+  train_prevalence_ : ndarray of shape (n_classes,)
+    The baseline prevalence proportion of each class observed in the training data.
+
+  conditional_matrix_ : ndarray of shape (n_bins, n_classes)
+    The binned score conditional matrix built using out-of-fold calibration data.
+
+  score_range_ : tuple of float (min, max)
+    The minimum and maximum boundaries used to define histogram bins.
+
+  References
+  ----------
+  André Maletzke, Denis dos Reis, Everton Cherman, and Gustavo Batista. DyS: A framework
+  for mixture models in quantification. In Proceedings of the AAAI Conference on Artificial
+  Intelligence, pages 4552-4560, Honolulu, Hawaii, 2019.
   """
-  FormanMM (Forman's Mixture Method).
-  
-  It uses cvxpy to solve the minimum squeares convex optimization problem (L2)
-  about probabilities histograms of positive class.
-  
-  This method assumes that the predicted distribution on the test set is a linear mixture
-  of distributions seen on calibration for positive class (D+) and negative (D-),
-  weighted by their respective prevalences.
-  
-  Refs
-  [1] Forman, G. Quantifying counts and costs via classification.
-      Data Min Knowl Disc 17, 164-206 (2008).
-      https://doi.org/10.1007/s10618-008-0097-y
-  """
-  _strictly_binary = True
 
-  def __init__(self, classifier: BaseEstimator = None, cv: int = 5, n_bins: int = 10):
-    super().__init__(classifier=classifier, cv=cv)
+  def __init__(self,
+               classifier: BaseEstimator = SVC(),
+               distance_metric: str = "TS",
+               n_bins: int = 10, cv: int = 10, use_convex_solver: bool = True, 
+                predict_proba: bool = False):
+    BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv)
+    BaseMixtureQuantifier.__init__(self, classifier=classifier, distance_metric=distance_metric, 
+                                  use_convex_solver=use_convex_solver)
     self.n_bins = n_bins
+    self.predict_proba = predict_proba
+    self.score_range_ = None
 
   def _get_oof_method(self) -> str:
-    return "predict_proba"
+    return "predict_proba" if self.predict_proba else ("decision_function" if hasattr(self.classifier, "decision_function") else "predict_proba")
+
+  def _extract_1d_scores(self, y_predictions: np.ndarray) -> np.ndarray:
+    """Extracts positive class probabilities if the score vector is 2D."""
+    if y_predictions.ndim == 2:
+      return y_predictions[:, 1]
+    return y_predictions
+
+  def fit(self, X: np.ndarray, y: np.ndarray) -> 'DyS':
+    unique_classes = np.unique(y)
+    if len(unique_classes) > 2:
+      raise ValueError("DyS framework quantifiers only work for binary quantification.")
+    return super().fit(X, y)
 
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
-    """ 1-step: build the baseline distributions
+    y_scores = self._extract_1d_scores(y_pred_oof)
+    self.score_range_ = (0.0, 1.0) if self.predict_proba else (np.min(y_scores), np.max(y_scores))
     
-    D+: distribution scores from validation for positive class
-    D-: distribution scores
+    conditional_blocks = []
+    for class_label in self.classes_:
+      class_mask = (y_true_oof == class_label)
+      counts, _ = np.histogram(y_scores[class_mask], bins=self.n_bins, range=self.score_range_)
+      conditional_blocks.append(counts)
+        
+    _, class_counts = np.unique(y_true_oof, return_counts=True)
+    self.conditional_matrix_ = np.vstack(conditional_blocks).T / class_counts
 
-    Args:
-      y_true_oof (np.ndarray): _description_
-      y_pred_oof (np.ndarray): _description_
-    """
-    neg_class = self.classes_[0]
-    pos_class = self.classes_[1]
+  def _compute_score(self, X: np.ndarray) -> np.ndarray:
+    prediction_method = getattr(self.classifier_, self._get_oof_method())
+    raw_predictions = prediction_method(X)
+    y_scores = self._extract_1d_scores(raw_predictions)
 
-    # split the masks based on the ground-truth (y_train)
-    actual_pos_mask = (y_true_oof == pos_class)
-    actual_neg_mask = (y_true_oof == neg_class)
+    test_frequencies, _ = np.histogram(y_scores, bins=self.n_bins, range=self.score_range_)
+    if not self.predict_proba:
+      test_frequencies[0] += np.sum(y_scores < self.score_range_[0])
+      test_frequencies[-1] += np.sum(y_scores > self.score_range_[1])
 
-    # define the thresholds for each histograms bins (B)
-    self.bins_ = np.linspace(0.0, 1.0, self.n_bins + 1)
-
-    # get scores for P(Y=1|X) generated via Out-of-Fold Cross Validation
-    pos_probs_oof = y_pred_oof[:, 1]
-
-    # Create frequency histograms for each individual class
-    h_pos, _ = np.histogram(pos_probs_oof[actual_pos_mask], bins=self.bins_)
-    h_neg, _ = np.histogram(pos_probs_oof[actual_neg_mask], bins=self.bins_)
-
-    # We add 1e-12 in each value to avoid division per 0 in empty bins
-    # self.h_pos_ represents the vector D+ (probability score that Y=1)
-    self.h_pos_ = h_pos / (np.sum(h_pos) + 1e-12)
-    # self.h_neg_ represents the vector D- (probability score that Y=0)
-    self.h_neg_ = h_neg / (np.sum(h_neg) + 1e-12)
+    return test_frequencies / X.shape[0]
 
   def _quantify(self, X: np.ndarray) -> np.ndarray:
-    if not hasattr(self.classifier_, "predict_proba"):
-      raise AttributeError(
-        f"The base classifier '{self.classifier_.__class__.__name__}' "
-        f"do not have the method 'predict_proba' necessary to FormanMM."
-      )
-
-    # step-2: capture the test mix distribution (D_test)
-    # get the probabilities of an unlabeled test bag
-    pos_probs_test = self.classifier_.predict_proba(X)[:, 1]
-
-    # build the test histogram using the same bins partitions of the training phase
-    h_test, _ = np.histogram(pos_probs_test, bins=self.bins_)
-    # h_test represents the agg distribution observed in the test set
-    h_test = h_test / (np.sum(h_test) + 1e-12)
-    
-    # mixture matrix (M) stores the calibration columns (D-, D+)
-    # (n_bins, 2)
-    calib_matrix = np.column_stack((self.h_neg_, self.h_pos_))
-    
-    # decision vector (alpha) represents the variables for prevalence estimation
-    # alpha[0] is the negative class prevalence (1 - p)
-    # alpha[1] is the positive class prevalence (p)
-    alpha = cp.Variable(2)
-  
-    # objetive function (minimum squares)
-    # @ operator executes the product calib_matrix @ alpha
-    # alpha[0] * D- + alpha[1] * D+
-    # objetive is to minimize the sum of squares errors between observed distributions
-    # and the linear combination: ||D_test - [(1 - p) * D- + p * D+]||^2
-    objective = cp.Minimize(cp.sum_squares(h_test - calib_matrix @ alpha))
-
-    # simplex probabilities
-    # cp.sum(alpha) == 1. this ensure that (1 - p) + p = 1.0
-    # alpha >= 0 ensure the non-negativity restriction
-    constraints = [cp.sum(alpha) == 1, alpha >= 0]
-    problem = cp.Problem(objective, constraints) # finds the values for p that satisfies our restrictions
-    problem.solve()
-
-    # extract the calculated prevalences
-    p_adjusted = alpha.value
-
-    if p_adjusted is None:
-      # fallback if the solver didnt find any solutions
-      return self.train_prevalence_.copy()
-
-    # eliminate any noise or float point errors
-    p_adjusted = np.clip(p_adjusted, 0.0, 1.0)
-    p_adjusted /= np.sum(p_adjusted)
-
-    return p_adjusted
+    test_frequencies = self._compute_score(X)
+    if not self.use_convex_solver:
+      return self._golden_section_search_fallback(test_frequencies)
+    try:
+      prevalence_solution = self._solve_via_convex_programming(test_frequencies)
+      if prevalence_solution is None:
+        warnings.warn("Convex optimization returned an empty result. Falling back to GSS search.")
+        return self._golden_section_search_fallback(test_frequencies)
+      return np.array(prevalence_solution).squeeze()
+    except cvx.SolverError:
+      warnings.warn("CVXPY SolverError encountered. Falling back to GSS search.")
+      return self._golden_section_search_fallback(test_frequencies)
 
 
-class GAC(BaseCalibratedQuantifier):
+class HDy(DyS):
+  """Hellinger Distance y (HDy) Quantifier.
+
+  A specialized instance of the DyS framework that minimizes the Hellinger 
+  Distance over binned score histograms using a Logistic Regression classifier.
+
+  Parameters
+  ----------
+  classifier : estimator object, default=None
+      The underlying base classifier. Defaults to `LogisticRegression()`.
+
+  n_bins : int, default=10
+      The total number of histogram bins.
+
+  cv : int, default=10
+      The number of cross-validation folds.
+
+  use_convex_solver : bool, default=True
+      If True, optimizes via CVXPY.
+
+  predict_proba : bool, default=False
+      If True, forces the model to use probabilistic `predict_proba` outputs.
+
+  References
+  ----------
+  Víctor González-Castro, Rocío Alaiz-Rodríguez, and Enrique Alegre. Class distribution
+  estimation based on the Hellinger distance. Information Sciences, 218(1):146-164, 2013.
   """
-  GAC (Generalized Adjusted Classify and Count).
 
-  GAC extends the multiclass problem for ACC (Adjusted Classify and Count).
-  Works with hard predictions (crisp labels via predict call) to build the
-  confusion matrix CxC normalized.
+  def __init__(self,
+               classifier: BaseEstimator = LogisticRegression(),
+               n_bins: int = 10,
+               cv: int = 10,
+               use_convex_solver: bool = True,
+               predict_proba: bool = False):
+    super().__init__(classifier=classifier, distance_metric="HD", n_bins=n_bins, 
+                     cv=cv, use_convex_solver=use_convex_solver, predict_proba=predict_proba)
 
-  Refs
-  [1] Aykut Firat. Unified framework for quantification.
-      arXiv preprint arXiv:1606.00868, 2016.
+
+class FormanMM(BaseCalibratedQuantifier, BaseMixtureQuantifier):
+  """Forman's Mixture Model (FormanMM) Quantifier.
+
+  An adjusting binary quantifier that optimizes the `L1` distance over the 
+  Cumulative Distribution Function (CDF) profiles of classification scores.
+
+  Parameters
+  ----------
+  classifier : estimator object, default = None
+    The underlying base classifier. Defaults to `SVC()`.
+
+  cv : int, default = 10
+    The number of cross-validation folds.
+
+  use_convex_solver : bool, default = True
+    If True, optimizes via CVXPY.
+
+  predict_proba : bool, default = False
+    If True, forces the model to use probabilistic `predict_proba` outputs.
+
+  Attributes
+  ----------
+  classes_ : ndarray of shape (n_classes,)
+    The distinct class labels found during the training phase.
+
+  n_classes_ : int
+    The total number of unique classes.
+
+  train_prevalence_ : ndarray of shape (n_classes,)
+    The baseline prevalence proportion of each class observed in the training data.
+
+  conditional_matrix_ : ndarray of shape (n_bins, n_classes)
+    The binned CDF score conditional matrix built using out-of-fold calibration data.
+
+  bins_ : ndarray
+    The array of unique out-of-fold score values used as thresholds for the CDF bins.
+
+  References
+  ----------
+  George Forman. Quantifying counts and costs via classification.
+  Data Mining and Knowledge Discovery, 17(2):164-206, 2008.
   """
-  _strictly_binary = False
 
-  def __init__(self, classifier: BaseEstimator = None, cv: int = 5):
-    super().__init__(classifier=classifier, cv=cv)
+  def __init__(self, classifier: BaseEstimator = SVC(), cv: int = 10, 
+                use_convex_solver: bool = True, predict_proba: bool = False):
+      BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv)
+      BaseMixtureQuantifier.__init__(self, classifier=classifier, distance_metric="L1", 
+                                     use_convex_solver=use_convex_solver)
+      self.predict_proba = predict_proba
+      self.bins_ = None
+
+  def _get_oof_method(self) -> str:
+    return "predict_proba" if self.predict_proba else ("decision_function" if hasattr(self.classifier, "decision_function") else "predict_proba")
+
+  def _extract_1d_scores(self, y_predictions: np.ndarray) -> np.ndarray:
+    if y_predictions.ndim == 2:
+      return y_predictions[:, 1]
+    return y_predictions
+
+  def fit(self, X: np.ndarray, y: np.ndarray) -> 'FormanMM':
+    unique_classes = np.unique(y)
+    if len(unique_classes) > 2:
+      raise ValueError("FormanMM only works for binary quantification.")
+    return super().fit(X, y)
+
+  def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
+    y_scores = self._extract_1d_scores(y_pred_oof)
+    self.bins_ = np.unique(y_scores)
+
+    # exclude the largest edge score to avoid overlapping conditional values equal to 1.0
+    if len(self.bins_) > 1 and (self.bins_[-1] - np.finfo(float).eps > self.bins_[-2]):
+      self.bins_[-1] -= np.finfo(float).eps
+
+    conditional_blocks = []
+    for class_label in self.classes_:
+      class_mask = (y_true_oof == class_label)
+      counts, _ = np.histogram(y_scores[class_mask], bins=self.bins_)
+      conditional_blocks.append(np.cumsum(counts))
+
+    _, class_counts = np.unique(y_true_oof, return_counts=True)
+    self.conditional_matrix_ = np.vstack(conditional_blocks).T / class_counts
+
+  def _compute_score(self, X: np.ndarray) -> np.ndarray:
+    prediction_method = getattr(self.classifier_, self._get_oof_method())
+    raw_predictions = prediction_method(X)
+    y_scores = self._extract_1d_scores(raw_predictions)
+
+    test_frequencies = np.cumsum(np.histogram(y_scores, bins=self.bins_)[0])
+    test_frequencies += np.sum(y_scores < self.bins_[0])
+
+    return test_frequencies / X.shape[0]
+
+  def _quantify(self, X: np.ndarray) -> np.ndarray:
+    test_frequencies = self._compute_score(X)
+    if not self.use_convex_solver:
+      return self._golden_section_search_fallback(test_frequencies)
+    try:
+      prevalence_solution = self._solve_via_convex_programming(test_frequencies)
+      if prevalence_solution is None:
+        warnings.warn("Convex optimization returned an empty result. Falling back to GSS search.")
+        return self._golden_section_search_fallback(test_frequencies)
+      return np.array(prevalence_solution).squeeze()
+    except cvx.SolverError:
+      warnings.warn("CVXPY SolverError encountered. Falling back to GSS search.")
+      return self._golden_section_search_fallback(test_frequencies)
+
+
+class GAC(BaseCalibratedQuantifier, BaseMixtureQuantifier):
+  """Generalized Adjusting Confusion Matrix (GAC) Quantifier.
+
+  A distance-minimizing multi-class generalization of the Adjusting Count (AC) 
+  algorithm that optimizes target distributions across the discrete labels 
+  confusion matrix profile.
+
+  Parameters
+  ----------
+  classifier : estimator object, default = LogisticRegression
+    The underlying base classifier. Defaults to `LogisticRegression()`.
+
+  distance_metric : str, default = 'L2'
+    The distance metric minimized.
+
+  cv : int, default = 10
+    The number of cross-validation folds.
+
+  use_convex_solver : bool, default = True
+    If True, optimizes via CVXPY.
+    
+  References
+  ----------
+  Aykut Firat. Unified framework for quantification. arXiv preprint arXiv:1606.00868, 2016.
+  """
+
+  def __init__(self,
+               classifier: BaseEstimator = LogisticRegression(),
+               distance_metric: str = "L2", 
+               cv: int = 10,
+               use_convex_solver: bool = True):
+    BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv)
+    BaseMixtureQuantifier.__init__(self, classifier=classifier, distance_metric=distance_metric, 
+                                  use_convex_solver=use_convex_solver)
 
   def _get_oof_method(self) -> str:
     return "predict"
 
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
-    """
-    Build the Confusion Matrix (M).
-    Each column j represents the distribution of predictions given that the real class
-    is c_j. The resulting matrix have the shape (n_classes, n_classes).
-    """
-    n_classes = self.n_classes_
-    self.cm_ = np.zeros((n_classes, n_classes))
+    confusion_matrix = np.zeros((self.n_classes_, self.n_classes_))
+    for i, true_label in enumerate(self.classes_):
+      for j, pred_label in enumerate(self.classes_):
+        confusion_matrix[j, i] = np.sum((y_true_oof == true_label) & (y_pred_oof == pred_label))
 
-    for j, true_class in enumerate(self.classes_):
-      # we isolate the instances where the validation ground truth is the class 'true class'
-      mask = (y_true_oof == true_class)
-      total_true = np.sum(mask)
-      
-      if total_true > 0:
-        for i, pred_class in enumerate(self.classes_):
-          # M[i, j] = P(Y_pred = c_i | Y_true = c_j)
-          self.cm_[i, j] = np.sum(y_pred_oof[mask] == pred_class) / total_true
-      else:
-        # guardrail for cases where a rare class isnt found in the fold
-        self.cm_[:, j] = 1.0 / n_classes
+    _, class_counts = np.unique(y_true_oof, return_counts=True)
+    self.conditional_matrix_ = confusion_matrix / class_counts
+
+  def _compute_score(self, X: np.ndarray) -> np.ndarray:
+    y_predictions = self.classifier_.predict(X)
+    return np.array([np.mean(y_predictions == class_label) for class_label in self.classes_])
 
   def _quantify(self, X: np.ndarray) -> np.ndarray:
-    if not hasattr(self.classifier_, "predict"):
-      raise AttributeError(
-        f"The base classifier '{self.classifier_.__class__.__name__}' "
-        f"do not have the method 'predict' required for GAC."
-      )
-
-    
-    y_pred_test = self.classifier_.predict(X) # direct count for test bag (using CC)
-    # prevalence vector
-    p_cc = np.zeros(self.n_classes_)
-    total_test = len(y_pred_test)
-    for i, pred_class in enumerate(self.classes_):
-      p_cc[i] = np.sum(y_pred_test == pred_class) / (total_test + 1e-12)
-
-    # alpha represent the vector of real prevalences adjusted that
-    # we want to estimate
-    alpha = cp.Variable(self.n_classes_)
-
-    # GAC solve by minimum squares (L2) the linear sistem M @ alpha = p_cc
-    objective = cp.Minimize(cp.sum_squares(p_cc - self.cm_ @ alpha))
-
-    # restrictions are 1-the sum must be 1.0, and 2-none can be negative
-    constraints = [cp.sum(alpha) == 1, alpha >= 0]
-
-    problem = cp.Problem(objective, constraints)
-    problem.solve()
-    
-    p_adjusted = alpha.value
-    if p_adjusted is None:
-      # fallback if the solver didnt solve the problem
-      return self.train_prevalence_.copy()
-
-    # handle noise in p_adjusted
-    p_adjusted = np.clip(p_adjusted, 0.0, 1.0)
-    p_adjusted /= np.sum(p_adjusted)
-
-    return p_adjusted
+    test_frequencies = self._compute_score(X)
+    if not self.use_convex_solver:
+      return self._golden_section_search_fallback(test_frequencies)
+    try:
+      prevalence_solution = self._solve_via_convex_programming(test_frequencies)
+      if prevalence_solution is None:
+        warnings.warn("Convex optimization returned an empty result. Falling back to GSS search.")
+        return self._golden_section_search_fallback(test_frequencies)
+      return np.array(prevalence_solution).squeeze()
+    except cvx.SolverError:
+      warnings.warn("CVXPY SolverError encountered. Falling back to GSS search.")
+      return self._golden_section_search_fallback(test_frequencies)
 
 
-class GPAC(BaseCalibratedQuantifier):
+class GPAC(BaseCalibratedQuantifier, BaseMixtureQuantifier):
+  """Generalized Probabilistic Adjusting Confusion Matrix (GPAC) Quantifier.
+
+  A distance-minimizing multi-class generalization of the Probabilistic Adjusting 
+  Count (PAC) algorithm that optimizes target distributions using soft-probability profiles.
+
+  Parameters
+  ----------
+  classifier : estimator object, default = LogisticRegression
+    The underlying base classifier. Defaults to `LogisticRegression()`.
+
+  distance_metric : str, default = 'L2'
+    The distance metric minimized.
+
+  cv : int, default = 10
+    The number of cross-validation folds.
+
+  use_convex_solver : bool, default = True
+    If True, optimizes via CVXPY.
+
+  References
+  ----------
+  Aykut Firat. Unified framework for quantification. arXiv preprint arXiv:1606.00868, 2016.
   """
-  GPAC (Generalized Probabilistic Adjusted Classify and Count).
-  
-  GPAC is the multiclass extension for PACC (Probabilistic Adjusted Classify and Count)
-  Its replace the confusion matrix built with hard labels with the mean of predicted 
-  probabilities, avoiding the threshold impact that hard labels have.
-  
-  Refs
-  [1] Aykut Firat. Unified framework for quantification.
-      arXiv preprint arXiv:1606.00868, 2016.
-  """
-  _strictly_binary = False
 
-  def __init__(self, classifier: BaseEstimator = None, cv: int = 5):
-      super().__init__(classifier=classifier, cv=cv)
+  def __init__(self,
+               classifier: BaseEstimator = LogisticRegression(),
+               distance_metric: str = "L2", 
+               cv: int = 10,
+               use_convex_solver: bool = True):
+    BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv)
+    BaseMixtureQuantifier.__init__(self, classifier=classifier, distance_metric=distance_metric, 
+                                  use_convex_solver=use_convex_solver)
 
   def _get_oof_method(self) -> str:
     return "predict_proba"
 
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
-    """
-    Build the probabilities confusion matrix (M)
-    Each element M[i, j] stores the mean of predicted probabilities for class i given
-    that the real ground truth is the class j.
-    Shape of M is (n_classes, n_classes)
-    """
-    n_classes = self.n_classes_
-    self.cm_ = np.zeros((n_classes, n_classes))
-
-    # loop for each real class j (columns for the matrix)
-    for j, true_class in enumerate(self.classes_):
-      # isolate the scores for each instance that real belong to that class (true class)
-      mask = (y_true_oof == true_class)
-      total_true = np.sum(mask)
-      
-      if total_true > 0:
-        # loop each prob column i (rows for M)
-        for i in range(n_classes):
-          # M[i, j] = mean( P(Y_pred = c_i | Y_true = c_j) )
-          self.cm_[i, j] = np.mean(y_pred_oof[mask, i])
-      else:
-        # guardrail: uniform att in case that the class do not appear in this fold
-        self.cm_[:, j] = 1.0 / n_classes
-
-  def _quantify(self, X: np.ndarray) -> np.ndarray:
-    if not hasattr(self.classifier_, "predict_proba"):
-      raise AttributeError(
-        f"The base classifier '{self.classifier_.__class__.__name__}' "
-        f"do not have the method 'predict_proba' required for GPAC."
-      )
-
-    # step-2 calculate the prevalence probability in this test bag using PCC
-    y_pred_test = self.classifier_.predict_proba(X)
-    
-    # Array containing the mean probabilities predicted for each class in the test bag
-    # p_pcc = [ mean(P(c_0)), mean(P(c_1)), ..., mean(P(c_C)) ]
-    p_pcc = np.mean(y_pred_test, axis=0)
-
-    # alpha is the decision array containing the real prevalences adjusted (C,)
-    alpha = cp.Variable(self.n_classes_)
-
-    # GPAC solves using minimum squares (L2) the linear system M @ alpha = p_pcc
-    objective = cp.Minimize(cp.sum_squares(p_pcc - self.cm_ @ alpha))
-
-    # restrictions: sum of prevalences must be 1.0 and only have positive values
-    constraints = [cp.sum(alpha) == 1, alpha >= 0]
-    problem = cp.Problem(objective, constraints)
-    problem.solve()
-
-    p_adjusted = alpha.value
-
-    if p_adjusted is None:
-      return self.train_prevalence_.copy()
-
-    p_adjusted = np.clip(p_adjusted, 0.0, 1.0)
-    p_adjusted /= np.sum(p_adjusted)
-
-    return p_adjusted
-
-
-class HDy(BaseCalibratedQuantifier):
-  """
-  HDy (Hellinger Distance on y-scores).
-  
-  minimizes the hellinger distance between probabilities histograms on tests bags
-  and the linear combinations of validations.
-  """
-  _strictly_binary = False
-
-  def __init__(self, classifier=None, cv=5, n_bins=10):
-    super().__init__(classifier=classifier, cv=cv)
-    self.n_bins = n_bins
-
-  def _get_oof_method(self) -> str:
-    return "predict_proba"
-
-  def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
-    """
-    Build the calibration matrix of scores (M).
-    For each real class, we create a histogram of the predicted probabilities.
-    In a multi-class scenario, we concatenate the histograms of all columns of probabilities.
-    """
-    # fixed bins in the space of probs[0, 1]
-    self.bin_edges_ = np.linspace(0.0, 1.0, self.n_bins + 1)
-    
-    calib_cols = []
-    # loop over each real class j (columns of M)
-    for j, true_class in enumerate(self.classes_):
-      mask = (y_true_oof == true_class)
-      class_components = []
-      
-      if np.sum(mask) > 0:
-        # loop over each column of pred probs c
-        for c in range(self.n_classes_):
-          scores_c = y_pred_oof[mask, c]
-          h, _ = np.histogram(scores_c, bins=self.bin_edges_)
-          # local histogram normalization for each column
-          h = h / (np.sum(h) + 1e-12)
-          class_components.append(h)
-      else:
-        # guardrail uniform if a class do not appear in the validation fold
-        for _ in range(self.n_classes_):
-          class_components.append(np.ones(self.n_bins) / self.n_bins)
-
-      # concatenate the histograms of all probabilities of class j
-      # result (n_classes * n_bins, )
-      super_vector_j = np.concatenate(class_components)
-      calib_cols.append(super_vector_j)
-
-    # Matrix M (n_classes * n_bins, n_classes)
-    self.calib_matrix_ = np.column_stack(calib_cols)
-
-  def _quantify(self, X: np.ndarray) -> np.ndarray:
-    if not hasattr(self.classifier_, "predict_proba"):
-      raise AttributeError(
-        f"The base classifier '{self.classifier_.__class__.__name__}' "
-        f"do not have the method 'predict_proba' required for HDy."
-      )
-
-    y_pred_test = self.classifier_.predict_proba(X)
-    
-    test_components = []
-    for c in range(self.n_classes_):
-      h, _ = np.histogram(y_pred_test[:, c], bins=self.bin_edges_)
-      h = h / (np.sum(h) + 1e-12)
-      test_components.append(h)
+    probabilistic_matrix = np.zeros((self.n_classes_, self.n_classes_))
+    for l, class_label in enumerate(self.classes_):
+      class_indices = np.where(y_true_oof == class_label)[0]
+      probabilistic_matrix[:, l] += y_pred_oof[class_indices].sum(axis=0)
         
-    # continuous vector for test (n_classes * n_bins,)
-    h_test = np.concatenate(test_components)
+    _, class_counts = np.unique(y_true_oof, return_counts=True)
+    self.conditional_matrix_ = probabilistic_matrix / class_counts
+
+  def _compute_score(self, X: np.ndarray) -> np.ndarray:
+    return self.classifier_.predict_proba(X).sum(axis=0) / X.shape[0]
+
+  def _quantify(self, X: np.ndarray) -> np.ndarray:
+    test_frequencies = self._compute_score(X)
+    if not self.use_convex_solver:
+      return self._golden_section_search_fallback(test_frequencies)
+    try:
+      prevalence_solution = self._solve_via_convex_programming(test_frequencies)
+      if prevalence_solution is None:
+        warnings.warn("Convex optimization returned an empty result. Falling back to GSS search.")
+        return self._golden_section_search_fallback(test_frequencies)
+      return np.array(prevalence_solution).squeeze()
+    except cvx.SolverError:
+      warnings.warn("CVXPY SolverError encountered. Falling back to GSS search.")
+      return self._golden_section_search_fallback(test_frequencies)
 
 
-    alpha = cp.Variable(self.n_classes_)
+class FM(BaseCalibratedQuantifier, BaseMixtureQuantifier):
+  """Friedman's Method (FM) Quantifier.
 
-    # Transformação matemática crucial para conformidade DCP:
-    # minimize Hellinger is equivalent to maximize the afinity (Bhattacharyya)
-    # sum(sqrt(h_test) * sqrt(M @ alpha))
-    predicted_mixture = self.calib_matrix_ @ alpha
-    
-    objective = cp.Maximize(
-      cp.sum(cp.multiply(np.sqrt(h_test), cp.sqrt(predicted_mixture)))
-    )
-    constraints = [cp.sum(alpha) == 1, alpha >= 0]
+  An adjusting prediction mixture model that maps soft classifier probabilities 
+  into binary indicator matrices by comparing them against baseline training priors.
 
-    problem = cp.Problem(objective, constraints)
-    problem.solve()
+  Parameters
+  ----------
+  classifier : estimator object, default = LogisticRegression
+    The underlying base classifier. Defaults to `LogisticRegression()`.
 
-    p_adjusted = alpha.value
+  distance_metric : str, default = 'L2'
+    The distance metric minimized.
 
-    if p_adjusted is None:
-      return self.train_prevalence_.copy()
+  cv : int, default = 10
+    The number of cross-validation folds.
 
-    p_adjusted = np.clip(p_adjusted, 0.0, 1.0)
-    p_adjusted /= np.sum(p_adjusted)
+  use_convex_solver : bool, default = True
+    If True, optimizes via CVXPY.
 
-    return p_adjusted
-
-
-class FM(BaseCalibratedQuantifier):
+  References
+  ----------
+  Jerome H. Friedman. Class counts in future unlabeled samples, 2014.
+  Presentation at MIT CSAIL Big Data Event.
   """
-  FM (Friedman's Method para Class Distribution Estimation).
-  
-  This method solves the linear equation system based in the expected value
-  for posterior probs, by adjust the distribution under the suposition of
-  Prior Probability Shift.
-  
-  Refs
-  
-  """
-  _strictly_binary = False  # Suporta nativamente cenários multiclasse
 
-  def __init__(self, classifier=None, cv=5):
-    super().__init__(classifier=classifier, cv=cv)
+  def __init__(self,
+               classifier: BaseEstimator = LogisticRegression(),
+               distance_metric: str = "L2",
+               cv: int = 10,
+               use_convex_solver: bool = True):
+    BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv)
+    BaseMixtureQuantifier.__init__(self, classifier=classifier, distance_metric=distance_metric, 
+                                  use_convex_solver=use_convex_solver)
 
   def _get_oof_method(self) -> str:
     return "predict_proba"
 
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
-    """
-    PASSO 1: Construção da Matriz de Calibração de Expectâncias (M).
-    Cada coluna 'j' armazena a média das probabilidades preditas pelo modelo
-    para todas as instâncias que pertencem de fato à classe 'j'.
-    Dimensão da matriz: (n_classes, n_classes)
-    """
-    self.calib_matrix_ = np.zeros((self.n_classes_, self.n_classes_))
-    
-    # Varre cada classe real 'j' (colunas de M)
-    for j, true_class in enumerate(self.classes_):
-      mask = (y_true_oof == true_class)
-      
-      if np.sum(mask) > 0:
-        # Calcula a média das probabilidades preditas para cada classe 'i'
-        # m_ij = E_P [ P(Y=i | X) | Y=j ]
-        self.calib_matrix_[:, j] = np.mean(y_pred_oof[mask], axis=0)
-      else:
-        # Fallback caso a classe não tenha amostras no Out-Of-Fold
-        self.calib_matrix_[:, j] = 1.0 / self.n_classes_
+    threshold_matrix = np.zeros((self.n_classes_, self.n_classes_))
+    for l, class_label in enumerate(self.classes_):
+      class_indices = np.where(y_true_oof == class_label)[0]
+      threshold_matrix[:, l] += (y_pred_oof[class_indices] > self.train_prevalence_).sum(axis=0)
+
+    _, class_counts = np.unique(y_true_oof, return_counts=True)
+    self.conditional_matrix_ = threshold_matrix / class_counts
+
+  def _compute_score(self, X: np.ndarray) -> np.ndarray:
+    return np.sum(self.classifier_.predict_proba(X) > self.train_prevalence_, axis=0) / X.shape[0]
 
   def _quantify(self, X: np.ndarray) -> np.ndarray:
-    if not hasattr(self.classifier_, "predict_proba"):
-      raise AttributeError(
-        f"O classificador base '{self.classifier_.__class__.__name__}' "
-        f"precisa obrigatoriamente do método 'predict_proba'."
-      )
-
-    # PASSO 2: Construção do Vetor de Previsões Médias do Teste (h_test)
-    # h_test[i] = E_Q [ P(Y=i | X) ]
-    y_pred_test = self.classifier_.predict_proba(X)
-    h_test = np.mean(y_pred_test, axis=0)
-
-    # =====================================================================
-    # ENGINE DE OTIMIZAÇÃO CONVEXA (CVXPY)
-    # =====================================================================
-    # Buscamos o vetor alpha (prevalências) que minimize a norma L2 do sistema:
-    # M @ alpha = h_test
-    alpha = cp.Variable(self.n_classes_)
-
-    # Objetivo: Mínimos Quadrados para aproximar a igualdade linear
-    objective = cp.Minimize(cp.sum_squares(self.calib_matrix_ @ alpha - h_test))
-
-    # Restrições do Simplex: as prevalências devem somar 1 e ser não-negativas
-    constraints = [cp.sum(alpha) == 1, alpha >= 0]
-
-    problem = cp.Problem(objective, constraints)
-    problem.solve()
-
-    p_adjusted = alpha.value
-
-    # --- Proteção para falhas de convergência do solver ---
-    if p_adjusted is None:
-      return self.train_prevalence_.copy()
-
-    # Garante limites numéricos rígidos [0, 1] pós-otimização
-    p_adjusted = np.clip(p_adjusted, 0.0, 1.0)
-    p_adjusted /= np.sum(p_adjusted)
-
-    return p_adjusted
+    test_frequencies = self._compute_score(X)
+    if not self.use_convex_solver:
+      return self._golden_section_search_fallback(test_frequencies)
+    try:
+      prevalence_solution = self._solve_via_convex_programming(test_frequencies)
+      if prevalence_solution is None:
+        warnings.warn("Convex optimization returned an empty result. Falling back to GSS search.")
+        return self._golden_section_search_fallback(test_frequencies)
+      return np.array(prevalence_solution).squeeze()
+    except cvx.SolverError:
+      warnings.warn("CVXPY SolverError encountered. Falling back to GSS search.")
+      return self._golden_section_search_fallback(test_frequencies)
