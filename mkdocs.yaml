@@ -1,14 +1,42 @@
 site_name: quack
-site_description: Quantification Kit for Python
+site_description: A Python Quantification Kit.
+
+copyright: Maintained by Gilberto Medeiros @ University of São Paulo, 2026-present
+
 theme:
-  name: readthedocs
+  name: shadcn
+  favicon: images/favicon.png
+  show_title: true
+  pygments_style:
+    light: shadcn-light
+    dark: github-dark
+  icon: openmoji:duck
+  topbar_sections: false
+  show_datetime: false
+  features:
+    - navigation.tabs
+    - content.code.copy
 
 nav:
-  - Home: index.md
+  - Quack!: index.md
+  - Getting Started: getting-started.md
+  - Tutorials: 
+      - Overview: tutorials.md
+      - Methods: tutorials/methods.md
+  - API Reference:
+      - Base Class: api/base.md
+      - Quantifiers: api/quantifiers.md
+      - Metrics: api/metrics.md
 
 plugins:
-  - search
-  - mkdocstrings:
+- search
+- mkdocstrings:
       handlers:
         python:
-          paths: [src]
+          options:
+            docstring_style: numpy
+
+markdown_extensions:
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - codehilite

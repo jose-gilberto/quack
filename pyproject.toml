@@ -25,6 +25,7 @@ test = [
 ]
 docs = [
     "mkdocs>=1.5.0",
+    "mkdocs-shadcn",
     "mkdocstrings[python]>=0.24.0",
 ]
 
