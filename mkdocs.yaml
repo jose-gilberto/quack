@@ -40,3 +40,6 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - codehilite
+
+extra_css:
+  - css/pygments.css
