@@ -51,6 +51,7 @@ class BaseQuantifier(BaseEstimator, QuantifierMixin, ABC):
     """
     pass
 
+  @abstractmethod
   def predict(self, X: np.ndarray) -> np.ndarray:
     """ Estimate the prevalences (distribution) for the test bag X.
     

@@ -22,13 +22,18 @@ To evaluate the method, we used the Absolute Error (AE) between the predicted an
 
 ```python
 from sklearn.linear_model import LogisticRegression
+import numpy as np
 # Import from quack
 from quack.quantifiers import CC
-from quack.metrics import absolute_error
+from quack.metrics import ae
 
-# 1. Load the dataset
+# 1. Load the dataset and count the true prevalence
 X_train, y_train = ...
 X_test, y_test = ...
+
+labels, counts = np.unique(y_test, return_counts=True)
+true_prev = counts / y_test.shape[0]
+true_prev
 
 # 2. Initialize and fit a Classify & Count (CC) quantifier
 quantifier = CC(classifier=LogisticRegression())
@@ -36,7 +41,7 @@ quantifier.fit(X, y)
 
 predicted_prev = quantifier.predict(X_test)
 # Measure performance using Absolute Error
-error = absolute_error(true_prev, predicted_prev)
+error = ae(true_prev, predicted_prev)
 
 print(f"True: {true_prev[1]:.2f} | Pred: {predicted_prev[1]:.2f} | AE: {error:.4f}")
 ```
