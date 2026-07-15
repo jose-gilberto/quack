@@ -79,6 +79,7 @@
         }
     </style>
     <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+    <link href="../../css/pygments.css" rel="stylesheet" />
 
     
 
@@ -650,13 +651,14 @@ Porto, Portugal, 2005.</p>
 </details>
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <pre class="codehilite"><code class="language-pycon">&gt;&gt;&gt; from sklearn.datasets import make_classification
-&gt;&gt;&gt; X, y = make_classification(n_samples=1000, n_classes=2, random_state=42)
-&gt;&gt;&gt; quantifier = CC()
-&gt;&gt;&gt; quantifier.fit(X, y)
-&gt;&gt;&gt; X_test, _ = make_classification(n_samples=200, n_classes=2, random_state=7)
-&gt;&gt;&gt; prevalences = quantifier.predict(X_test)
-&gt;&gt;&gt; print(prevalences)</code></pre>
+    <div class="codehilite"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">quantifier</span> <span class="o">=</span> <span class="n">CC</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">quantifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prevalences</span> <span class="o">=</span> <span class="n">quantifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">prevalences</span><span class="p">)</span>
+</code></pre></div>
 
 
 
@@ -667,133 +669,260 @@ Porto, Portugal, 2005.</p>
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>quack/quantifiers/_baselines.py</code></summary>
-                <pre class="codehilite"><code class="language-python">class CC(BaseQuantifier):
-  """Classify and Count (CC) quantifier.
+                <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 13</span>
+<span class="normal"> 14</span>
+<span class="normal"> 15</span>
+<span class="normal"> 16</span>
+<span class="normal"> 17</span>
+<span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CC</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Classify and Count (CC) quantifier.</span>
 
-  The CC method is the simplest baseline in quantification. It works by
-  classifying all unlabeled instances in the test bag using a hard (crisp)
-  classifier, and then computing the relative frequency (prevalence) of
-  each class based on those predictions.
+<span class="sd">  The CC method is the simplest baseline in quantification. It works by</span>
+<span class="sd">  classifying all unlabeled instances in the test bag using a hard (crisp)</span>
+<span class="sd">  classifier, and then computing the relative frequency (prevalence) of</span>
+<span class="sd">  each class based on those predictions.</span>
 
-  Parameters
-  ----------
-  classifier : estimator object, default = None
-    The classifier to be used as the base for quantification.
-    If None, an instance of `LogisticRegression()` will be created.
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  classifier : estimator object, default = None</span>
+<span class="sd">    The classifier to be used as the base for quantification.</span>
+<span class="sd">    If None, an instance of `LogisticRegression()` will be created.</span>
 
-  Attributes
-  ----------
-  classes_ : ndarray of shape (n_classes,)
-    The distinct class labels found during training.
+<span class="sd">  Attributes</span>
+<span class="sd">  ----------</span>
+<span class="sd">  classes_ : ndarray of shape (n_classes,)</span>
+<span class="sd">    The distinct class labels found during training.</span>
 
-  n_classes_ : int
-    The number of distinct classes.
+<span class="sd">  n_classes_ : int</span>
+<span class="sd">    The number of distinct classes.</span>
 
-  train_prevalence_ : ndarray of shape (n_classes,)
-    The prevalence of each class in the training dataset.
+<span class="sd">  train_prevalence_ : ndarray of shape (n_classes,)</span>
+<span class="sd">    The prevalence of each class in the training dataset.</span>
 
-  y_prevs_ : ndarray of shape (n_classes,)
-    Alias for train_prevalence_ kept for backward compatibility.
+<span class="sd">  y_prevs_ : ndarray of shape (n_classes,)</span>
+<span class="sd">    Alias for train_prevalence_ kept for backward compatibility.</span>
 
-  classifier_ : estimator object
-    The fitted base classifier trained on the entire dataset.
+<span class="sd">  classifier_ : estimator object</span>
+<span class="sd">    The fitted base classifier trained on the entire dataset.</span>
 
-  Notes
-  -----
-  The Classify and Count method does not adjust for misclassifications
-  made by the base classifier (false positives and false negatives). Therefore,
-  its performance is highly dependent on the classification accuracy. 
+<span class="sd">  Notes</span>
+<span class="sd">  -----</span>
+<span class="sd">  The Classify and Count method does not adjust for misclassifications</span>
+<span class="sd">  made by the base classifier (false positives and false negatives). Therefore,</span>
+<span class="sd">  its performance is highly dependent on the classification accuracy. </span>
 
-  The estimated prevalence for class 'c' is given by the formula:
+<span class="sd">  The estimated prevalence for class &#39;c&#39; is given by the formula:</span>
 
-    p_hat(c) = (1 / |X|) * sum( I( f(x) == c ) )
+<span class="sd">    p_hat(c) = (1 / |X|) * sum( I( f(x) == c ) )</span>
 
-  where f(x) is the crisp prediction of the classifier for instance x,
-  and I() is the indicator function.
+<span class="sd">  where f(x) is the crisp prediction of the classifier for instance x,</span>
+<span class="sd">  and I() is the indicator function.</span>
 
-  References
-  ----------
-  George Forman. Counting positives accurately despite inaccurate classification.
-  In Proceedings of the 16th European Conference on Machine Learning, pages 564-575,
-  Porto, Portugal, 2005.
+<span class="sd">  References</span>
+<span class="sd">  ----------</span>
+<span class="sd">  George Forman. Counting positives accurately despite inaccurate classification.</span>
+<span class="sd">  In Proceedings of the 16th European Conference on Machine Learning, pages 564-575,</span>
+<span class="sd">  Porto, Portugal, 2005.</span>
 
-  Examples
-  --------
-  &gt;&gt;&gt; from sklearn.datasets import make_classification
-  &gt;&gt;&gt; X, y = make_classification(n_samples=1000, n_classes=2, random_state=42)
-  &gt;&gt;&gt; quantifier = CC()
-  &gt;&gt;&gt; quantifier.fit(X, y)
-  &gt;&gt;&gt; X_test, _ = make_classification(n_samples=200, n_classes=2, random_state=7)
-  &gt;&gt;&gt; prevalences = quantifier.predict(X_test)
-  &gt;&gt;&gt; print(prevalences)
-  """
+<span class="sd">  Examples</span>
+<span class="sd">  --------</span>
+<span class="sd">  &gt;&gt;&gt; from sklearn.datasets import make_classification</span>
+<span class="sd">  &gt;&gt;&gt; X, y = make_classification(n_samples=1000, n_classes=2, random_state=42)</span>
+<span class="sd">  &gt;&gt;&gt; quantifier = CC()</span>
+<span class="sd">  &gt;&gt;&gt; quantifier.fit(X, y)</span>
+<span class="sd">  &gt;&gt;&gt; X_test, _ = make_classification(n_samples=200, n_classes=2, random_state=7)</span>
+<span class="sd">  &gt;&gt;&gt; prevalences = quantifier.predict(X_test)</span>
+<span class="sd">  &gt;&gt;&gt; print(prevalences)</span>
+<span class="sd">  &quot;&quot;&quot;</span>
 
-  def __init__(self, classifier: BaseEstimator = None):
-    super().__init__(classifier)
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classifier</span><span class="p">:</span> <span class="n">BaseEstimator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">classifier</span><span class="p">)</span>
 
-  def fit(self, X: np.ndarray, y: np.ndarray) -&gt; T_CC:
-    """Adjusts the CC quantifier by fitting the base classifier.
+  <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_CC</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adjusts the CC quantifier by fitting the base classifier.</span>
 
-    Parameters
-    ----------
-    X : {array-like, sparse matrix} of shape (n_samples, n_features)
-      Training data.
-    y : array-like of shape (n_samples,)
-      Labels for the corresponding classes.
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">      Training data.</span>
+<span class="sd">    y : array-like of shape (n_samples,)</span>
+<span class="sd">      Labels for the corresponding classes.</span>
 
-    Returns
-    -------
-    self : object
-        Returns the fitted estimator instance itself.
-    """
-    X, y = check_X_y(X, y, accept_sparse=True)
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    self : object</span>
+<span class="sd">        Returns the fitted estimator instance itself.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    # self.classes_ = self.Y 
-    self.classes_, counts = np.unique(y, return_counts=True)
-    self.n_classes_ = len(self.classes_)
-    self.train_prevalence_ = counts / len(y)
-    self.y_prevs_ = self.train_prevalence_ # Compatibility purposes
-    # lazy validation of the classifier
-    base_classifier = self.classifier if self.classifier is not None else LogisticRegression()
-    self.classifier_ = clone(base_classifier)
-    self.classifier_.fit(X, y) # fit the classifier with all training data
+    <span class="c1"># self.classes_ = self.Y </span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">y_prevs_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="c1"># Compatibility purposes</span>
+    <span class="c1"># lazy validation of the classifier</span>
+    <span class="n">base_classifier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">classifier_</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_classifier</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">classifier_</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="c1"># fit the classifier with all training data</span>
 
-    return self
+    <span class="k">return</span> <span class="bp">self</span>
 
-  def predict(self, X: np.ndarray) -&gt; np.ndarray:
-    """Estimate the class prevalences for the test bag X.
+  <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate the class prevalences for the test bag X.</span>
 
-    Parameters
-    ----------
-    X : {array-like, sparse matrix} of shape (n_samples, n_features)
-      The test bag with unlabelled instances.
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">      The test bag with unlabelled instances.</span>
 
-    Returns
-    -------
-    p_adjusted : ndarray of shape (n_classes,)
-      An array with the estimated prevalences for each class,
-      normalized to sum up to 1.0.
-    """
-    check_is_fitted(self)
-    X = check_array(X, accept_sparse=True)
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    p_adjusted : ndarray of shape (n_classes,)</span>
+<span class="sd">      An array with the estimated prevalences for each class,</span>
+<span class="sd">      normalized to sum up to 1.0.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    y_pred = self.classifier_.predict(X)
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier_</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-    unique_pred, counts_pred = np.unique(y_pred, return_counts=True)
-    pred_counts = dict(zip(unique_pred, counts_pred))
-    # maps back to self.classes_ in order to handle unpredicted classes
-    p_pred = np.array([pred_counts.get(c, 0) for c in self.classes_], dtype=float)
+    <span class="n">unique_pred</span><span class="p">,</span> <span class="n">counts_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">pred_counts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">unique_pred</span><span class="p">,</span> <span class="n">counts_pred</span><span class="p">))</span>
+    <span class="c1"># maps back to self.classes_ in order to handle unpredicted classes</span>
+    <span class="n">p_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pred_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
-    # geometrical normalization
-    p_pred = np.clip(p_pred, 0.0, 1.0)
-    p_sum = np.sum(p_pred)
+    <span class="c1"># geometrical normalization</span>
+    <span class="n">p_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">p_pred</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">p_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_pred</span><span class="p">)</span>
 
-    if p_sum &gt; 0:
-      p_pred /= p_sum
-    else:
-      p_pred = np.ones(self.n_classes_) / self.n_classes_
+    <span class="k">if</span> <span class="n">p_sum</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">p_pred</span> <span class="o">/=</span> <span class="n">p_sum</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">p_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span>
 
-    return p_pred</code></pre>
+    <span class="k">return</span> <span class="n">p_pred</span>
+</code></pre></div></td></tr></table></div></div>
               </details>
 
 
@@ -813,7 +942,7 @@ Porto, Portugal, 2005.</p>
 
 
 <h3 id="quack.quantifiers._baselines.CC.fit" class="doc doc-heading">
-            <code class=" language-python">fit(X, y)</code>
+            <code class=" language-python"><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></code>
 
 </h3>
 
@@ -895,34 +1024,62 @@ Porto, Portugal, 2005.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>quack/quantifiers/_baselines.py</code></summary>
-              <pre class="codehilite"><code class="language-python">def fit(self, X: np.ndarray, y: np.ndarray) -&gt; T_CC:
-  """Adjusts the CC quantifier by fitting the base classifier.
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_CC</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Adjusts the CC quantifier by fitting the base classifier.</span>
 
-  Parameters
-  ----------
-  X : {array-like, sparse matrix} of shape (n_samples, n_features)
-    Training data.
-  y : array-like of shape (n_samples,)
-    Labels for the corresponding classes.
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  X : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">    Training data.</span>
+<span class="sd">  y : array-like of shape (n_samples,)</span>
+<span class="sd">    Labels for the corresponding classes.</span>
 
-  Returns
-  -------
-  self : object
-      Returns the fitted estimator instance itself.
-  """
-  X, y = check_X_y(X, y, accept_sparse=True)
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  self : object</span>
+<span class="sd">      Returns the fitted estimator instance itself.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-  # self.classes_ = self.Y 
-  self.classes_, counts = np.unique(y, return_counts=True)
-  self.n_classes_ = len(self.classes_)
-  self.train_prevalence_ = counts / len(y)
-  self.y_prevs_ = self.train_prevalence_ # Compatibility purposes
-  # lazy validation of the classifier
-  base_classifier = self.classifier if self.classifier is not None else LogisticRegression()
-  self.classifier_ = clone(base_classifier)
-  self.classifier_.fit(X, y) # fit the classifier with all training data
+  <span class="c1"># self.classes_ = self.Y </span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">y_prevs_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="c1"># Compatibility purposes</span>
+  <span class="c1"># lazy validation of the classifier</span>
+  <span class="n">base_classifier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">classifier_</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_classifier</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">classifier_</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="c1"># fit the classifier with all training data</span>
 
-  return self</code></pre>
+  <span class="k">return</span> <span class="bp">self</span>
+</code></pre></div></td></tr></table></div></div>
             </details>
     </div>
 
@@ -932,7 +1089,7 @@ Porto, Portugal, 2005.</p>
 
 
 <h3 id="quack.quantifiers._baselines.CC.predict" class="doc doc-heading">
-            <code class=" language-python">predict(X)</code>
+            <code class=" language-python"><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></code>
 
 </h3>
 
@@ -999,40 +1156,74 @@ normalized to sum up to 1.0.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>quack/quantifiers/_baselines.py</code></summary>
-              <pre class="codehilite"><code class="language-python">def predict(self, X: np.ndarray) -&gt; np.ndarray:
-  """Estimate the class prevalences for the test bag X.
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Estimate the class prevalences for the test bag X.</span>
 
-  Parameters
-  ----------
-  X : {array-like, sparse matrix} of shape (n_samples, n_features)
-    The test bag with unlabelled instances.
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  X : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">    The test bag with unlabelled instances.</span>
 
-  Returns
-  -------
-  p_adjusted : ndarray of shape (n_classes,)
-    An array with the estimated prevalences for each class,
-    normalized to sum up to 1.0.
-  """
-  check_is_fitted(self)
-  X = check_array(X, accept_sparse=True)
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  p_adjusted : ndarray of shape (n_classes,)</span>
+<span class="sd">    An array with the estimated prevalences for each class,</span>
+<span class="sd">    normalized to sum up to 1.0.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+  <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-  y_pred = self.classifier_.predict(X)
+  <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier_</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-  unique_pred, counts_pred = np.unique(y_pred, return_counts=True)
-  pred_counts = dict(zip(unique_pred, counts_pred))
-  # maps back to self.classes_ in order to handle unpredicted classes
-  p_pred = np.array([pred_counts.get(c, 0) for c in self.classes_], dtype=float)
+  <span class="n">unique_pred</span><span class="p">,</span> <span class="n">counts_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">pred_counts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">unique_pred</span><span class="p">,</span> <span class="n">counts_pred</span><span class="p">))</span>
+  <span class="c1"># maps back to self.classes_ in order to handle unpredicted classes</span>
+  <span class="n">p_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pred_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
-  # geometrical normalization
-  p_pred = np.clip(p_pred, 0.0, 1.0)
-  p_sum = np.sum(p_pred)
+  <span class="c1"># geometrical normalization</span>
+  <span class="n">p_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">p_pred</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+  <span class="n">p_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_pred</span><span class="p">)</span>
 
-  if p_sum &gt; 0:
-    p_pred /= p_sum
-  else:
-    p_pred = np.ones(self.n_classes_) / self.n_classes_
+  <span class="k">if</span> <span class="n">p_sum</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">p_pred</span> <span class="o">/=</span> <span class="n">p_sum</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">p_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span>
 
-  return p_pred</code></pre>
+  <span class="k">return</span> <span class="n">p_pred</span>
+</code></pre></div></td></tr></table></div></div>
             </details>
     </div>
 

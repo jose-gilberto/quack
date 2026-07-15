@@ -79,6 +79,7 @@
         }
     </style>
     <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
+    <link href="../css/pygments.css" rel="stylesheet" />
 
     
 
@@ -510,32 +511,32 @@
 <p><strong>Note</strong>: this page may be adjusted in the feature as we are in a <code>alpha</code> version of the package, if you use it in any of you projects be careful to clone, install and use a 'stable' version (main branch). If you want to keep up with the updates you can use the 'develop' branch or some specific branch for other features.</p>
 <h2 id="instalation">Instalation</h2>
 <p>For now, to install quack you need to rely on the git pip feature. Just need to run the following command:</p>
-<pre class="codehilite"><code class="language-bash">pip install git+https://github.com/jose-gilberto/quack@main
-</code></pre>
+<div class="codehilite"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/jose-gilberto/quack@main
+</code></pre></div>
 
 <h2 id="quickstart-workflow">Quickstart Workflow</h2>
 <p>Considering that you already have a dataset loaded and splitted into training and testing, the following script will create a quantifier based on logistic regression to estimate the prevalence of your set.</p>
 <p>Any data compatible with Scikit-learn or Numpy can be used, whether <code>np.ndarray</code> or <code>sparse_matrix</code> objects.</p>
 <p>To evaluate the method, we used the Absolute Error (AE) between the predicted and real prevalences.</p>
-<pre class="codehilite"><code class="language-python">from sklearn.linear_model import LogisticRegression
-# Import from quack
-from quack.quantifiers import CC
-from quack.metrics import absolute_error
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="c1"># Import from quack</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">quack.quantifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">quack.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">absolute_error</span>
 
-# 1. Load the dataset
-X_train, y_train = ...
-X_test, y_test = ...
+<span class="c1"># 1. Load the dataset</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="o">...</span>
 
-# 2. Initialize and fit an Adjusted Classify &amp; Count (ACC) quantifier
-quantifier = CC(classifier=LogisticRegression())
-quantifier.fit(X, y)
+<span class="c1"># 2. Initialize and fit an Adjusted Classify &amp; Count (ACC) quantifier</span>
+<span class="n">quantifier</span> <span class="o">=</span> <span class="n">CC</span><span class="p">(</span><span class="n">classifier</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">quantifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
-predicted_prev = quantifier.predict(X_test)
-# Measure performance using Absolute Error
-error = absolute_error(true_prev, predicted_prev)
+<span class="n">predicted_prev</span> <span class="o">=</span> <span class="n">quantifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="c1"># Measure performance using Absolute Error</span>
+<span class="n">error</span> <span class="o">=</span> <span class="n">absolute_error</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">predicted_prev</span><span class="p">)</span>
 
-print(f&quot;True: {true_prev[1]:.2f} | Pred: {predicted_prev[1]:.2f} | AE: {error:.4f}&quot;)
-</code></pre>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;True: </span><span class="si">{</span><span class="n">true_prev</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> | Pred: </span><span class="si">{</span><span class="n">predicted_prev</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> | AE: </span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Quantification is very useful in scenarios where prior probability shifts occur.</p>
   </div>
