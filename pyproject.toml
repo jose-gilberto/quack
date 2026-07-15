@@ -16,7 +16,13 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = []
+dependencies = [
+    "scikit-learn>=1.9.0",
+    "scipy>=1.18.0",
+    "pandas>=3.0.3",
+    "numpy>=2.5.0",
+    "cvxpy>=1.9.2"
+]
 
 [project.optional-dependencies]
 test = [
