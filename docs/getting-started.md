@@ -30,7 +30,7 @@ from quack.metrics import absolute_error
 X_train, y_train = ...
 X_test, y_test = ...
 
-# 2. Initialize and fit an Adjusted Classify & Count (ACC) quantifier
+# 2. Initialize and fit a Classify & Count (CC) quantifier
 quantifier = CC(classifier=LogisticRegression())
 quantifier.fit(X, y)
 
