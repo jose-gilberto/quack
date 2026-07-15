@@ -18,7 +18,7 @@ classifiers = [
 ]
 dependencies = [
     "scikit-learn>=1.9.0",
-    "scipy>=1.18.0",
+    "scipy>=1.17.0",
     "pandas>=3.0.3",
     "numpy>=2.5.0",
     "cvxpy>=1.9.2"
