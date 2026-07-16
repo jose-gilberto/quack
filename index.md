@@ -40,6 +40,8 @@ And some other features that aren't listed here.
   - **Next steps** will include add more loaders to classical papers as (Forman 2008), hierarchical and multilabel dataset.
   - Loaders to signal based datasets from PhysioNet.
 
+---
+
 ## Citing
 
 If you use Quack, please consider citing the repository (at the moment we do not have any publication related to the original repository), in your paper.

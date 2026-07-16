@@ -507,7 +507,2076 @@
     </div>
   </div>
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
-    
+    <h2 id="mixins">Mixins</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="quack.quantifiers.base.QuantifierMixin" class="doc doc-heading">
+            <code>quack.quantifiers.base.QuantifierMixin</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>Mixin to identify that this class belongs to quantifiers family.</p>
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>quack/quantifiers/base.py</code></summary>
+                <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">QuantifierMixin</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Mixin to identify that this class belongs to quantifiers family.&quot;&quot;&quot;</span>
+  <span class="n">_estimator_type</span> <span class="o">=</span> <span class="s2">&quot;quantifier&quot;</span>
+</code></pre></div></td></tr></table></div></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="bases">Bases</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="quack.quantifiers.base.BaseQuantifier" class="doc doc-heading">
+            <code>quack.quantifiers.base.BaseQuantifier</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="sklearn.base.BaseEstimator">BaseEstimator</span></code>, <code><a class="autorefs autorefs-internal" title="quack.quantifiers.base.QuantifierMixin" href="#quack.quantifiers.base.QuantifierMixin">QuantifierMixin</a></code>, <code><span title="abc.ABC">ABC</span></code></p>
+
+
+
+        <p>Abstract class for all quantifiers. Inherits from BaseEstimator and QuantifierMixin
+to guarantee compatibility with scikit-learn, as clone of estimators, get or set
+parameters (get_parameter/set_parameter) and the integration with GridSeach (GridSearchCV).</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>classifier</code>
+            </td>
+            <td>
+                  <code><span title="sklearn.base.BaseEstimator">BaseEstimator</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The classifier that will be used as a base for the quantifier.
+If its None, an instance of <code>LogisticRegression()</code> will be created.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>quack/quantifiers/base.py</code></summary>
+                <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BaseQuantifier</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">QuantifierMixin</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Abstract class for all quantifiers. Inherits from BaseEstimator and QuantifierMixin</span>
+<span class="sd">  to guarantee compatibility with scikit-learn, as clone of estimators, get or set</span>
+<span class="sd">  parameters (get_parameter/set_parameter) and the integration with GridSeach (GridSearchCV).</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  classifier: estimator object, default = None</span>
+<span class="sd">    The classifier that will be used as a base for the quantifier.</span>
+<span class="sd">    If its None, an instance of `LogisticRegression()` will be created.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classifier</span><span class="p">:</span> <span class="n">BaseEstimator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">classifier</span>
+
+  <span class="nd">@abstractmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Adjusts the quantifier based on the training data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X: {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">      Training data.</span>
+<span class="sd">    y: array-like of shape (n_samples,)</span>
+<span class="sd">      Labels for the corresponding classes.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    self: object</span>
+<span class="sd">      Returns the fitted estimator instance itself.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+  <span class="nd">@abstractmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Estimate the prevalences (distribution) for the test bag X.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X: {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">      The test bag with unlabelled instances.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prevalences: ndarray of shape (n_classes,)</span>
+<span class="sd">      An array with the estimated prevalences for each class.</span>
+<span class="sd">      The sum of the elements in this array must be equals to 1.0.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</code></pre></div></td></tr></table></div></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="quack.quantifiers.base.BaseQuantifier.fit" class="doc doc-heading">
+            <code class=" language-python"><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Adjusts the quantifier based on the training data.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>X</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Training data.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>y</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Labels for the corresponding classes.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>self</code></td>            <td>
+                  <code><span title="object">object</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Returns the fitted estimator instance itself.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>quack/quantifiers/base.py</code></summary>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot; Adjusts the quantifier based on the training data.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  X: {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">    Training data.</span>
+<span class="sd">  y: array-like of shape (n_samples,)</span>
+<span class="sd">    Labels for the corresponding classes.</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  self: object</span>
+<span class="sd">    Returns the fitted estimator instance itself.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">pass</span>
+</code></pre></div></td></tr></table></div></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="quack.quantifiers.base.BaseQuantifier.predict" class="doc doc-heading">
+            <code class=" language-python"><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Estimate the prevalences (distribution) for the test bag X.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>X</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The test bag with unlabelled instances.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>prevalences</code></td>            <td>
+                  <code>ndarray of shape (n_classes,)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An array with the estimated prevalences for each class.
+The sum of the elements in this array must be equals to 1.0.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>quack/quantifiers/base.py</code></summary>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot; Estimate the prevalences (distribution) for the test bag X.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  X: {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">    The test bag with unlabelled instances.</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  prevalences: ndarray of shape (n_classes,)</span>
+<span class="sd">    An array with the estimated prevalences for each class.</span>
+<span class="sd">    The sum of the elements in this array must be equals to 1.0.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">pass</span>
+</code></pre></div></td></tr></table></div></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="quack.quantifiers.base.BaseCalibratedQuantifier" class="doc doc-heading">
+            <code>quack.quantifiers.base.BaseCalibratedQuantifier</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="quack.quantifiers.base.BaseQuantifier" href="#quack.quantifiers.base.BaseQuantifier">BaseQuantifier</a></code>, <code><span title="abc.ABC">ABC</span></code></p>
+
+
+
+        <p>Base class to quantifiers that requires cross-validation Out-of-Fold.</p>
+<p>This class manages automatically the pipeline for training with cross-validation
+needed to create the calibration matrices (or confusion matrix) avoiding the
+overfitting.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>classifiers</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The classifier to be internally adjusted. If its None, adopts the <code>LogisticRegressor()</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>cv</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Determine the strategy for cross validation to generate the predictions Out-of-Fold.
+Options include int (number of folds for <code>StratifiedKFold</code>), a generator for CV or an interable
+with custom splits.</p>
+              </div>
+            </td>
+            <td>
+                  <code>10</code>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>quack/quantifiers/base.py</code></summary>
+                <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BaseCalibratedQuantifier</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Base class to quantifiers that requires cross-validation Out-of-Fold.</span>
+
+<span class="sd">  This class manages automatically the pipeline for training with cross-validation</span>
+<span class="sd">  needed to create the calibration matrices (or confusion matrix) avoiding the</span>
+<span class="sd">  overfitting.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  classifiers: estimator object, default = None</span>
+<span class="sd">    The classifier to be internally adjusted. If its None, adopts the `LogisticRegressor()`.</span>
+<span class="sd">  cv: int, cross-validation generator or an iterable, default = 10</span>
+<span class="sd">    Determine the strategy for cross validation to generate the predictions Out-of-Fold.</span>
+<span class="sd">    Options include int (number of folds for `StratifiedKFold`), a generator for CV or an interable</span>
+<span class="sd">    with custom splits.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classifier</span><span class="p">:</span> <span class="n">BaseEstimator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cv</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">classifier</span><span class="o">=</span><span class="n">classifier</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cv</span> <span class="o">=</span> <span class="n">cv</span>
+
+  <span class="nd">@abstractmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">_get_oof_method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Determine which method from the classifier will be used to generate the</span>
+<span class="sd">    predictions.</span>
+
+<span class="sd">    Subclasses must return valid strings like `&quot;predict&quot;` or `&quot;predict_proba&quot;`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    method_name: str</span>
+<span class="sd">      Name of the method of the base estimator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+  <span class="nd">@abstractmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">_calibrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true_oof</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_pred_oof</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Internal method to build structures for calibration (matrix CM).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y_true_oof: ndarray of shape (n_samples,)</span>
+<span class="sd">      True labels colected out-of-fold.</span>
+<span class="sd">    y_pred_oof: ndarray of shape (n_samples, n_classes) or (n_samples,)</span>
+<span class="sd">      Predictions (continuous or crisp) generated out-of-fold.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+  <span class="nd">@abstractmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">_quantify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; End-to-end algorithm for prevalence estimation specific for each subclass.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X: ndarray of shape (n_samples, n_features)</span>
+<span class="sd">      Raw data from test bags</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prevalences: ndarray of shape (n_classes,)</span>
+<span class="sd">      Prevalences estimated by the method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Adjust the complete quantification pipeline using predictions out-of-fold.</span>
+
+<span class="sd">    Executes the cross-validation for internal calibration and, following, adjust</span>
+<span class="sd">    the model with all.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X: {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">      Training data features.</span>
+<span class="sd">    y: array-like of shape (n_samples,)</span>
+<span class="sd">      True labels for the training data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    self: object</span>
+<span class="sd">      Returns the fitted estimator instance itself.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># save the classes and number of classes metadata</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">y_prevs_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="c1"># compatibility purposes  </span>
+
+    <span class="n">base_classifier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+
+    <span class="c1"># check validation and instanciate the cross val strategy</span>
+    <span class="n">cv</span> <span class="o">=</span> <span class="n">check_cv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cv</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classifier</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Returns a StratifiedKFold object</span>
+    <span class="n">n_samples</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">oof_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_oof_method</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">oof_method</span> <span class="o">==</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">:</span>
+      <span class="n">y_pred_oof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">))</span> <span class="c1"># 2d</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">y_pred_oof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="c1"># 1d</span>
+
+    <span class="n">y_true_oof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="c1"># cross validation loop</span>
+    <span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">test_idx</span> <span class="ow">in</span> <span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+      <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">train_idx</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+      <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">train_idx</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+
+      <span class="c1"># clone in a clean way to avoid data leak between folds</span>
+      <span class="n">fold_classifier</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_classifier</span><span class="p">)</span>
+      <span class="n">fold_classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+      <span class="n">y_true_oof</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_test</span>
+      <span class="n">pred_func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">fold_classifier</span><span class="p">,</span> <span class="n">oof_method</span><span class="p">)</span> <span class="c1"># returns the method callable </span>
+      <span class="n">y_pred_oof</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_func</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span> <span class="c1"># even if appear that we can have an overhead</span>
+      <span class="c1"># the cv.split guarantees the a test_idx do not appears as test more than once</span>
+      <span class="c1"># (disjunt or mutually exclusive)</span>
+
+    <span class="c1"># trigger the calibration method</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_calibrate</span><span class="p">(</span><span class="n">y_true_oof</span><span class="p">,</span> <span class="n">y_pred_oof</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">classifier_</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_classifier</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">classifier_</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="c1"># train the final classifier with all training data     </span>
+
+    <span class="k">return</span> <span class="bp">self</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Maps the test bag and estimate the class prevalences.</span>
+
+<span class="sd">    Ensures that the post-optimization output adopts consistent geometric properties.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X: {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">      Test bag of unlabelled test samples.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    p_adjusted: ndarray of shape (n_classes,)</span>
+<span class="sd">      Array normalized and with all valid predictions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">p_adjusted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quantify</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="c1"># runs the specific math calculus for the subclass</span>
+
+    <span class="n">p_adjusted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">p_adjusted</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c1"># avoid values outside the valid range</span>
+    <span class="n">p_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_adjusted</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">p_sum</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">p_adjusted</span> <span class="o">/=</span> <span class="n">p_sum</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">p_adjusted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span>
+
+    <span class="k">return</span> <span class="n">p_adjusted</span>
+</code></pre></div></td></tr></table></div></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="quack.quantifiers.base.BaseCalibratedQuantifier.fit" class="doc doc-heading">
+            <code class=" language-python"><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Adjust the complete quantification pipeline using predictions out-of-fold.</p>
+<p>Executes the cross-validation for internal calibration and, following, adjust
+the model with all.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>X</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Training data features.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>y</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>True labels for the training data.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>self</code></td>            <td>
+                  <code><span title="object">object</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Returns the fitted estimator instance itself.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>quack/quantifiers/base.py</code></summary>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot; Adjust the complete quantification pipeline using predictions out-of-fold.</span>
+
+<span class="sd">  Executes the cross-validation for internal calibration and, following, adjust</span>
+<span class="sd">  the model with all.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  X: {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">    Training data features.</span>
+<span class="sd">  y: array-like of shape (n_samples,)</span>
+<span class="sd">    True labels for the training data.</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  self: object</span>
+<span class="sd">    Returns the fitted estimator instance itself.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+  <span class="c1"># save the classes and number of classes metadata</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">y_prevs_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="c1"># compatibility purposes  </span>
+
+  <span class="n">base_classifier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+
+  <span class="c1"># check validation and instanciate the cross val strategy</span>
+  <span class="n">cv</span> <span class="o">=</span> <span class="n">check_cv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cv</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classifier</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Returns a StratifiedKFold object</span>
+  <span class="n">n_samples</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+  <span class="n">oof_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_oof_method</span><span class="p">()</span>
+  <span class="k">if</span> <span class="n">oof_method</span> <span class="o">==</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">:</span>
+    <span class="n">y_pred_oof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">))</span> <span class="c1"># 2d</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">y_pred_oof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="c1"># 1d</span>
+
+  <span class="n">y_true_oof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+  <span class="c1"># cross validation loop</span>
+  <span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">test_idx</span> <span class="ow">in</span> <span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">train_idx</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+    <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">train_idx</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+
+    <span class="c1"># clone in a clean way to avoid data leak between folds</span>
+    <span class="n">fold_classifier</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_classifier</span><span class="p">)</span>
+    <span class="n">fold_classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+    <span class="n">y_true_oof</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_test</span>
+    <span class="n">pred_func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">fold_classifier</span><span class="p">,</span> <span class="n">oof_method</span><span class="p">)</span> <span class="c1"># returns the method callable </span>
+    <span class="n">y_pred_oof</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_func</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span> <span class="c1"># even if appear that we can have an overhead</span>
+    <span class="c1"># the cv.split guarantees the a test_idx do not appears as test more than once</span>
+    <span class="c1"># (disjunt or mutually exclusive)</span>
+
+  <span class="c1"># trigger the calibration method</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">_calibrate</span><span class="p">(</span><span class="n">y_true_oof</span><span class="p">,</span> <span class="n">y_pred_oof</span><span class="p">)</span>
+
+  <span class="bp">self</span><span class="o">.</span><span class="n">classifier_</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_classifier</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">classifier_</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="c1"># train the final classifier with all training data     </span>
+
+  <span class="k">return</span> <span class="bp">self</span>
+</code></pre></div></td></tr></table></div></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="quack.quantifiers.base.BaseCalibratedQuantifier.predict" class="doc doc-heading">
+            <code class=" language-python"><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Maps the test bag and estimate the class prevalences.</p>
+<p>Ensures that the post-optimization output adopts consistent geometric properties.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>X</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Test bag of unlabelled test samples.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>p_adjusted</code></td>            <td>
+                  <code>ndarray of shape (n_classes,)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Array normalized and with all valid predictions.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>quack/quantifiers/base.py</code></summary>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot; Maps the test bag and estimate the class prevalences.</span>
+
+<span class="sd">  Ensures that the post-optimization output adopts consistent geometric properties.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  X: {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">    Test bag of unlabelled test samples.</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  p_adjusted: ndarray of shape (n_classes,)</span>
+<span class="sd">    Array normalized and with all valid predictions.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+  <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">p_adjusted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quantify</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="c1"># runs the specific math calculus for the subclass</span>
+
+  <span class="n">p_adjusted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">p_adjusted</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c1"># avoid values outside the valid range</span>
+  <span class="n">p_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_adjusted</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">p_sum</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">p_adjusted</span> <span class="o">/=</span> <span class="n">p_sum</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">p_adjusted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span>
+
+  <span class="k">return</span> <span class="n">p_adjusted</span>
+</code></pre></div></td></tr></table></div></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="quack.quantifiers.base.BaseMixtureQuantifier" class="doc doc-heading">
+            <code>quack.quantifiers.base.BaseMixtureQuantifier</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="quack.quantifiers.base.BaseQuantifier" href="#quack.quantifiers.base.BaseQuantifier">BaseQuantifier</a></code>, <code><span title="abc.ABC">ABC</span></code></p>
+
+
+
+        <p>Base class for Distance-based Mixture Models (DMM) for quantification.</p>
+<p>This abstract class manages the core optimization engine (via cvxpy) and 
+the Golden Section Search (GSS) binary fallback mechanism for quantifiers 
+that estimate class prevalences by minimizing statistical distances between 
+training and test feature/score distributions.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>classifier</code>
+            </td>
+            <td>
+                  <code>estimator object</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The underlying base classifier. Can be None for feature-based mixture 
+models (e.g., HDx, ReadMe) or an instance of a classifier for prediction-based 
+mixture models (e.g., HDy, EDy).</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>distance_metric</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The mathematical distance metric to minimize. Supported metrics:
+- 'L1': Manhattan Distance (Sum of absolute errors).
+- 'L2': Euclidean Distance (Root of the sum of squared errors).
+- 'HD': Hellinger Divergence (Measures overlap between probability distributions).
+- 'TS': Topsoe Distance (Symmetric version of Kullback-Leibler Divergence).</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;L1&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>use_convex_solver</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If True, attempts to find the exact global minimum using <code>cvxpy</code>.
+If False or if the convex solver fails, automatically activates the 
+Golden Section Search numerical fallback mechanism.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="quack.quantifiers.base.BaseMixtureQuantifier.classes_">classes_</span></code></td>
+            <td>
+                  <code>ndarray of shape (n_classes,)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The distinct class labels found during the training phase.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="quack.quantifiers.base.BaseMixtureQuantifier.n_classes_">n_classes_</span></code></td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The total number of unique classes.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="quack.quantifiers.base.BaseMixtureQuantifier.train_prevalence_">train_prevalence_</span></code></td>
+            <td>
+                  <code>ndarray of shape (n_classes,)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The baseline prevalence proportion of each class observed in the training data.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="quack.quantifiers.base.BaseMixtureQuantifier.conditional_matrix_">conditional_matrix_</span></code></td>
+            <td>
+                  <code>ndarray of shape (n_components, n_classes)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The conditional probability matrix built during the <code>fit</code> phase.
+Represents the expected distribution profile for each class from the training set.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>quack/quantifiers/base.py</code></summary>
+                <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BaseMixtureQuantifier</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Base class for Distance-based Mixture Models (DMM) for quantification.</span>
+
+<span class="sd">  This abstract class manages the core optimization engine (via cvxpy) and </span>
+<span class="sd">  the Golden Section Search (GSS) binary fallback mechanism for quantifiers </span>
+<span class="sd">  that estimate class prevalences by minimizing statistical distances between </span>
+<span class="sd">  training and test feature/score distributions.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  classifier : estimator object, default=None</span>
+<span class="sd">    The underlying base classifier. Can be None for feature-based mixture </span>
+<span class="sd">    models (e.g., HDx, ReadMe) or an instance of a classifier for prediction-based </span>
+<span class="sd">    mixture models (e.g., HDy, EDy).</span>
+
+<span class="sd">  distance_metric : str, default=&#39;L1&#39;</span>
+<span class="sd">    The mathematical distance metric to minimize. Supported metrics:</span>
+<span class="sd">    - &#39;L1&#39;: Manhattan Distance (Sum of absolute errors).</span>
+<span class="sd">    - &#39;L2&#39;: Euclidean Distance (Root of the sum of squared errors).</span>
+<span class="sd">    - &#39;HD&#39;: Hellinger Divergence (Measures overlap between probability distributions).</span>
+<span class="sd">    - &#39;TS&#39;: Topsoe Distance (Symmetric version of Kullback-Leibler Divergence).</span>
+
+<span class="sd">  use_convex_solver : bool, default=True</span>
+<span class="sd">    If True, attempts to find the exact global minimum using `cvxpy`.</span>
+<span class="sd">    If False or if the convex solver fails, automatically activates the </span>
+<span class="sd">    Golden Section Search numerical fallback mechanism.</span>
+
+<span class="sd">  Attributes</span>
+<span class="sd">  ----------</span>
+<span class="sd">  classes_ : ndarray of shape (n_classes,)</span>
+<span class="sd">    The distinct class labels found during the training phase.</span>
+
+<span class="sd">  n_classes_ : int</span>
+<span class="sd">    The total number of unique classes.</span>
+
+<span class="sd">  train_prevalence_ : ndarray of shape (n_classes,)</span>
+<span class="sd">    The baseline prevalence proportion of each class observed in the training data.</span>
+
+<span class="sd">  conditional_matrix_ : ndarray of shape (n_components, n_classes)</span>
+<span class="sd">    The conditional probability matrix built during the `fit` phase.</span>
+<span class="sd">    Represents the expected distribution profile for each class from the training set.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+               <span class="n">classifier</span><span class="p">:</span> <span class="n">BaseEstimator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+               <span class="n">distance_metric</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;L1&#39;</span><span class="p">,</span>
+               <span class="n">use_convex_solver</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">classifier</span><span class="o">=</span><span class="n">classifier</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">=</span> <span class="n">distance_metric</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">use_convex_solver</span> <span class="o">=</span> <span class="n">use_convex_solver</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">conditional_matrix_</span> <span class="o">=</span> <span class="kc">None</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">_compute_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                        <span class="n">candidate_prevalence</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                        <span class="n">test_frequencies</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the selected distance error for a given prevalence candidate.</span>
+
+<span class="sd">    Simulates how the test dataset should look if the true prevalence matched </span>
+<span class="sd">    `candidate_prevalence`, comparing the result against the actual observed </span>
+<span class="sd">    `test_frequencies`. Used primarily as a cost function for the GSS optimizer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># project the candidate prevalence using the training distribution profile (CM * p)</span>
+    <span class="n">projected_frequencies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conditional_matrix_</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">candidate_prevalence</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;L1&#39;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">projected_frequencies</span> <span class="o">-</span> <span class="n">test_frequencies</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;L2&#39;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">projected_frequencies</span> <span class="o">-</span> <span class="n">test_frequencies</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;HD&#39;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">projected_frequencies</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;TS&#39;</span><span class="p">:</span>
+      <span class="n">term_projected</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">projected_frequencies</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">projected_frequencies</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">projected_frequencies</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">test_frequencies</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> 
+                           <span class="k">if</span> <span class="n">projected_frequencies</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">projected_frequencies</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+      <span class="n">term_test</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">test_frequencies</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">projected_frequencies</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">test_frequencies</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> 
+                      <span class="k">if</span> <span class="n">test_frequencies</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">projected_frequencies</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+      <span class="k">return</span> <span class="n">term_projected</span> <span class="o">+</span> <span class="n">term_test</span>
+
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown distance metric: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">_solve_via_convex_programming</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_frequencies</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solves the constrained mixture problem using exact convex optimization.&quot;&quot;&quot;</span>
+    <span class="c1"># define the target optimization variable: the estimated prevalence vector</span>
+    <span class="n">estimated_prevalence</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conditional_matrix_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># proportions cannot be negative and must sum to exactly 1.0</span>
+    <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">estimated_prevalence</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">estimated_prevalence</span><span class="p">)</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">]</span>
+
+    <span class="c1"># map the selected distance metric to CVXPY objective functions</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;L1&#39;</span><span class="p">:</span>
+      <span class="n">objective_function</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conditional_matrix_</span> <span class="o">@</span> <span class="n">estimated_prevalence</span> <span class="o">-</span> <span class="n">test_frequencies</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;L2&#39;</span><span class="p">:</span>
+      <span class="n">objective_function</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conditional_matrix_</span> <span class="o">@</span> <span class="n">estimated_prevalence</span> <span class="o">-</span> <span class="n">test_frequencies</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;HD&#39;</span><span class="p">:</span>
+      <span class="c1"># maximizing affinity is mathematically equivalent to minimizing Hellinger Distance</span>
+      <span class="n">objective_function</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Maximize</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conditional_matrix_</span> <span class="o">@</span> <span class="n">estimated_prevalence</span><span class="p">))))</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;TS&#39;</span><span class="p">:</span>
+      <span class="n">objective_function</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">kl_div</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">conditional_matrix_</span> <span class="o">@</span> <span class="n">estimated_prevalence</span><span class="p">,</span> <span class="n">test_frequencies</span><span class="p">)</span> <span class="o">+</span> 
+                                                <span class="n">cvx</span><span class="o">.</span><span class="n">kl_div</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">test_frequencies</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conditional_matrix_</span> <span class="o">@</span> <span class="n">estimated_prevalence</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Distance metric not supported by the convex solver: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># construct and solve the mathematical problem globally</span>
+    <span class="n">problem</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">objective_function</span><span class="p">,</span> <span class="n">constraints</span><span class="p">)</span>
+    <span class="n">problem</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">estimated_prevalence</span><span class="o">.</span><span class="n">value</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">_golden_section_search_fallback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_frequencies</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-04</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Golden Section Search (GSS) algorithm for binary optimization fallback.</span>
+
+<span class="sd">    Approximates the minimum point of the distance function by narrowing down </span>
+<span class="sd">    the search window based on the Golden Ratio (phi). Automatically triggered </span>
+<span class="sd">    if the convex solver fails or is disabled.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># golden Section mathematical constants (1/phi and 1/phi^2)</span>
+    <span class="n">inverse_phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">inverse_phi_squared</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+
+    <span class="c1"># initial search boundaries for the positive class prevalence: between 0% and 100%</span>
+    <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span>
+    <span class="n">interval_width</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="c1"># calculate the required number of steps to satisfy the target tolerance threshold</span>
+    <span class="n">total_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tolerance</span> <span class="o">/</span> <span class="n">interval_width</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">inverse_phi</span><span class="p">)))</span>
+
+    <span class="c1"># define the two initial internal sampling probe points</span>
+    <span class="n">probe_point_1</span> <span class="o">=</span> <span class="n">lower_bound</span> <span class="o">+</span> <span class="n">inverse_phi_squared</span> <span class="o">*</span> <span class="n">interval_width</span>
+    <span class="n">probe_point_2</span> <span class="o">=</span> <span class="n">lower_bound</span> <span class="o">+</span> <span class="n">inverse_phi</span> <span class="o">*</span> <span class="n">interval_width</span>
+
+    <span class="c1"># evaluate distance errors at both sample probes (assuming binary scenario: [p, 1-p])</span>
+    <span class="n">error_at_probe_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_distance</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">probe_point_1</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">probe_point_1</span><span class="p">]),</span> <span class="n">test_frequencies</span><span class="p">)</span>
+    <span class="n">error_at_probe_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_distance</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">probe_point_2</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">probe_point_2</span><span class="p">]),</span> <span class="n">test_frequencies</span><span class="p">)</span>
+
+    <span class="c1"># iteratively shrink the search window</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">total_steps</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">error_at_probe_1</span> <span class="o">&lt;</span> <span class="n">error_at_probe_2</span><span class="p">:</span>
+        <span class="c1"># the minimum lies in the left segment; discard the rightmost region</span>
+        <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">probe_point_2</span>
+        <span class="n">probe_point_2</span> <span class="o">=</span> <span class="n">probe_point_1</span>
+        <span class="n">error_at_probe_2</span> <span class="o">=</span> <span class="n">error_at_probe_1</span>
+        <span class="n">interval_width</span> <span class="o">=</span> <span class="n">inverse_phi</span> <span class="o">*</span> <span class="n">interval_width</span>
+        <span class="n">probe_point_1</span> <span class="o">=</span> <span class="n">lower_bound</span> <span class="o">+</span> <span class="n">inverse_phi_squared</span> <span class="o">*</span> <span class="n">interval_width</span>
+        <span class="n">error_at_probe_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_distance</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">probe_point_1</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">probe_point_1</span><span class="p">]),</span> <span class="n">test_frequencies</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># the minimum lies in the right segment; discard the leftmost region</span>
+        <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">probe_point_1</span>
+        <span class="n">probe_point_1</span> <span class="o">=</span> <span class="n">probe_point_2</span>
+        <span class="n">error_at_probe_1</span> <span class="o">=</span> <span class="n">error_at_probe_2</span>
+        <span class="n">interval_width</span> <span class="o">=</span> <span class="n">inverse_phi</span> <span class="o">*</span> <span class="n">interval_width</span>
+        <span class="n">probe_point_2</span> <span class="o">=</span> <span class="n">lower_bound</span> <span class="o">+</span> <span class="n">inverse_phi</span> <span class="o">*</span> <span class="n">interval_width</span>
+        <span class="n">error_at_probe_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_distance</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">probe_point_2</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">probe_point_2</span><span class="p">]),</span> <span class="n">test_frequencies</span><span class="p">)</span>
+
+    <span class="c1"># select the absolute best prevalence candidate within the finalized narrow window</span>
+    <span class="k">if</span> <span class="n">error_at_probe_1</span> <span class="o">&lt;</span> <span class="n">error_at_probe_2</span><span class="p">:</span>
+      <span class="n">error_at_lower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_distance</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lower_bound</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">lower_bound</span><span class="p">]),</span> <span class="n">test_frequencies</span><span class="p">)</span>
+      <span class="n">mid_point</span> <span class="o">=</span> <span class="p">(</span><span class="n">lower_bound</span> <span class="o">+</span> <span class="n">probe_point_2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+      <span class="n">error_at_mid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_distance</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mid_point</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">mid_point</span><span class="p">]),</span> <span class="n">test_frequencies</span><span class="p">)</span>
+      <span class="n">best_positive_prevalence</span> <span class="o">=</span> <span class="p">[</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">mid_point</span><span class="p">,</span> <span class="n">probe_point_2</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">([</span><span class="n">error_at_lower</span><span class="p">,</span> <span class="n">error_at_mid</span><span class="p">,</span> <span class="n">error_at_probe_2</span><span class="p">]))]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">error_at_upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_distance</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">upper_bound</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">upper_bound</span><span class="p">]),</span> <span class="n">test_frequencies</span><span class="p">)</span>
+      <span class="n">mid_point</span> <span class="o">=</span> <span class="p">(</span><span class="n">upper_bound</span> <span class="o">+</span> <span class="n">probe_point_1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+      <span class="n">error_at_mid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_distance</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mid_point</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">mid_point</span><span class="p">]),</span> <span class="n">test_frequencies</span><span class="p">)</span>
+      <span class="n">best_positive_prevalence</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_bound</span><span class="p">,</span> <span class="n">mid_point</span><span class="p">,</span> <span class="n">probe_point_1</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">([</span><span class="n">error_at_upper</span><span class="p">,</span> <span class="n">error_at_mid</span><span class="p">,</span> <span class="n">error_at_probe_1</span><span class="p">]))]</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">best_positive_prevalence</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">best_positive_prevalence</span><span class="p">])</span>
+
+  <span class="nd">@abstractmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">_compute_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the empirical frequency distribution of the test batch X.</span>
+
+<span class="sd">    Must be implemented by specific sub-quantifiers (e.g., HDx, HDy, ReadMe) </span>
+<span class="sd">    to map the testing data into the matching distribution space.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimates the class prevalences for the given test data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : ndarray of shape (n_samples, n_features)</span>
+<span class="sd">      The testing data matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    estimated_prevalences : ndarray of shape (n_classes,)</span>
+<span class="sd">      A normalized probability vector indicating the estimated prevalence </span>
+<span class="sd">      proportions for each class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># validate that the quantifier has been fitted and parse input data</span>
+    <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># calculate the test score distribution/frequencies</span>
+    <span class="n">test_frequencies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_score</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+    <span class="c1"># bypass the convex solver entirely if use_convex_solver is explicitly turned off</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_convex_solver</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_golden_section_search_fallback</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">)</span>
+
+    <span class="c1"># Primary route: Attempt exact programming via convex optimization</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">prevalence_solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_solve_via_convex_programming</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="n">prevalence_solution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Convex optimization returned an empty result. Falling back to GSS search.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_golden_section_search_fallback</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">)</span>
+
+      <span class="n">estimated_prevalences</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">prevalence_solution</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="n">cvx</span><span class="o">.</span><span class="n">SolverError</span><span class="p">:</span>
+      <span class="c1"># Catch mathematical instabilities or convergence issues triggered by CVXPY</span>
+      <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;CVXPY SolverError encountered. Falling back to GSS search as a safety measure.&quot;</span><span class="p">)</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_golden_section_search_fallback</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">)</span>
+
+    <span class="c1"># --- Geometric Post-Processing Pipeline ---</span>
+    <span class="c1"># Clip edge values into the strict [0.0, 1.0] range to fix floating-point precision noise</span>
+    <span class="n">estimated_prevalences</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">estimated_prevalences</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="c1"># Enforce probability closure (The final vector elements must sum to exactly 1.0)</span>
+    <span class="n">total_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">estimated_prevalences</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">total_sum</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">estimated_prevalences</span> <span class="o">/=</span> <span class="n">total_sum</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="c1"># Safe boundary fallback: apply a uniform distribution if everything collapsed to zero</span>
+      <span class="n">estimated_prevalences</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span>
+
+    <span class="k">return</span> <span class="n">estimated_prevalences</span>
+</code></pre></div></td></tr></table></div></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="quack.quantifiers.base.BaseMixtureQuantifier.predict" class="doc doc-heading">
+            <code class=" language-python"><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Estimates the class prevalences for the given test data.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>X</code>
+            </td>
+            <td>
+                  <code>ndarray of shape (n_samples, n_features)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The testing data matrix.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>estimated_prevalences</code></td>            <td>
+                  <code>ndarray of shape (n_classes,)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A normalized probability vector indicating the estimated prevalence 
+proportions for each class.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>quack/quantifiers/base.py</code></summary>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Estimates the class prevalences for the given test data.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  X : ndarray of shape (n_samples, n_features)</span>
+<span class="sd">    The testing data matrix.</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  estimated_prevalences : ndarray of shape (n_classes,)</span>
+<span class="sd">    A normalized probability vector indicating the estimated prevalence </span>
+<span class="sd">    proportions for each class.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="c1"># validate that the quantifier has been fitted and parse input data</span>
+  <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+  <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="c1"># calculate the test score distribution/frequencies</span>
+  <span class="n">test_frequencies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_score</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+  <span class="c1"># bypass the convex solver entirely if use_convex_solver is explicitly turned off</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_convex_solver</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_golden_section_search_fallback</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">)</span>
+
+  <span class="c1"># Primary route: Attempt exact programming via convex optimization</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="n">prevalence_solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_solve_via_convex_programming</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">prevalence_solution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Convex optimization returned an empty result. Falling back to GSS search.&quot;</span><span class="p">)</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_golden_section_search_fallback</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">)</span>
+
+    <span class="n">estimated_prevalences</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">prevalence_solution</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+  <span class="k">except</span> <span class="n">cvx</span><span class="o">.</span><span class="n">SolverError</span><span class="p">:</span>
+    <span class="c1"># Catch mathematical instabilities or convergence issues triggered by CVXPY</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;CVXPY SolverError encountered. Falling back to GSS search as a safety measure.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_golden_section_search_fallback</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">)</span>
+
+  <span class="c1"># --- Geometric Post-Processing Pipeline ---</span>
+  <span class="c1"># Clip edge values into the strict [0.0, 1.0] range to fix floating-point precision noise</span>
+  <span class="n">estimated_prevalences</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">estimated_prevalences</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+
+  <span class="c1"># Enforce probability closure (The final vector elements must sum to exactly 1.0)</span>
+  <span class="n">total_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">estimated_prevalences</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">total_sum</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">estimated_prevalences</span> <span class="o">/=</span> <span class="n">total_sum</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="c1"># Safe boundary fallback: apply a uniform distribution if everything collapsed to zero</span>
+    <span class="n">estimated_prevalences</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span>
+
+  <span class="k">return</span> <span class="n">estimated_prevalences</span>
+</code></pre></div></td></tr></table></div></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
   </div>
   
   <script>
@@ -648,6 +2717,56 @@
                                 <div id="toc" view-transition-name="toc" class="no-scrollbar overflow-y-auto px-8">
     <div class="flex flex-col gap-2 p-4 pt-0 text-sm">
         <p class="text-muted-foreground bg-background sticky top-0 h-6 text-xs">On This Page</p>
+        
+        
+        
+        
+        <a href="#mixins"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#mixins');">
+            Mixins
+        </a>
+        
+        
+        <a href="#quack.quantifiers.base.QuantifierMixin"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.quantifiers.base.QuantifierMixin');">
+            QuantifierMixin
+        </a>
+        
+        
+
+        
+        <a href="#bases"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#bases');">
+            Bases
+        </a>
+        
+        
+        <a href="#quack.quantifiers.base.BaseQuantifier"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.quantifiers.base.BaseQuantifier');">
+            BaseQuantifier
+        </a>
+        
+        <a href="#quack.quantifiers.base.BaseCalibratedQuantifier"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.quantifiers.base.BaseCalibratedQuantifier');">
+            BaseCalibratedQuantifier
+        </a>
+        
+        <a href="#quack.quantifiers.base.BaseMixtureQuantifier"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.quantifiers.base.BaseMixtureQuantifier');">
+            BaseMixtureQuantifier
+        </a>
+        
+        
+
+        
+        
+        
         
 
     </div>

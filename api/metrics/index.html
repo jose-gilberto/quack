@@ -494,7 +494,502 @@
     </div>
   </div>
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
-    
+    <h2 id="quantification-metrics-base">Quantification Metrics Base</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="quack.metrics.base.QuantificationMetric" class="doc doc-heading">
+            <code>quack.metrics.base.QuantificationMetric</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="abc.ABC">ABC</span></code></p>
+
+
+
+        <p>Abstract class to all quantification metrics. It uses the strategy design pattern.</p>
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>quack/metrics/base.py</code></summary>
+                <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">QuantificationMetric</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Abstract class to all quantification metrics. It uses the strategy design pattern.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lower_is_better</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lower_is_better</span> <span class="o">=</span> <span class="n">lower_is_better</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">_validate_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p_true</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Secute that all inputs are in the same format, shape and type.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      p_true (np.ndarray): Array-like with all true prevalences.</span>
+<span class="sd">      p_pred (np.ndarray): Array-like with all predicted prevalences.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">      ValueError: throws it when the shapes are incompatible.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple[np.ndarray, np.ndarray]: Returns the two arrays in a numpy compatible format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">p_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">p_true</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">p_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">p_pred</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">p_true</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">p_pred</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Shape Error: p_true has a shape </span><span class="si">{</span><span class="n">p_true</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;and p_pred have shape </span><span class="si">{</span><span class="n">p_pred</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span>
+      <span class="p">)</span>
+    <span class="k">return</span> <span class="n">p_true</span><span class="p">,</span> <span class="n">p_pred</span>
+
+  <span class="nd">@abstractmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p_true</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Each metric implements its own logic and mathematics.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p_true</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Call and perform the input validation and metric computation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      p_true (np.ndarray): Array-like with all true prevalences.</span>
+<span class="sd">      p_pred (np.ndarray): Array-like with all predicted prevalences.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      float: Array-like containing each metric calculated among the two inputs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">p_true_clean</span><span class="p">,</span> <span class="n">p_pred_clean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_inputs</span><span class="p">(</span><span class="n">p_true</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">p_true_clean</span><span class="p">,</span> <span class="n">p_pred_clean</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="quack.metrics.base.QuantificationMetric.__call__" class="doc doc-heading">
+            <code class=" language-python"><span class="fm">__call__</span><span class="p">(</span><span class="n">p_true</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Call and perform the input validation and metric computation.</p>
+<p>Args:
+  p_true (np.ndarray): Array-like with all true prevalences.
+  p_pred (np.ndarray): Array-like with all predicted prevalences.</p>
+<p>Returns:
+  float: Array-like containing each metric calculated among the two inputs.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>quack/metrics/base.py</code></summary>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p_true</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot; Call and perform the input validation and metric computation.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    p_true (np.ndarray): Array-like with all true prevalences.</span>
+<span class="sd">    p_pred (np.ndarray): Array-like with all predicted prevalences.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    float: Array-like containing each metric calculated among the two inputs.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">p_true_clean</span><span class="p">,</span> <span class="n">p_pred_clean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_inputs</span><span class="p">(</span><span class="n">p_true</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">)</span>
+  <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">p_true_clean</span><span class="p">,</span> <span class="n">p_pred_clean</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="quack.metrics.base.QuantificationMetric.compute" class="doc doc-heading">
+            <code class=" language-python"><span class="n">compute</span><span class="p">(</span><span class="n">p_true</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Each metric implements its own logic and mathematics.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>quack/metrics/base.py</code></summary>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p_true</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot; Each metric implements its own logic and mathematics.&quot;&quot;&quot;</span>
+  <span class="k">pass</span>
+</code></pre></div></td></tr></table></div></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="absolute-error-ae">Absolute Error (AE)</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="quack.metrics._ae.AbsoluteError" class="doc doc-heading">
+            <code>quack.metrics._ae.AbsoluteError</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="quack.metrics.base.QuantificationMetric" href="#quack.metrics.base.QuantificationMetric">QuantificationMetric</a></code></p>
+
+
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>quack/metrics/_ae.py</code></summary>
+                <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">AbsoluteError</span><span class="p">(</span><span class="n">QuantificationMetric</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Absolute Error&quot;</span><span class="p">,</span> <span class="n">lower_is_better</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p_true</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">p_true</span> <span class="o">-</span> <span class="n">p_pred</span><span class="p">)))</span>
+</code></pre></div></td></tr></table></div></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="relative-absolute-error-rae">Relative Absolute Error (RAE)</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="quack.metrics._rae.RelativeAbsoluteError" class="doc doc-heading">
+            <code>quack.metrics._rae.RelativeAbsoluteError</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="quack.metrics.base.QuantificationMetric" href="#quack.metrics.base.QuantificationMetric">QuantificationMetric</a></code></p>
+
+
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>quack/metrics/_rae.py</code></summary>
+                <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RelativeAbsoluteError</span><span class="p">(</span><span class="n">QuantificationMetric</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Relative Absolute Error&quot;</span><span class="p">,</span> <span class="n">lower_is_better</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">epsilon</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p_true</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="n">denominator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">p_true</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">p_true</span> <span class="o">-</span> <span class="n">p_pred</span><span class="p">)</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="kullback-leibler-divergence-kld">Kullback Leibler Divergence (KLD)</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="quack.metrics._kld.KullbackLeiblerDivergence" class="doc doc-heading">
+            <code>quack.metrics._kld.KullbackLeiblerDivergence</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="quack.metrics.base.QuantificationMetric" href="#quack.metrics.base.QuantificationMetric">QuantificationMetric</a></code></p>
+
+
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>quack/metrics/_kld.py</code></summary>
+                <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">KullbackLeiblerDivergence</span><span class="p">(</span><span class="n">QuantificationMetric</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Kullback-Leibler Divergence&quot;</span><span class="p">,</span> <span class="n">lower_is_better</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">epsilon</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p_true</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="n">p_true_smoothed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">p_true</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">p_pred_smoothed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">p_pred</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_true_smoothed</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p_true_smoothed</span> <span class="o">/</span> <span class="n">p_pred_smoothed</span><span class="p">)))</span>
+</code></pre></div></td></tr></table></div></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="normalized-kullback-leibler-divergence-nkld">Normalized Kullback Leibler Divergence (NKLD)</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="quack.metrics._nkld.NormalizedKullbackLeiblerDivergence" class="doc doc-heading">
+            <code>quack.metrics._nkld.NormalizedKullbackLeiblerDivergence</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="quack.metrics.base.QuantificationMetric" href="#quack.metrics.base.QuantificationMetric">QuantificationMetric</a></code></p>
+
+
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>quack/metrics/_nkld.py</code></summary>
+                <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">NormalizedKullbackLeiblerDivergence</span><span class="p">(</span><span class="n">QuantificationMetric</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Normalized Kullback-Leibler Divergence&quot;</span><span class="p">,</span> <span class="n">lower_is_better</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">epsilon</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">kld</span> <span class="o">=</span> <span class="n">KullbackLeiblerDivergence</span><span class="p">()</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p_true</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="n">exp_kld</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kld</span><span class="p">(</span><span class="n">p_true</span><span class="p">,</span> <span class="n">p_pred</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">exp_kld</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">exp_kld</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
   </div>
   
   <script>
@@ -622,6 +1117,92 @@
                                 <div id="toc" view-transition-name="toc" class="no-scrollbar overflow-y-auto px-8">
     <div class="flex flex-col gap-2 p-4 pt-0 text-sm">
         <p class="text-muted-foreground bg-background sticky top-0 h-6 text-xs">On This Page</p>
+        
+        
+        
+        
+        <a href="#quantification-metrics-base"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#quantification-metrics-base');">
+            Quantification Metrics Base
+        </a>
+        
+        
+        <a href="#quack.metrics.base.QuantificationMetric"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.metrics.base.QuantificationMetric');">
+            QuantificationMetric
+        </a>
+        
+        
+
+        
+        <a href="#absolute-error-ae"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#absolute-error-ae');">
+            Absolute Error (AE)
+        </a>
+        
+        
+        <a href="#quack.metrics._ae.AbsoluteError"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.metrics._ae.AbsoluteError');">
+            AbsoluteError
+        </a>
+        
+        
+
+        
+        <a href="#relative-absolute-error-rae"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#relative-absolute-error-rae');">
+            Relative Absolute Error (RAE)
+        </a>
+        
+        
+        <a href="#quack.metrics._rae.RelativeAbsoluteError"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.metrics._rae.RelativeAbsoluteError');">
+            RelativeAbsoluteError
+        </a>
+        
+        
+
+        
+        <a href="#kullback-leibler-divergence-kld"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#kullback-leibler-divergence-kld');">
+            Kullback Leibler Divergence (KLD)
+        </a>
+        
+        
+        <a href="#quack.metrics._kld.KullbackLeiblerDivergence"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.metrics._kld.KullbackLeiblerDivergence');">
+            KullbackLeiblerDivergence
+        </a>
+        
+        
+
+        
+        <a href="#normalized-kullback-leibler-divergence-nkld"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#normalized-kullback-leibler-divergence-nkld');">
+            Normalized Kullback Leibler Divergence (NKLD)
+        </a>
+        
+        
+        <a href="#quack.metrics._nkld.NormalizedKullbackLeiblerDivergence"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.metrics._nkld.NormalizedKullbackLeiblerDivergence');">
+            NormalizedKullbackLeiblerDivergence
+        </a>
+        
+        
+
+        
+        
+        
         
 
     </div>

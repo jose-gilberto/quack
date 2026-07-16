@@ -507,7 +507,59 @@
     </div>
   </div>
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
-    
+    <p>The methods are organized according to the taxonomy proposed by [1] and used in [2], resulting in 3 groups:</p>
+<ul>
+<li><strong>Classify, Count and Correct</strong>: this category uses classifiers to individually classify each sample and count them grouping by the class labels. Some methods may include a correction step to the counts obtained by the classifier. They are:<ol>
+<li>Classify &amp; Count (CC)</li>
+<li>Adjusted Classify &amp; Count (ACC)</li>
+<li>Probabilistic Classify &amp; Count (PCC)</li>
+<li>Probabilistic Adjusted Classify &amp; Count (PACC)</li>
+<li>Generalized Adjusted Classify &amp; Count (GAC)</li>
+<li>Generalized Probabilistic Adjusted Classify &amp; Count (GPAC)</li>
+<li>Friedman's Method (FM)</li>
+<li>Threshold X (X)</li>
+<li>Threshold Max (MAX)</li>
+<li>Threshold 50 (T50)</li>
+<li>MedianSweep (MS)</li>
+</ol>
+</li>
+<li><strong>Distribution Matching</strong>: in this category, the methods model the training distribution and search for the parameters that provides the best match or fit with test distribution. We also split then in 3 subcategories:<ul>
+<li>Feature Based Models (those who works on feature space, do not require a classifier)<ol>
+<li>Hellinger Distance over features (HDx)</li>
+<li>ReadMe</li>
+<li>Energy Distance Minimization (ED)</li>
+</ol>
+</li>
+<li>Label Based Models (those who works with the label)<ol>
+<li>Hellinger Distance over class histograms (HDy)</li>
+<li>Forman's Mixture Model (FMM)</li>
+<li>Distribution y-Similarity (DyS)</li>
+</ol>
+</li>
+<li>Iterator Based (those who use an optimization process based on iterators)<ol>
+<li>Expectation Maximization Quantifier</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>Adaptation of Classification Algorithms</strong>: this category adapts existing classification algorithms to work under quantification tasks. For now we have:<ol>
+<li>Class Distribution Estimation (CDE)</li>
+</ol>
+</li>
+</ul>
+<p>All quantification methods inherits from the <code>BaseQuantifier</code> and <code>BaseEstimator</code> in order to be compatible with scikit-learn. Method names like <code>fit</code> and <code>predict</code> are used to provide an easy integration with other modules from scikit. This way all quantifiers must implement the following methods:</p>
+<div class="codehilite"><pre><span></span><code>  <span class="nd">@abstractmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+  <span class="nd">@abstractmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">pass</span>
+</code></pre></div>
+
+<p>In order to import then we only need to use:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">quack.quantifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span><span class="p">,</span> <span class="n">ACC</span><span class="p">,</span> <span class="n">CDE</span><span class="p">,</span> <span class="n">HDy</span><span class="p">,</span> <span class="o">...</span>
+</code></pre></div>
   </div>
   
   <script>
