@@ -5,10 +5,10 @@
 <head>
     <script>
         /* const base_url = "None"; */
-        const base_url = (new URL("..", window.location)).href.replace(/\/+$/, ""); /* for search plugin notably */
-        /* const root_relative_url = ".."; */
+        const base_url = (new URL("../..", window.location)).href.replace(/\/+$/, ""); /* for search plugin notably */
+        /* const root_relative_url = "../.."; */
     </script>
-    <script integrity="sha384-m6cZ+Whl1ci89lidlu8DH4C+sZLNOYBvImtjUIhUK+iaNffXhqtbYgBVuuPfRsa0" src="../js/dark.js"></script>
+    <script integrity="sha384-m6cZ+Whl1ci89lidlu8DH4C+sZLNOYBvImtjUIhUK+iaNffXhqtbYgBVuuPfRsa0" src="../../js/dark.js"></script>
 
 
     <meta charset="utf-8" />
@@ -18,7 +18,7 @@
     
 
 
-<title>Getting Started</title>
+<title>Datasets</title>
 
 
 
@@ -31,7 +31,7 @@
 
 <!-- Open Graph (Facebook, LinkedIn) -->
 
-<meta property="og:title" content="Getting Started">
+<meta property="og:title" content="Datasets">
 
 
 
@@ -44,7 +44,7 @@
 
 <!-- Twitter Card -->
 
-<meta name="twitter:title" content="Getting Started">
+<meta name="twitter:title" content="Datasets">
 
 
 
@@ -56,18 +56,18 @@
 
 
     
-    <link href="../images/favicon.png" rel="icon" />
+    <link href="../../images/favicon.png" rel="icon" />
 
-    <link href="../css/base.css" rel="stylesheet" />
-    <link href="../css/geist.css" rel="stylesheet" />
+    <link href="../../css/base.css" rel="stylesheet" />
+    <link href="../../css/geist.css" rel="stylesheet" />
 
     
     
 
 <link id="pygments-light" rel="stylesheet"
-    href="../css/pygments/shadcn-light.css">
+    href="../../css/pygments/shadcn-light.css">
 <link id="pygments-dark" rel="stylesheet"
-    href="../css/pygments/github-dark.css"
+    href="../../css/pygments/github-dark.css"
     media="(prefers-color-scheme: dark)">
 
 
@@ -78,13 +78,13 @@
             --theme-accent: oklch(62.3% 0.214 259.815);
         }
     </style>
-    <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
-    <link href="../css/pygments.css" rel="stylesheet" />
+    <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+    <link href="../../css/pygments.css" rel="stylesheet" />
 
     
 
     <script integrity="sha384-V2jkXRy811qODUbfkLlkVJYBbf4h6XHAEjcU6ReASBPrJvTrlYh4GrI4t6GCju6n"
-        src="../js/callbacks.js"></script>
+        src="../../js/callbacks.js"></script>
 
     
 
@@ -271,7 +271,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href=".."
+        data-size="default" href="../.."
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -290,8 +290,8 @@
             
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
-    <a data-slot="sidebar-menu-button" data-active="true" data-sidebar="menu-button"
-        data-size="default" href="./"
+    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
+        data-size="default" href="../../getting-started/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -324,7 +324,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../tutorials/"
+        data-size="default" href="../../tutorials/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -343,7 +343,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../tutorials/methods/"
+        data-size="default" href="../../tutorials/methods/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -362,7 +362,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../tutorials/uci-datasets/"
+        data-size="default" href="../../tutorials/uci-datasets/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -394,7 +394,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/base/"
+        data-size="default" href="../base/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -413,7 +413,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/quantifiers/"
+        data-size="default" href="../quantifiers/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -432,7 +432,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/metrics/"
+        data-size="default" href="../metrics/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -450,8 +450,8 @@
             
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
-    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/datasets/"
+    <a data-slot="sidebar-menu-button" data-active="true" data-sidebar="menu-button"
+        data-size="default" href="./"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -493,13 +493,13 @@
     <div class="flex flex-col gap-2">
       <div id="page-header" class="flex items-start justify-between">
         <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
-          Getting Started
+          Datasets
         </h1>
 
         <div class="flex items-center gap-2 pt-1.5">
           
           <button
-    onclick="fetch(`..`).then((r) => r.text()).then((text) => navigator.clipboard.write([new ClipboardItem({ 'text/plain': text })]))"
+    onclick="fetch(`../..`).then((r) => r.text()).then((text) => navigator.clipboard.write([new ClipboardItem({ 'text/plain': text })]))"
     data-slot="button" class="secondary cursor-pointer">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-copy ">
@@ -514,7 +514,7 @@
           
           <a data-slot="button" id="previous-button"
             class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 extend-touch-target size-8 shadow-none md:size-7"
-            href="..">
+            href="../metrics/">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
               class="tabler-icon tabler-icon-arrow-left">
@@ -526,19 +526,6 @@
           </a>
           
           
-          <a data-slot="button" id="next-button"
-            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 extend-touch-target size-8 shadow-none md:size-7"
-            href="../tutorials/">
-            <span class="sr-only">Next</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="tabler-icon tabler-icon-arrow-right">
-              <path d="M5 12l14 0"></path>
-              <path d="M13 18l6 -6"></path>
-              <path d="M13 6l6 6"></path>
-            </svg>
-          </a>
-          
         </div>
       </div>
       
@@ -549,43 +536,429 @@
     </div>
   </div>
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
-    <p>This guide walks you through a instalation, training and testing a classifier-based quantifier, and evaluating the predictions using a <code>quack</code>'s built-in metrics.</p>
-<p><strong>Note</strong>: this page may be adjusted in the feature as we are in a <code>alpha</code> version of the package, if you use it in any of you projects be careful to clone, install and use a 'stable' version (main branch). If you want to keep up with the updates you can use the 'develop' branch or some specific branch for other features.</p>
-<h2 id="instalation">Instalation</h2>
-<p>For now, to install quack you need to rely on the git pip feature. Just need to run the following command:</p>
-<div class="codehilite"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/jose-gilberto/quack@main
+    <h2 id="uci-datasets">UCI Datasets</h2>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="quack.datasets._uci_datasets.load_uci" class="doc doc-heading">
+            <code class=" language-python"><span class="n">quack</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">_uci_datasets</span><span class="o">.</span><span class="n">load_uci</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Load a UCI dataset by name using the registered loader factory.</p>
+<p>Downloads (if not cached), preprocess and splits features/targets for
+the requested UCI dataset, delegating the whole pipeline to the
+corresponding <code>BaseDatasetLoader</code> subclass registered in <code>UCILoaderFactory</code>.</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>  X, y: np.ndarray, np.ndarray</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Feature matrix <code>X</code> (float32) and target vector <code>y</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>  ValueError</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>if <code>dataset</code> is not a registered key in <code>UCILoaderFactory</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+<p><span class="doc-section-title">Examples:</span></p>
+    <div class="codehilite"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">quack.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_uci</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_uci</span><span class="p">(</span><span class="s2">&quot;bc-count&quot;</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="quickstart-workflow">Quickstart Workflow</h2>
-<p>Considering that you already have a dataset loaded and splitted into training and testing, the following script will create a quantifier based on logistic regression to estimate the prevalence of your set.</p>
-<p>Any data compatible with Scikit-learn or Numpy can be used, whether <code>np.ndarray</code> or <code>sparse_matrix</code> objects.</p>
-<p>To evaluate the method, we used the Absolute Error (AE) between the predicted and real prevalences.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="c1"># Import from quack</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">quack.quantifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">quack.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">ae</span>
 
-<span class="c1"># 1. Load the dataset and count the true prevalence</span>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="o">...</span>
-<span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="o">...</span>
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>quack/datasets/_uci_datasets.py</code></summary>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">867</span>
+<span class="normal">868</span>
+<span class="normal">869</span>
+<span class="normal">870</span>
+<span class="normal">871</span>
+<span class="normal">872</span>
+<span class="normal">873</span>
+<span class="normal">874</span>
+<span class="normal">875</span>
+<span class="normal">876</span>
+<span class="normal">877</span>
+<span class="normal">878</span>
+<span class="normal">879</span>
+<span class="normal">880</span>
+<span class="normal">881</span>
+<span class="normal">882</span>
+<span class="normal">883</span>
+<span class="normal">884</span>
+<span class="normal">885</span>
+<span class="normal">886</span>
+<span class="normal">887</span>
+<span class="normal">888</span>
+<span class="normal">889</span>
+<span class="normal">890</span>
+<span class="normal">891</span>
+<span class="normal">892</span>
+<span class="normal">893</span>
+<span class="normal">894</span>
+<span class="normal">895</span>
+<span class="normal">896</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load_uci</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Load a UCI dataset by name using the registered loader factory.</span>
 
-<span class="n">labels</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">true_prev</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="n">y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">true_prev</span>
+<span class="sd">  Downloads (if not cached), preprocess and splits features/targets for</span>
+<span class="sd">  the requested UCI dataset, delegating the whole pipeline to the</span>
+<span class="sd">  corresponding `BaseDatasetLoader` subclass registered in `UCILoaderFactory`.</span>
 
-<span class="c1"># 2. Initialize and fit a Classify &amp; Count (CC) quantifier</span>
-<span class="n">quantifier</span> <span class="o">=</span> <span class="n">CC</span><span class="p">(</span><span class="n">classifier</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
-<span class="n">quantifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">    dataset: str</span>
+<span class="sd">      Dataset key. Must be one of `quack.datasets.UCI_DATASETS`.</span>
 
-<span class="n">predicted_prev</span> <span class="o">=</span> <span class="n">quantifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-<span class="c1"># Measure performance using Absolute Error</span>
-<span class="n">error</span> <span class="o">=</span> <span class="n">ae</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">predicted_prev</span><span class="p">)</span>
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">    X, y: np.ndarray, np.ndarray</span>
+<span class="sd">      Feature matrix `X` (float32) and target vector `y`.</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;True: </span><span class="si">{</span><span class="n">true_prev</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> | Pred: </span><span class="si">{</span><span class="n">predicted_prev</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> | AE: </span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</code></pre></div>
+<span class="sd">  Raises</span>
+<span class="sd">  ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">      if `dataset` is not a registered key in `UCILoaderFactory`.</span>
 
-<p>Quantification is very useful in scenarios where prior probability shifts occur.</p>
+<span class="sd">  Examples</span>
+<span class="sd">  --------</span>
+<span class="sd">  &gt;&gt;&gt; from quack.datasets import load_uci</span>
+<span class="sd">  &gt;&gt;&gt; X, y = load_uci(&quot;bc-count&quot;)</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">loader</span> <span class="o">=</span> <span class="n">UCILoaderFactory</span><span class="o">.</span><span class="n">get_loader</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+  <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">()</span>
+  <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span>
+</code></pre></div></td></tr></table></div></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="quack.datasets._uci_datasets.UCILoaderFactory" class="doc doc-heading">
+            <code>quack.datasets._uci_datasets.UCILoaderFactory</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>Factory used to instanciate the correct Loader based on the dataset name.</p>
+<p>Some of these datasets are build with one-versus-all strategy and others are
+naturally binary problems. These are the datasets used in [1].</p>
+<p>Refs
+[1] Schumacher, Tobias, Markus Strohmaier, and Florian Lemmerich.
+    "A comparative evaluation of quantification methods."
+    Journal of Machine Learning Research 26.55 (2025): 1-54.</p>
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>quack/datasets/_uci_datasets.py</code></summary>
+                <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">815</span>
+<span class="normal">816</span>
+<span class="normal">817</span>
+<span class="normal">818</span>
+<span class="normal">819</span>
+<span class="normal">820</span>
+<span class="normal">821</span>
+<span class="normal">822</span>
+<span class="normal">823</span>
+<span class="normal">824</span>
+<span class="normal">825</span>
+<span class="normal">826</span>
+<span class="normal">827</span>
+<span class="normal">828</span>
+<span class="normal">829</span>
+<span class="normal">830</span>
+<span class="normal">831</span>
+<span class="normal">832</span>
+<span class="normal">833</span>
+<span class="normal">834</span>
+<span class="normal">835</span>
+<span class="normal">836</span>
+<span class="normal">837</span>
+<span class="normal">838</span>
+<span class="normal">839</span>
+<span class="normal">840</span>
+<span class="normal">841</span>
+<span class="normal">842</span>
+<span class="normal">843</span>
+<span class="normal">844</span>
+<span class="normal">845</span>
+<span class="normal">846</span>
+<span class="normal">847</span>
+<span class="normal">848</span>
+<span class="normal">849</span>
+<span class="normal">850</span>
+<span class="normal">851</span>
+<span class="normal">852</span>
+<span class="normal">853</span>
+<span class="normal">854</span>
+<span class="normal">855</span>
+<span class="normal">856</span>
+<span class="normal">857</span>
+<span class="normal">858</span>
+<span class="normal">859</span>
+<span class="normal">860</span>
+<span class="normal">861</span>
+<span class="normal">862</span>
+<span class="normal">863</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">UCILoaderFactory</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Factory used to instanciate the correct Loader based on the dataset name.</span>
+
+<span class="sd">  Some of these datasets are build with one-versus-all strategy and others are</span>
+<span class="sd">  naturally binary problems. These are the datasets used in [1].</span>
+
+<span class="sd">  Refs</span>
+<span class="sd">  [1] Schumacher, Tobias, Markus Strohmaier, and Florian Lemmerich.</span>
+<span class="sd">      &quot;A comparative evaluation of quantification methods.&quot;</span>
+<span class="sd">      Journal of Machine Learning Research 26.55 (2025): 1-54.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">_registry</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;adult&quot;</span><span class="p">:</span> <span class="n">AdultLoader</span><span class="p">,</span>
+    <span class="s2">&quot;avila&quot;</span><span class="p">:</span> <span class="n">AvilaLoader</span><span class="p">,</span>
+    <span class="s2">&quot;bike&quot;</span><span class="p">:</span> <span class="n">BikeLoader</span><span class="p">,</span>
+    <span class="s2">&quot;blog&quot;</span><span class="p">:</span> <span class="n">BlogFeedbackLoader</span><span class="p">,</span>
+    <span class="s2">&quot;bc-cont&quot;</span><span class="p">:</span> <span class="n">BreastCancerContLoader</span><span class="p">,</span>
+    <span class="s2">&quot;bc-int&quot;</span><span class="p">:</span> <span class="n">BreastCancerIntLoader</span><span class="p">,</span>
+    <span class="s2">&quot;cars&quot;</span><span class="p">:</span> <span class="n">CarsLoader</span><span class="p">,</span>
+    <span class="s2">&quot;conc&quot;</span><span class="p">:</span> <span class="n">ConcreteLoader</span><span class="p">,</span>
+    <span class="s2">&quot;contra&quot;</span><span class="p">:</span> <span class="n">ContraceptiveLoader</span><span class="p">,</span>
+    <span class="s2">&quot;cappl&quot;</span><span class="p">:</span> <span class="n">CreditApprovalLoader</span><span class="p">,</span>
+    <span class="s2">&quot;ccard&quot;</span><span class="p">:</span> <span class="n">CreditCardsLoader</span><span class="p">,</span>
+    <span class="s2">&quot;dota&quot;</span><span class="p">:</span> <span class="n">DotaLoader</span><span class="p">,</span>
+    <span class="s2">&quot;drug&quot;</span><span class="p">:</span> <span class="n">DrugLoader</span><span class="p">,</span>
+    <span class="s2">&quot;ener&quot;</span><span class="p">:</span> <span class="n">EnergyLoader</span><span class="p">,</span>
+    <span class="s2">&quot;flare&quot;</span><span class="p">:</span> <span class="n">FlareLoader</span><span class="p">,</span>
+    <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GridStabilityLoader</span><span class="p">,</span>
+    <span class="s2">&quot;ads&quot;</span><span class="p">:</span> <span class="n">InternetAdsLoader</span><span class="p">,</span>
+    <span class="s2">&quot;magic&quot;</span><span class="p">:</span> <span class="n">MagicLoader</span><span class="p">,</span>
+    <span class="s2">&quot;boone&quot;</span><span class="p">:</span> <span class="n">BooneLoader</span><span class="p">,</span>
+    <span class="s2">&quot;mush&quot;</span><span class="p">:</span> <span class="n">MushroomLoader</span><span class="p">,</span>
+    <span class="s2">&quot;music&quot;</span><span class="p">:</span> <span class="n">MusicLoader</span><span class="p">,</span>
+    <span class="s2">&quot;news&quot;</span><span class="p">:</span> <span class="n">NewsPopularityLoader</span><span class="p">,</span>
+    <span class="s2">&quot;nurse&quot;</span><span class="p">:</span> <span class="n">NurseryLoader</span><span class="p">,</span>
+    <span class="s2">&quot;occup&quot;</span><span class="p">:</span> <span class="n">OccupancyLoader</span><span class="p">,</span>
+    <span class="s2">&quot;spam&quot;</span><span class="p">:</span> <span class="n">SpamBaseLoader</span><span class="p">,</span>
+    <span class="s2">&quot;cond&quot;</span><span class="p">:</span> <span class="n">SuperConductorLoader</span><span class="p">,</span>
+    <span class="s2">&quot;turk&quot;</span><span class="p">:</span> <span class="n">TurkStudentEvalLoader</span><span class="p">,</span>
+    <span class="s2">&quot;wine&quot;</span><span class="p">:</span> <span class="n">WineLoader</span><span class="p">,</span>
+    <span class="s2">&quot;yeast&quot;</span><span class="p">:</span> <span class="n">YeastLoader</span><span class="p">,</span>
+  <span class="p">}</span>
+
+  <span class="nd">@classmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">get_loader</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BaseDatasetLoader</span><span class="p">:</span>
+    <span class="n">pipeline_class</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dataset_name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pipeline_class</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dataset &#39;</span><span class="si">{</span><span class="n">dataset_name</span><span class="si">}</span><span class="s2">&#39; not supported on UCI datasets.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pipeline_class</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="forman-datasets">Forman Datasets</h2>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="quack.datasets._forman_datasets.load_forman" class="doc doc-heading">
+            <code class=" language-python"><span class="n">quack</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">_forman_datasets</span><span class="o">.</span><span class="n">load_forman</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data_home</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_load</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Load the datasets from [1] following scikit patterns. If there is no tmp dataset
+locally available, this method will download a tmp version from zenodo and save locally.</p>
+<p>Note that the splits are not performed, once the user may want to perform a binary or
+a multiclass quantification over these datasets.</p>
+<p>Refs:
+  [1] Forman, G. Quantifying counts and costs via classification.
+      Data Min Knowl Disc 17, 164–206 (2008). https://doi.org/10.1007/s10618-008-0097-y</p>
+<p>Args:
+    dataset (str): Dataset name. The list of valid dataset name is available
+      at quack.datasets.FORMAN_DATASETS.
+    data_home (Path, optional): Directory that the tmp dataset file will be saved
+      locally. If its None, the default dataset will be obtained from utils. Defaults to None.
+    force_load (bool, optional): Force the download of the files even if there is a tmp file
+      available locally. Defaults to False.</p>
+<p>Returns:
+    tuple[np.ndarray, np.ndarray]: Tuple containing the features and labels
+      of the choosen dataset.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>quack/datasets/_forman_datasets.py</code></summary>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load_forman</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">data_home</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">force_load</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot; Load the datasets from [1] following scikit patterns. If there is no tmp dataset</span>
+<span class="sd">  locally available, this method will download a tmp version from zenodo and save locally.</span>
+
+<span class="sd">  Note that the splits are not performed, once the user may want to perform a binary or</span>
+<span class="sd">  a multiclass quantification over these datasets.</span>
+
+<span class="sd">  Refs:</span>
+<span class="sd">    [1] Forman, G. Quantifying counts and costs via classification.</span>
+<span class="sd">        Data Min Knowl Disc 17, 164–206 (2008). https://doi.org/10.1007/s10618-008-0097-y</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">      dataset (str): Dataset name. The list of valid dataset name is available</span>
+<span class="sd">        at quack.datasets.FORMAN_DATASETS.</span>
+<span class="sd">      data_home (Path, optional): Directory that the tmp dataset file will be saved</span>
+<span class="sd">        locally. If its None, the default dataset will be obtained from utils. Defaults to None.</span>
+<span class="sd">      force_load (bool, optional): Force the download of the files even if there is a tmp file</span>
+<span class="sd">        available locally. Defaults to False.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">      tuple[np.ndarray, np.ndarray]: Tuple containing the features and labels</span>
+<span class="sd">        of the choosen dataset.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="k">assert</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">FORMAN_DATASETS</span>
+
+  <span class="k">if</span> <span class="n">data_home</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">data_home</span> <span class="o">=</span> <span class="n">get_quack_home</span><span class="p">()</span>
+
+  <span class="n">URL</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;https://zenodo.org/records/20707970/files/</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">.zip&#39;</span>
+  <span class="n">unzipped_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_home</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">unzipped_path</span><span class="p">):</span>
+    <span class="n">downloaded_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_home</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">.zip&#39;</span><span class="p">)</span>
+    <span class="n">download_file</span><span class="p">(</span><span class="n">URL</span><span class="p">,</span> <span class="n">downloaded_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="n">force_load</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">downloaded_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+      <span class="n">file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">data_home</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">downloaded_path</span><span class="p">)</span>
+
+  <span class="c1"># Load all data</span>
+  <span class="n">X</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">load_npz</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">unzipped_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_X.npz&#39;</span><span class="p">))</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">unzipped_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_y.npy&#39;</span><span class="p">),</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">toarray</span><span class="p">(),</span> <span class="n">y</span>
+</code></pre></div></td></tr></table></div></div>
+            </details>
+    </div>
+
+</div>
   </div>
   
   <script>
@@ -598,7 +971,7 @@
     
     <a data-slot="button"
         class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5 shadow-none"
-        href="..">
+        href="../metrics/">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="tabler-icon tabler-icon-arrow-left ">
@@ -606,22 +979,9 @@
             <path d="M5 12l6 6"></path>
             <path d="M5 12l6 -6"></path>
         </svg>
-        <span class="max-[500px]:hidden">Quack!</span>
+        <span class="max-[500px]:hidden">Metrics</span>
     </a>
     
-    
-    <a data-slot="button"
-        class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5 ml-auto shadow-none"
-        href="../tutorials/">
-        <span class="max-[500px]:hidden">Overview</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="tabler-icon tabler-icon-arrow-right ">
-            <path d="M5 12l14 0"></path>
-            <path d="M13 18l6 -6"></path>
-            <path d="M13 6l6 6"></path>
-        </svg>
-    </a>
     
 </div>
                                 
@@ -644,13 +1004,13 @@
                 <div class="text-muted-foreground text-sm font-medium">Menu</div>
                 <div class="flex flex-col gap-3">
                     
-                    <a class="text-2xl font-medium" href="..">
+                    <a class="text-2xl font-medium" href="../..">
                         
                         Quack!
                         
                     </a>
                     
-                    <a class="text-2xl font-medium" href="./">
+                    <a class="text-2xl font-medium" href="../../getting-started/">
                         
                         Getting Started
                         
@@ -668,19 +1028,19 @@
                     
                     <div class="flex flex-col gap-3">
                         
-                        <a class="text-2xl font-medium" href="../tutorials/">
+                        <a class="text-2xl font-medium" href="../../tutorials/">
                             
                             Overview
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../tutorials/methods/">
+                        <a class="text-2xl font-medium" href="../../tutorials/methods/">
                             
                             Methods
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../tutorials/uci-datasets/">
+                        <a class="text-2xl font-medium" href="../../tutorials/uci-datasets/">
                             
                             UCI Datasets
                             
@@ -695,25 +1055,25 @@
                     
                     <div class="flex flex-col gap-3">
                         
-                        <a class="text-2xl font-medium" href="../api/base/">
+                        <a class="text-2xl font-medium" href="../base/">
                             
                             Base Class
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../api/quantifiers/">
+                        <a class="text-2xl font-medium" href="../quantifiers/">
                             
                             Quantifiers
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../api/metrics/">
+                        <a class="text-2xl font-medium" href="../metrics/">
                             
                             Metrics
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../api/datasets/">
+                        <a class="text-2xl font-medium" href="./">
                             
                             Datasets
                             
@@ -742,19 +1102,41 @@
         
         
         
-        <a href="#instalation"
+        <a href="#uci-datasets"
             class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#instalation');">
-            Instalation
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#uci-datasets');">
+            UCI Datasets
         </a>
+        
+        
+        <a href="#quack.datasets._uci_datasets.load_uci"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.datasets._uci_datasets.load_uci');">
+            load_uci
+        </a>
+        
+        <a href="#quack.datasets._uci_datasets.UCILoaderFactory"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.datasets._uci_datasets.UCILoaderFactory');">
+            UCILoaderFactory
+        </a>
+        
         
 
         
-        <a href="#quickstart-workflow"
+        <a href="#forman-datasets"
             class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#quickstart-workflow');">
-            Quickstart Workflow
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#forman-datasets');">
+            Forman Datasets
         </a>
+        
+        
+        <a href="#quack.datasets._forman_datasets.load_forman"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.datasets._forman_datasets.load_forman');">
+            load_forman
+        </a>
+        
         
 
         
@@ -790,23 +1172,23 @@
     </div>
      
 
-<script src="../search/main.js"></script>
+<script src="../../search/main.js"></script>
 
 
     
 
     <script integrity="sha384-JLNLRFGzvOp0up707XKgSnAjjt1w5BF/+lbeLQvlf6mNwf0m89IXFdpNAk4t6Hcs"
-        src="../js/copy-button.js"></script>
+        src="../../js/copy-button.js"></script>
     <script integrity="sha384-JBx6cBEiyhK1KPwZgBHiI6GDaAmvlOxMQFyWAZTEpW5Ifo5XQ2LBcJ61GVOumwF1"
-        src="../js/sidebar.js"></script>
+        src="../../js/sidebar.js"></script>
     <script integrity="sha384-fNURFMRt0p/HqXnQnV4+CT9dX1GiU5F0fC3pFbg7gfoANytoUMErSW7suWSBkSuF"
-        src="../js/slider.js"></script>
+        src="../../js/slider.js"></script>
     <script>updatePygmentsStylesheet();</script>
     
     <script>fetchStargazers("None");</script>
     
     
-    <script integrity="sha384-Oi13RhLSSgEpSmRyDbfsfmU5N1KzT7IBoQqMenKZoi1Mu+0mCDcF1mKtSZw3cd80" src="../js/mkdocstrings.js"></script>
+    <script integrity="sha384-Oi13RhLSSgEpSmRyDbfsfmU5N1KzT7IBoQqMenKZoi1Mu+0mCDcF1mKtSZw3cd80" src="../../js/mkdocstrings.js"></script>
     
     
     <script type="speculationrules">

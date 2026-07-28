@@ -5,10 +5,10 @@
 <head>
     <script>
         /* const base_url = "None"; */
-        const base_url = (new URL("..", window.location)).href.replace(/\/+$/, ""); /* for search plugin notably */
-        /* const root_relative_url = ".."; */
+        const base_url = (new URL("../..", window.location)).href.replace(/\/+$/, ""); /* for search plugin notably */
+        /* const root_relative_url = "../.."; */
     </script>
-    <script integrity="sha384-m6cZ+Whl1ci89lidlu8DH4C+sZLNOYBvImtjUIhUK+iaNffXhqtbYgBVuuPfRsa0" src="../js/dark.js"></script>
+    <script integrity="sha384-m6cZ+Whl1ci89lidlu8DH4C+sZLNOYBvImtjUIhUK+iaNffXhqtbYgBVuuPfRsa0" src="../../js/dark.js"></script>
 
 
     <meta charset="utf-8" />
@@ -18,7 +18,7 @@
     
 
 
-<title>Getting Started</title>
+<title>UCI Datasets</title>
 
 
 
@@ -31,7 +31,7 @@
 
 <!-- Open Graph (Facebook, LinkedIn) -->
 
-<meta property="og:title" content="Getting Started">
+<meta property="og:title" content="UCI Datasets">
 
 
 
@@ -44,7 +44,7 @@
 
 <!-- Twitter Card -->
 
-<meta name="twitter:title" content="Getting Started">
+<meta name="twitter:title" content="UCI Datasets">
 
 
 
@@ -56,18 +56,18 @@
 
 
     
-    <link href="../images/favicon.png" rel="icon" />
+    <link href="../../images/favicon.png" rel="icon" />
 
-    <link href="../css/base.css" rel="stylesheet" />
-    <link href="../css/geist.css" rel="stylesheet" />
+    <link href="../../css/base.css" rel="stylesheet" />
+    <link href="../../css/geist.css" rel="stylesheet" />
 
     
     
 
 <link id="pygments-light" rel="stylesheet"
-    href="../css/pygments/shadcn-light.css">
+    href="../../css/pygments/shadcn-light.css">
 <link id="pygments-dark" rel="stylesheet"
-    href="../css/pygments/github-dark.css"
+    href="../../css/pygments/github-dark.css"
     media="(prefers-color-scheme: dark)">
 
 
@@ -78,13 +78,13 @@
             --theme-accent: oklch(62.3% 0.214 259.815);
         }
     </style>
-    <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
-    <link href="../css/pygments.css" rel="stylesheet" />
+    <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+    <link href="../../css/pygments.css" rel="stylesheet" />
 
     
 
     <script integrity="sha384-V2jkXRy811qODUbfkLlkVJYBbf4h6XHAEjcU6ReASBPrJvTrlYh4GrI4t6GCju6n"
-        src="../js/callbacks.js"></script>
+        src="../../js/callbacks.js"></script>
 
     
 
@@ -271,7 +271,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href=".."
+        data-size="default" href="../.."
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -290,8 +290,8 @@
             
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
-    <a data-slot="sidebar-menu-button" data-active="true" data-sidebar="menu-button"
-        data-size="default" href="./"
+    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
+        data-size="default" href="../../getting-started/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -324,7 +324,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../tutorials/"
+        data-size="default" href="../"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -343,7 +343,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../tutorials/methods/"
+        data-size="default" href="../methods/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -361,8 +361,8 @@
             
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
-    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../tutorials/uci-datasets/"
+    <a data-slot="sidebar-menu-button" data-active="true" data-sidebar="menu-button"
+        data-size="default" href="./"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -394,7 +394,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/base/"
+        data-size="default" href="../../api/base/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -413,7 +413,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/quantifiers/"
+        data-size="default" href="../../api/quantifiers/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -432,7 +432,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/metrics/"
+        data-size="default" href="../../api/metrics/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -451,7 +451,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/datasets/"
+        data-size="default" href="../../api/datasets/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -493,13 +493,13 @@
     <div class="flex flex-col gap-2">
       <div id="page-header" class="flex items-start justify-between">
         <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
-          Getting Started
+          UCI Datasets
         </h1>
 
         <div class="flex items-center gap-2 pt-1.5">
           
           <button
-    onclick="fetch(`..`).then((r) => r.text()).then((text) => navigator.clipboard.write([new ClipboardItem({ 'text/plain': text })]))"
+    onclick="fetch(`../..`).then((r) => r.text()).then((text) => navigator.clipboard.write([new ClipboardItem({ 'text/plain': text })]))"
     data-slot="button" class="secondary cursor-pointer">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-copy ">
@@ -514,7 +514,7 @@
           
           <a data-slot="button" id="previous-button"
             class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 extend-touch-target size-8 shadow-none md:size-7"
-            href="..">
+            href="../methods/">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
               class="tabler-icon tabler-icon-arrow-left">
@@ -528,7 +528,7 @@
           
           <a data-slot="button" id="next-button"
             class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 extend-touch-target size-8 shadow-none md:size-7"
-            href="../tutorials/">
+            href="../../api/base/">
             <span class="sr-only">Next</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -549,43 +549,210 @@
     </div>
   </div>
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
-    <p>This guide walks you through a instalation, training and testing a classifier-based quantifier, and evaluating the predictions using a <code>quack</code>'s built-in metrics.</p>
-<p><strong>Note</strong>: this page may be adjusted in the feature as we are in a <code>alpha</code> version of the package, if you use it in any of you projects be careful to clone, install and use a 'stable' version (main branch). If you want to keep up with the updates you can use the 'develop' branch or some specific branch for other features.</p>
-<h2 id="instalation">Instalation</h2>
-<p>For now, to install quack you need to rely on the git pip feature. Just need to run the following command:</p>
-<div class="codehilite"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/jose-gilberto/quack@main
+    <p><code>quack</code> bundles loaders for ~30 datasets from the <a href="https://archive.ics.uci.edu/">UCI Machine Learning Repository</a>, following the same selection used in [1]. Each dataset is wrapped by a <code>BaseDatasetLoader</code> subclass, registered under a short string key in <code>UCILoaderFactory</code>, and exposed through the single <code>load_uci</code> function.</p>
+<h2 id="quickstart">Quickstart</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">quack.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_uci</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_uci</span><span class="p">(</span><span class="s2">&quot;bc-cont&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="quickstart-workflow">Quickstart Workflow</h2>
-<p>Considering that you already have a dataset loaded and splitted into training and testing, the following script will create a quantifier based on logistic regression to estimate the prevalence of your set.</p>
-<p>Any data compatible with Scikit-learn or Numpy can be used, whether <code>np.ndarray</code> or <code>sparse_matrix</code> objects.</p>
-<p>To evaluate the method, we used the Absolute Error (AE) between the predicted and real prevalences.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="c1"># Import from quack</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">quack.quantifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">quack.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">ae</span>
+<p><code>load_uci</code> downloads the raw source file(s) (cached via <code>urllib</code>), applies the dataset-specific preprocessing (encoding categoricals, binning continuous targets, dropping constant/leaky columns, etc.), and returns <code>X</code> as <code>float32</code> and <code>y</code> as the label array — ready to be split and fed into any quantifier's <code>.fit(X, y)</code>.</p>
+<h2 id="listing-available-datasets">Listing available datasets</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">quack.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">UCI_DATASETS</span>
 
-<span class="c1"># 1. Load the dataset and count the true prevalence</span>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="o">...</span>
-<span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="o">...</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">UCI_DATASETS</span><span class="p">)</span>
+<span class="c1"># [&#39;adult&#39;, &#39;avila&#39;, &#39;bike&#39;, &#39;blog&#39;, &#39;bc-cont&#39;, &#39;bc-int&#39;, &#39;cars&#39;, &#39;conc&#39;,</span>
+<span class="c1">#  &#39;contra&#39;, &#39;cappl&#39;, &#39;ccard&#39;, &#39;dota&#39;, &#39;drug&#39;, &#39;ener&#39;, &#39;flare&#39;, &#39;grid&#39;,</span>
+<span class="c1">#  &#39;ads&#39;, &#39;magic&#39;, &#39;boone&#39;, &#39;mush&#39;, &#39;music&#39;, &#39;news&#39;, &#39;nurse&#39;, &#39;occup&#39;,</span>
+<span class="c1">#  &#39;spam&#39;, &#39;cond&#39;, &#39;turk&#39;, &#39;wine&#39;, &#39;yeast&#39;]</span>
+</code></pre></div>
+
+<h2 id="dataset-reference">Dataset reference</h2>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Dataset</th>
+<th>Task type / target binning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>adult</code></td>
+<td>Adult (Census Income)</td>
+<td>Binary (<code>&lt;=50K</code> / <code>&gt;50K</code>)</td>
+</tr>
+<tr>
+<td><code>avila</code></td>
+<td>Avila</td>
+<td>Binary (class A vs. rest)</td>
+</tr>
+<tr>
+<td><code>bike</code></td>
+<td>Bike Sharing</td>
+<td>4-class (<code>cnt</code> binned)</td>
+</tr>
+<tr>
+<td><code>blog</code></td>
+<td>BlogFeedback</td>
+<td>4-class (<code>att280</code> binned)</td>
+</tr>
+<tr>
+<td><code>bc-cont</code></td>
+<td>Breast Cancer Wisconsin (Original)</td>
+<td>Binary (<code>diagnosis</code>)</td>
+</tr>
+<tr>
+<td><code>bc-int</code></td>
+<td>Breast Cancer Wisconsin (Diagnostic)</td>
+<td>Binary (<code>Class</code>)</td>
+</tr>
+<tr>
+<td><code>cars</code></td>
+<td>Car Evaluation</td>
+<td>4-class</td>
+</tr>
+<tr>
+<td><code>conc</code></td>
+<td>Concrete Compressive Strength</td>
+<td>3-class (<code>strength</code> binned)</td>
+</tr>
+<tr>
+<td><code>contra</code></td>
+<td>Contraceptive Method Choice</td>
+<td>3-class</td>
+</tr>
+<tr>
+<td><code>cappl</code></td>
+<td>Credit Approval</td>
+<td>Binary</td>
+</tr>
+<tr>
+<td><code>ccard</code></td>
+<td>Default of Credit Card Clients</td>
+<td>Binary</td>
+</tr>
+<tr>
+<td><code>dota</code></td>
+<td>Dota2 Games Results</td>
+<td>Binary (<code>Winner</code>)</td>
+</tr>
+<tr>
+<td><code>drug</code></td>
+<td>Drug Consumption</td>
+<td>3-class (grouped <code>CL0-CL6</code>)</td>
+</tr>
+<tr>
+<td><code>ener</code></td>
+<td>Appliances Energy Prediction</td>
+<td>3-class (<code>Appliances</code> binned)</td>
+</tr>
+<tr>
+<td><code>flare</code></td>
+<td>Solar Flare</td>
+<td>Binary (<code>C</code> binned)</td>
+</tr>
+<tr>
+<td><code>grid</code></td>
+<td>Electrical Grid Stability Simulated</td>
+<td>Binary (<code>stabf</code>)</td>
+</tr>
+<tr>
+<td><code>ads</code></td>
+<td>Internet Advertisements</td>
+<td>Binary (<code>class</code>)</td>
+</tr>
+<tr>
+<td><code>magic</code></td>
+<td>MAGIC Gamma Telescope</td>
+<td>Binary (<code>target</code>)</td>
+</tr>
+<tr>
+<td><code>boone</code></td>
+<td>MiniBooNE Particle Identification</td>
+<td>Binary (<code>signal</code>)</td>
+</tr>
+<tr>
+<td><code>mush</code></td>
+<td>Mushroom</td>
+<td>Binary (<code>result</code>)</td>
+</tr>
+<tr>
+<td><code>music</code></td>
+<td>Geographical Original of Music</td>
+<td>Binary (<code>att117</code> binned)</td>
+</tr>
+<tr>
+<td><code>news</code></td>
+<td>News Popularity</td>
+<td>4-class (<code>shares</code> binned)</td>
+</tr>
+<tr>
+<td><code>nurse</code></td>
+<td>Nursery</td>
+<td>3-class</td>
+</tr>
+<tr>
+<td><code>occup</code></td>
+<td>Occupancy Detection</td>
+<td>Binary (<code>Occupancy</code>)</td>
+</tr>
+<tr>
+<td><code>spam</code></td>
+<td>Spambase</td>
+<td>Binary (<code>spam</code>)</td>
+</tr>
+<tr>
+<td><code>cond</code></td>
+<td>Superconductivity</td>
+<td>4-class (<code>critical_temp</code> binned)</td>
+</tr>
+<tr>
+<td><code>turk</code></td>
+<td>Turkiye Student Evaluation</td>
+<td>Multi-class (<code>instr</code>)</td>
+</tr>
+<tr>
+<td><code>wine</code></td>
+<td>Wine Quality (red + white)</td>
+<td>4-class (<code>quality</code> binned)</td>
+</tr>
+<tr>
+<td><code>yeast</code></td>
+<td>Yeast</td>
+<td>4-class (grouped)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Some loaders (<code>ccard</code>, <code>dota</code>, <code>boone</code>, <code>avila</code>, <code>music</code>, <code>bike</code>, <code>blog</code>, <code>ener</code>, <code>news</code>, <code>cond</code>) download <code>.zip</code>/<code>.xls</code> archives on demand and may take a while on first use, since no local cache directory is used by these UCI loaders (unlike <code>load_forman</code>, which caches under <code>~/.quack_data/</code>).</p>
+</div>
+<h2 id="combining-with-a-quantifier">Combining with a quantifier</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">quack.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_uci</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">quack.quantifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">ACC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">quack.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">ae</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_uci</span><span class="p">(</span><span class="s2">&quot;magic&quot;</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">quantifier</span> <span class="o">=</span> <span class="n">ACC</span><span class="p">(</span><span class="n">classifier</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">))</span>
+<span class="n">quantifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 
 <span class="n">labels</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">true_prev</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="n">y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">true_prev</span>
+<span class="n">pred_prev</span> <span class="o">=</span> <span class="n">quantifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="c1"># 2. Initialize and fit a Classify &amp; Count (CC) quantifier</span>
-<span class="n">quantifier</span> <span class="o">=</span> <span class="n">CC</span><span class="p">(</span><span class="n">classifier</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
-<span class="n">quantifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-
-<span class="n">predicted_prev</span> <span class="o">=</span> <span class="n">quantifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-<span class="c1"># Measure performance using Absolute Error</span>
-<span class="n">error</span> <span class="o">=</span> <span class="n">ae</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">predicted_prev</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;True: </span><span class="si">{</span><span class="n">true_prev</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> | Pred: </span><span class="si">{</span><span class="n">predicted_prev</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> | AE: </span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AE: </span><span class="si">{</span><span class="n">ae</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span><span class="w"> </span><span class="n">pred_prev</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 
-<p>Quantification is very useful in scenarios where prior probability shifts occur.</p>
+<h2 id="references">References</h2>
+<p>[1] Schumacher, T., Strohmaier, M., &amp; Lemmerich, F. (2025). <em>A comparative evaluation of quantification methods</em>. Journal of Machine Learning Research, 26(55), 1-54.</p>
   </div>
   
   <script>
@@ -598,7 +765,7 @@
     
     <a data-slot="button"
         class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5 shadow-none"
-        href="..">
+        href="../methods/">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="tabler-icon tabler-icon-arrow-left ">
@@ -606,14 +773,14 @@
             <path d="M5 12l6 6"></path>
             <path d="M5 12l6 -6"></path>
         </svg>
-        <span class="max-[500px]:hidden">Quack!</span>
+        <span class="max-[500px]:hidden">Methods</span>
     </a>
     
     
     <a data-slot="button"
         class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5 ml-auto shadow-none"
-        href="../tutorials/">
-        <span class="max-[500px]:hidden">Overview</span>
+        href="../../api/base/">
+        <span class="max-[500px]:hidden">Base Class</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="tabler-icon tabler-icon-arrow-right ">
@@ -644,13 +811,13 @@
                 <div class="text-muted-foreground text-sm font-medium">Menu</div>
                 <div class="flex flex-col gap-3">
                     
-                    <a class="text-2xl font-medium" href="..">
+                    <a class="text-2xl font-medium" href="../..">
                         
                         Quack!
                         
                     </a>
                     
-                    <a class="text-2xl font-medium" href="./">
+                    <a class="text-2xl font-medium" href="../../getting-started/">
                         
                         Getting Started
                         
@@ -668,19 +835,19 @@
                     
                     <div class="flex flex-col gap-3">
                         
-                        <a class="text-2xl font-medium" href="../tutorials/">
+                        <a class="text-2xl font-medium" href="../">
                             
                             Overview
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../tutorials/methods/">
+                        <a class="text-2xl font-medium" href="../methods/">
                             
                             Methods
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../tutorials/uci-datasets/">
+                        <a class="text-2xl font-medium" href="./">
                             
                             UCI Datasets
                             
@@ -695,25 +862,25 @@
                     
                     <div class="flex flex-col gap-3">
                         
-                        <a class="text-2xl font-medium" href="../api/base/">
+                        <a class="text-2xl font-medium" href="../../api/base/">
                             
                             Base Class
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../api/quantifiers/">
+                        <a class="text-2xl font-medium" href="../../api/quantifiers/">
                             
                             Quantifiers
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../api/metrics/">
+                        <a class="text-2xl font-medium" href="../../api/metrics/">
                             
                             Metrics
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../api/datasets/">
+                        <a class="text-2xl font-medium" href="../../api/datasets/">
                             
                             Datasets
                             
@@ -742,18 +909,42 @@
         
         
         
-        <a href="#instalation"
+        <a href="#quickstart"
             class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#instalation');">
-            Instalation
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#quickstart');">
+            Quickstart
         </a>
         
 
         
-        <a href="#quickstart-workflow"
+        <a href="#listing-available-datasets"
             class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#quickstart-workflow');">
-            Quickstart Workflow
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#listing-available-datasets');">
+            Listing available datasets
+        </a>
+        
+
+        
+        <a href="#dataset-reference"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#dataset-reference');">
+            Dataset reference
+        </a>
+        
+
+        
+        <a href="#combining-with-a-quantifier"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#combining-with-a-quantifier');">
+            Combining with a quantifier
+        </a>
+        
+
+        
+        <a href="#references"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#references');">
+            References
         </a>
         
 
@@ -790,23 +981,23 @@
     </div>
      
 
-<script src="../search/main.js"></script>
+<script src="../../search/main.js"></script>
 
 
     
 
     <script integrity="sha384-JLNLRFGzvOp0up707XKgSnAjjt1w5BF/+lbeLQvlf6mNwf0m89IXFdpNAk4t6Hcs"
-        src="../js/copy-button.js"></script>
+        src="../../js/copy-button.js"></script>
     <script integrity="sha384-JBx6cBEiyhK1KPwZgBHiI6GDaAmvlOxMQFyWAZTEpW5Ifo5XQ2LBcJ61GVOumwF1"
-        src="../js/sidebar.js"></script>
+        src="../../js/sidebar.js"></script>
     <script integrity="sha384-fNURFMRt0p/HqXnQnV4+CT9dX1GiU5F0fC3pFbg7gfoANytoUMErSW7suWSBkSuF"
-        src="../js/slider.js"></script>
+        src="../../js/slider.js"></script>
     <script>updatePygmentsStylesheet();</script>
     
     <script>fetchStargazers("None");</script>
     
     
-    <script integrity="sha384-Oi13RhLSSgEpSmRyDbfsfmU5N1KzT7IBoQqMenKZoi1Mu+0mCDcF1mKtSZw3cd80" src="../js/mkdocstrings.js"></script>
+    <script integrity="sha384-Oi13RhLSSgEpSmRyDbfsfmU5N1KzT7IBoQqMenKZoi1Mu+0mCDcF1mKtSZw3cd80" src="../../js/mkdocstrings.js"></script>
     
     
     <script type="speculationrules">
