@@ -14,7 +14,7 @@ summary: An overview about all modules and methods available in Quack
     - 2.1. Evaluation Metrics
     - 2.2. Evaluation Protocols
 3. Datasets
-    - 3.1. UCI Datasets
+    - 3.1. [UCI Datasets](./tutorials/uci-datasets.md)
     - 3.2. Forman Datasets
     - 3.3. PhysioNet Datasets
     - 3.4. Reviews Datasets

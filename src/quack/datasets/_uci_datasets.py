@@ -861,3 +861,36 @@ class UCILoaderFactory:
     if not pipeline_class:
       raise ValueError(f"Dataset '{dataset_name}' not supported on UCI datasets.")
     return pipeline_class()
+
+UCI_DATASETS: list[str] = list(UCILoaderFactory._registry.keys())
+
+def load_uci(dataset: str) -> tuple[np.ndarray, np.ndarray]:
+  """Load a UCI dataset by name using the registered loader factory.
+
+  Downloads (if not cached), preprocess and splits features/targets for
+  the requested UCI dataset, delegating the whole pipeline to the
+  corresponding `BaseDatasetLoader` subclass registered in `UCILoaderFactory`.
+
+  Parameters
+  ----------
+    dataset: str
+      Dataset key. Must be one of `quack.datasets.UCI_DATASETS`.
+  
+  Returns
+  -------
+    X, y: np.ndarray, np.ndarray
+      Feature matrix `X` (float32) and target vector `y`.
+
+  Raises
+  ------
+    ValueError
+      if `dataset` is not a registered key in `UCILoaderFactory`.
+
+  Examples
+  --------
+  >>> from quack.datasets import load_uci
+  >>> X, y = load_uci("bc-count")
+  """
+  loader = UCILoaderFactory.get_loader(dataset)
+  X, y = loader.load_dataset()
+  return X, y

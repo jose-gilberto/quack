@@ -23,10 +23,12 @@ nav:
   - Tutorials: 
       - Overview: tutorials.md
       - Methods: tutorials/methods.md
+      - UCI Datasets: tutorials/uci-datasets.md
   - API Reference:
       - Base Class: api/base.md
       - Quantifiers: api/quantifiers.md
       - Metrics: api/metrics.md
+      - Datasets: api/datasets.md
 
 plugins:
 - search
@@ -37,6 +39,7 @@ plugins:
             docstring_style: numpy
 
 markdown_extensions:
+  - admonition
   - pymdownx.tasklist:
       custom_checkbox: true
   - codehilite
