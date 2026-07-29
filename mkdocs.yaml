@@ -24,11 +24,13 @@ nav:
       - Overview: tutorials.md
       - Methods: tutorials/methods.md
       - UCI Datasets: tutorials/uci-datasets.md
+      - Visualization: tutorials/visualization.md
   - API Reference:
       - Base Class: api/base.md
       - Quantifiers: api/quantifiers.md
       - Metrics: api/metrics.md
       - Datasets: api/datasets.md
+      - Visualization: api/visualization.md
 
 plugins:
 - search

@@ -19,5 +19,8 @@ summary: An overview about all modules and methods available in Quack
     - 3.3. PhysioNet Datasets
     - 3.4. Reviews Datasets
 4. Model Selection
-5. Visualization
+5. [Visualization](./tutorials/visualization.md)
+    - 5.1. Prevalence Plot (diagonal plot)
+    - 5.2. Quantification Bias Plot
+    - 5.3. Class Distribution Plot
 6. Utils
