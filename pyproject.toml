@@ -42,3 +42,17 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--cov=quack --cov-report=term-missing"
+
+[tool.coverage.run]
+omit = [
+    "src/quack/datasets/_uci_datasets.py",
+    "src/quack/datasets/_forman_datasets.py",
+    "src/quack/datasets/_reviews_datasets.py",
+    "src/quack/datasets/_physionet_datasets.py",
+]
+
+[tool.coverage.report]
+exclude_also = [
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]

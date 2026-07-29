@@ -873,18 +873,18 @@ def load_uci(dataset: str) -> tuple[np.ndarray, np.ndarray]:
 
   Parameters
   ----------
-    dataset: str
-      Dataset key. Must be one of `quack.datasets.UCI_DATASETS`.
+  dataset: str
+    Dataset key. Must be one of `quack.datasets.UCI_DATASETS`.
   
   Returns
   -------
-    X, y: np.ndarray, np.ndarray
-      Feature matrix `X` (float32) and target vector `y`.
+  X, y: np.ndarray, np.ndarray
+    Feature matrix `X` (float32) and target vector `y`.
 
   Raises
   ------
-    ValueError
-      if `dataset` is not a registered key in `UCILoaderFactory`.
+  ValueError
+    if `dataset` is not a registered key in `UCILoaderFactory`.
 
   Examples
   --------
