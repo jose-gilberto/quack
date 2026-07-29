@@ -35,6 +35,9 @@ docs = [
     "mkdocstrings[python]>=0.24.0",
     "Pygments"
 ]
+viz = [
+    "matplotlib>=3.8",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
