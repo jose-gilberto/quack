@@ -12,6 +12,7 @@ from quack.visualization import (
   get_color_palette,
   get_marker_cycle,
   COLORBLIND_PALETTE,
+  prevalence_coverage_plot
 )
 
 
@@ -127,4 +128,68 @@ class TestClassDistributionPlot:
     ax = fig.axes[0]
     facecolors = {tuple(p.get_facecolor()) for p in ax.patches}
     assert len(facecolors) == 15
+    plt.close(fig)
+
+
+class TestPrevalenceCoveragePlot:
+  def test_returns_figure_single_series(self):
+    rng = np.random.default_rng(0)
+    prevalences = rng.uniform(0, 1, 300)
+    fig = prevalence_coverage_plot(prevalences, train_prevalence=0.5)
+    assert isinstance(fig, plt.Figure)
+    plt.close(fig)
+
+  def test_returns_figure_multiple_series(self):
+    rng = np.random.default_rng(0)
+    series_a = rng.uniform(0, 1, 200)
+    series_b = rng.beta(2, 8, 200)  # skewed towards low prevalence -> visible coverage gap
+    fig = prevalence_coverage_plot(
+      [series_a, series_b], labels=["Prior Shift", "Covariate Shift"],
+    )
+    assert isinstance(fig, plt.Figure)
+    plt.close(fig)
+
+  def test_density_mode_returns_figure(self):
+    rng = np.random.default_rng(0)
+    prevalences = rng.uniform(0, 1, 150)
+    fig = prevalence_coverage_plot(prevalences, density=True, show_rug=False)
+    assert isinstance(fig, plt.Figure)
+    plt.close(fig)
+
+  def test_raises_on_mismatched_labels_length(self):
+    rng = np.random.default_rng(0)
+    prevalences = [rng.uniform(0, 1, 50), rng.uniform(0, 1, 50)]
+    with pytest.raises(ValueError, match="labels must have the same length"):
+      prevalence_coverage_plot(prevalences, labels=["only-one"])
+
+  def test_raises_on_non_1d_series(self):
+    prevalences = np.zeros((10, 2))
+    with pytest.raises(ValueError, match="must be 1D"):
+      prevalence_coverage_plot(prevalences)
+
+  def test_raises_on_out_of_range_values(self):
+    prevalences = np.array([0.5, 1.2, 0.3])
+    with pytest.raises(ValueError, match=r"within \[0, 1\]"):
+      prevalence_coverage_plot(prevalences)
+
+  def test_accepts_external_axes(self):
+    rng = np.random.default_rng(0)
+    prevalences = rng.uniform(0, 1, 100)
+    fig, ax = plt.subplots()
+    returned_fig = prevalence_coverage_plot(prevalences, ax=ax)
+    assert returned_fig is fig
+    plt.close(fig)
+
+  def test_full_coverage_from_prior_shift_bags(self):
+    # integration-style check: PriorShiftBagGenerator with a large n_bags
+    # should realistically cover most of the simplex
+    from sklearn.datasets import make_classification
+    from quack.bag_generator import PriorShiftBagGenerator
+
+    X, y = make_classification(n_samples=500, n_classes=2, random_state=0)
+    generator = PriorShiftBagGenerator(n_bags=300, bag_size=100, random_state=0)
+    generator.to_list(X, y)
+
+    fig = prevalence_coverage_plot(generator.sampled_prevalences_[:, 1], n_bins=10)
+    assert isinstance(fig, plt.Figure)
     plt.close(fig)

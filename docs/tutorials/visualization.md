@@ -93,6 +93,31 @@ fig.savefig("bc_cont_bias_bins.png")
 
 This is particularly useful to spot patterns invisible in the global view — e.g. a method trained at a balanced prior can still show positive bias for low-prevalence bags and negative bias for high-prevalence ones.
 
+## Prevalence Coverage Plot
+
+Shows how well a set of generated bags covers the `[0, 1]` prevalence range for a target class — a histogram of bag counts per prevalence bin plus a rug plot marking each individual bag, so gaps in coverage are immediately visible before running a full benchmark.
+
+```python
+from quack.bag_generator import PriorShiftBagGenerator, CovariateShiftBagGenerator
+from quack.visualization import prevalence_coverage_plot
+
+prior_gen = PriorShiftBagGenerator(n_bags=200, bag_size=100, random_state=0)
+cov_gen = CovariateShiftBagGenerator(n_bags=200, bag_size=100, random_state=0)
+
+prior_gen.to_list(X_test, y_test)
+cov_gen.to_list(X_test, y_test)
+
+fig = prevalence_coverage_plot(
+    [prior_gen.sampled_prevalences_[:, 1], cov_gen.sampled_prevalences_[:, 1]],
+    labels=["Prior Shift", "Covariate Shift"],
+    class_name="malignant",
+    train_prevalence=np.mean(y_train == 1),
+)
+fig.savefig("coverage.png", dpi=300)
+```
+
+`PriorShiftBagGenerator` with `sampling_strategy="uniform"` should show near-full coverage (close to 100%) across all bins, while `CovariateShiftBagGenerator` — since prevalence shift is only a side effect of the covariate shift, not directly controlled — often reveals gaps or an uneven concentration of bags. Comparing the two side by side helps decide which protocol actually exercises the prevalence range you care about for your evaluation.
+
 ## Class Distribution Plot
 
 A quick sanity check for the label distribution of a training set or test bag:
