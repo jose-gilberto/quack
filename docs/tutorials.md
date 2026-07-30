@@ -10,17 +10,20 @@ summary: An overview about all modules and methods available in Quack
     - 1.3. Adaptation of Classification Algorithms
     - 1.4. Neural Networks (WIP)
     - 1.5. Ensembles (WIP)
-2. Evaluation
+2. [Bag Generator](./tutorials/bag-generator.md)
+    - 2.1. Prior Shift
+    - 2.2. Covariate Shift
+3. Evaluation
     - 2.1. Evaluation Metrics
     - 2.2. Evaluation Protocols
-3. Datasets
+4. Datasets
     - 3.1. [UCI Datasets](./tutorials/uci-datasets.md)
     - 3.2. Forman Datasets
     - 3.3. PhysioNet Datasets
     - 3.4. Reviews Datasets
-4. Model Selection
-5. [Visualization](./tutorials/visualization.md)
+5. Model Selection
+6. [Visualization](./tutorials/visualization.md)
     - 5.1. Prevalence Plot (diagonal plot)
     - 5.2. Quantification Bias Plot
     - 5.3. Class Distribution Plot
-6. Utils
+7. Utils

@@ -23,11 +23,13 @@ nav:
   - Tutorials: 
       - Overview: tutorials.md
       - Methods: tutorials/methods.md
+      - Bag Generator: tutorials/bag-generator.md
       - UCI Datasets: tutorials/uci-datasets.md
       - Visualization: tutorials/visualization.md
   - API Reference:
       - Base Class: api/base.md
       - Quantifiers: api/quantifiers.md
+      - Bag Generator: api/bag_generator.md
       - Metrics: api/metrics.md
       - Datasets: api/datasets.md
       - Visualization: api/visualization.md
