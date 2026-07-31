@@ -28,15 +28,20 @@ def normalize_prevalence(p: np.ndarray, n_classes: int) -> np.ndarray:
   total sum is what enforces the `[0, 1]` range and the sum-to-1
   constraint on the *output*, not a per-component clip on the input.
 
-  Args:
-    p (np.ndarray): Raw prevalence-like vector of shape `(n_classes,)`
-      (e.g. class counts, averaged probabilities, or an optimizer's
-      output), not necessarily non-negative or summing to 1.0.
-    n_classes (int): Number of classes, used for the uniform fallback
-      when `p` collapses entirely to zero/negative mass.
+  Parameters
+  ----------
+  p: np.ndarray
+    Raw prevalence-like vector of shape `(n_classes,)`
+    (e.g. class counts, averaged probabilities, or an optimizer's
+    output), not necessarily non-negative or summing to 1.0.
+  n_classes: int
+    Number of classes, used for the uniform fallback
+    when `p` collapses entirely to zero/negative mass.
 
-  Returns:
-    np.ndarray: A valid probability vector of shape `(n_classes,)`.
+  Returns
+  -------
+  probs: np.ndarray
+    A valid probability vector of shape `(n_classes,)`.
   """
   p = np.clip(p, 0.0, None)
   p_sum = np.sum(p)
@@ -558,6 +563,42 @@ class BaseMixtureQuantifier(BaseQuantifier, ABC):
     to map the testing data into the matching distribution space.
     """
     pass
+
+  def _solve_mixture(self, test_frequencies: np.ndarray) -> np.ndarray:
+    """Solves for the class prevalences that best explain `test_frequencies`,
+    trying the exact convex solver first and falling back to Golden Section
+    Search on failure or when the solver is disabled.
+
+    Shared by every DMM-style quantifier's prevalence estimation step
+    (`BaseMixtureQuantifier.predict` for feature-based methods like `HDx`/
+    `ReadMe`/`ED`, and `_quantify` in score/confusion-matrix-based methods
+    like `DyS`/`FormanMM`/`GAC`/`GPAC`/`FM` in `quack.quantifiers._dmm`) so
+    the convex-solve-with-fallback control flow lives in exactly one place.
+
+    Parameters
+    ----------
+    test_frequencies: np.ndarray
+      Empirical frequency/score distribution
+      of the test bag, in the same space as `conditional_matrix_`.
+
+    Returns
+    -------
+    raw_prevalences: np.ndarray
+      Raw (not yet clipped/renormalized) prevalence solution
+      of shape `(n_classes,)`.
+    """
+    if not self.use_convex_solver:
+      return self._golden_section_search_fallback(test_frequencies)
+
+    try:
+      prevalence_solution = self._solve_via_convex_programming(test_frequencies)
+      if prevalence_solution is None:
+        warnings.warn("Convex optimization returned an empty result. Falling back to GSS search.")
+        return self._golden_section_search_fallback(test_frequencies)
+      return np.array(prevalence_solution).squeeze()
+    except cvx.SolverError:
+      warnings.warn("CVXPY SolverError encountered. Falling back to GSS search as a safety measure.")
+      return self._golden_section_search_fallback(test_frequencies)
   
   def predict(self, X: np.ndarray) -> np.ndarray:
     """Estimates the class prevalences for the given test data.
@@ -573,37 +614,17 @@ class BaseMixtureQuantifier(BaseQuantifier, ABC):
       A normalized probability vector indicating the estimated prevalence 
       proportions for each class.
     """
-    # validate that the quantifier has been fitted and parse input data
     check_is_fitted(self)
     X = check_array(X, accept_sparse=False)
-    
-    # calculate the test score distribution/frequencies
+
     test_frequencies = self._compute_score(X)
-
-    # bypass the convex solver entirely if use_convex_solver is explicitly turned off
-    if not self.use_convex_solver:
-      return self._golden_section_search_fallback(test_frequencies)
-
-    # Primary route: Attempt exact programming via convex optimization
-    try:
-      prevalence_solution = self._solve_via_convex_programming(test_frequencies)
-      
-      if prevalence_solution is None:
-        warnings.warn("Convex optimization returned an empty result. Falling back to GSS search.")
-        return self._golden_section_search_fallback(test_frequencies)
-          
-      estimated_prevalences = np.array(prevalence_solution).squeeze()
-        
-    except cvx.SolverError:
-      # Catch mathematical instabilities or convergence issues triggered by CVXPY
-      warnings.warn("CVXPY SolverError encountered. Falling back to GSS search as a safety measure.")
-      return self._golden_section_search_fallback(test_frequencies)
+    estimated_prevalences = self._solve_mixture(test_frequencies)
 
     # --- Geometric Post-Processing Pipeline ---
     # Clip edge values into the strict [0.0, 1.0] range to fix floating-point precision noise
     estimated_prevalences = np.clip(estimated_prevalences, 0.0, 1.0)
 
-    # Enforce probability closure (The final vector elements must sum to exactly 1.0)
+    # Enforce probability closure (the final vector elements must sum to exactly 1.0)
     total_sum = np.sum(estimated_prevalences)
     if total_sum > 0:
       estimated_prevalences /= total_sum
@@ -612,3 +633,85 @@ class BaseMixtureQuantifier(BaseQuantifier, ABC):
       estimated_prevalences = np.ones(self.n_classes_) / self.n_classes_
 
     return estimated_prevalences
+
+
+class BaseScoreMixtureQuantifier(BaseCalibratedQuantifier, BaseMixtureQuantifier, ABC):
+  """Base class for binary mixture-model quantifiers built on 1D classifier scores.
+
+  Factors out the boilerplate shared by score-based binary DMM quantifiers
+  (`DyS`/`HDy`, which bin scores into histograms, and `FormanMM`, which
+  bins them into a CDF): resolving whether Out-of-Fold scores come from
+  `predict_proba` or `decision_function`, extracting the positive-class
+  column from either output shape, enforcing the binary-only constraint,
+  and delegating prevalence estimation to
+  `BaseMixtureQuantifier._solve_mixture` once `_compute_score` has mapped
+  a test bag into the same binned space used to build
+  `conditional_matrix_`. Subclasses only need to implement `_calibrate`
+  (building `conditional_matrix_` from Out-of-Fold scores) and
+  `_compute_score` (mapping a test bag into that same space).
+
+  Parameters
+  ----------
+  classifier : estimator object
+    The underlying base classifier.
+  distance_metric : str
+    The distance metric minimized by the mixture solver.
+  cv : int, cross-validation generator or an iterable, default = 10
+    Cross-validation strategy used to generate Out-of-Fold scores.
+  use_convex_solver : bool, default = True
+    If True, solves via CVXPY; falls back to Golden Section Search
+    otherwise or on solver failure.
+  predict_proba : bool, default = False
+    If True, forces `predict_proba` for scoring. If False, uses
+    `decision_function` when the classifier provides one, falling back to
+    `predict_proba` otherwise.
+  n_jobs : int, default = None
+    Number of jobs to run in parallel while fitting the `cv` folds. See
+    `BaseCalibratedQuantifier`.
+  parallel_backend : str, default = "loky"
+    `joblib.Parallel` backend used for the CV/final-fit jobs.
+  """
+
+  def __init__(self,
+               classifier: BaseEstimator,
+               distance_metric: str,
+               cv: int = 10,
+               use_convex_solver: bool = True,
+               predict_proba: bool = False,
+               n_jobs: int = None,
+               parallel_backend: str = "loky"):
+    BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv,
+                                      n_jobs=n_jobs, parallel_backend=parallel_backend)
+    BaseMixtureQuantifier.__init__(self, classifier=classifier, distance_metric=distance_metric,
+                                   use_convex_solver=use_convex_solver)
+    self.predict_proba = predict_proba
+
+  def _get_oof_method(self) -> str:
+    return ("predict_proba" if self.predict_proba
+            else ("decision_function" if hasattr(self.classifier, "decision_function") else "predict_proba"))
+
+  @staticmethod
+  def _extract_1d_scores(y_predictions: np.ndarray) -> np.ndarray:
+    """Extracts positive-class probabilities from a `predict_proba` (2D)
+    output; passes a `decision_function` (already 1D) output through."""
+    if y_predictions.ndim == 2:
+      return y_predictions[:, 1]
+    return y_predictions
+
+  def fit(self, X: np.ndarray, y: np.ndarray) -> 'BaseScoreMixtureQuantifier':
+    """Fits the quantifier, enforcing the binary-only constraint shared
+    by every score-based mixture model in this family.
+
+    Raises
+    ------
+    ValueError
+      If `y` contains more than 2 distinct classes.
+    """
+    unique_classes = np.unique(y)
+    if len(unique_classes) > 2:
+      raise ValueError(f"{self.__class__.__name__} only works for binary quantification.")
+    return BaseCalibratedQuantifier.fit(self, X, y)
+
+  def _quantify(self, X: np.ndarray) -> np.ndarray:
+    test_frequencies = self._compute_score(X)
+    return self._solve_mixture(test_frequencies)

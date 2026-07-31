@@ -1,14 +1,13 @@
-import math
 import warnings
 import cvxpy as cvx
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
-from quack.quantifiers.base import BaseCalibratedQuantifier, BaseMixtureQuantifier
+from quack.quantifiers.base import BaseCalibratedQuantifier, BaseMixtureQuantifier, BaseScoreMixtureQuantifier
 
 
-class DyS(BaseCalibratedQuantifier, BaseMixtureQuantifier):
+class DyS(BaseScoreMixtureQuantifier):
   """Distribution y-Similarity (DyS) Quantifier.
 
   An adjusting prediction mixture model built strictly for binary quantification. 
@@ -35,6 +34,13 @@ class DyS(BaseCalibratedQuantifier, BaseMixtureQuantifier):
   predict_proba : bool, default=False
     If True, forces the model to use probabilistic `predict_proba` outputs. 
     If False, falls back to raw decision boundary scores.
+
+  n_jobs : int, default = None
+    Number of jobs to run in parallel while fitting the `cv` folds. See
+    `BaseCalibratedQuantifier`.
+
+  parallel_backend : str, default = "loky"
+    `joblib.Parallel` backend used for the CV/final-fit jobs.
 
   Attributes
   ----------
@@ -63,29 +69,13 @@ class DyS(BaseCalibratedQuantifier, BaseMixtureQuantifier):
   def __init__(self,
                classifier: BaseEstimator = SVC(),
                distance_metric: str = "TS",
-               n_bins: int = 10, cv: int = 10, use_convex_solver: bool = True, 
-                predict_proba: bool = False):
-    BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv)
-    BaseMixtureQuantifier.__init__(self, classifier=classifier, distance_metric=distance_metric, 
-                                  use_convex_solver=use_convex_solver)
+               n_bins: int = 10, cv: int = 10, use_convex_solver: bool = True,
+               predict_proba: bool = False, n_jobs: int = None, parallel_backend: str = "loky"):
+    super().__init__(classifier=classifier, distance_metric=distance_metric, cv=cv,
+                     use_convex_solver=use_convex_solver, predict_proba=predict_proba,
+                     n_jobs=n_jobs, parallel_backend=parallel_backend)
     self.n_bins = n_bins
-    self.predict_proba = predict_proba
     self.score_range_ = None
-
-  def _get_oof_method(self) -> str:
-    return "predict_proba" if self.predict_proba else ("decision_function" if hasattr(self.classifier, "decision_function") else "predict_proba")
-
-  def _extract_1d_scores(self, y_predictions: np.ndarray) -> np.ndarray:
-    """Extracts positive class probabilities if the score vector is 2D."""
-    if y_predictions.ndim == 2:
-      return y_predictions[:, 1]
-    return y_predictions
-
-  def fit(self, X: np.ndarray, y: np.ndarray) -> 'DyS':
-    unique_classes = np.unique(y)
-    if len(unique_classes) > 2:
-      raise ValueError("DyS framework quantifiers only work for binary quantification.")
-    return super().fit(X, y)
 
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
     y_scores = self._extract_1d_scores(y_pred_oof)
@@ -112,20 +102,6 @@ class DyS(BaseCalibratedQuantifier, BaseMixtureQuantifier):
 
     return test_frequencies / X.shape[0]
 
-  def _quantify(self, X: np.ndarray) -> np.ndarray:
-    test_frequencies = self._compute_score(X)
-    if not self.use_convex_solver:
-      return self._golden_section_search_fallback(test_frequencies)
-    try:
-      prevalence_solution = self._solve_via_convex_programming(test_frequencies)
-      if prevalence_solution is None:
-        warnings.warn("Convex optimization returned an empty result. Falling back to GSS search.")
-        return self._golden_section_search_fallback(test_frequencies)
-      return np.array(prevalence_solution).squeeze()
-    except cvx.SolverError:
-      warnings.warn("CVXPY SolverError encountered. Falling back to GSS search.")
-      return self._golden_section_search_fallback(test_frequencies)
-
 
 class HDy(DyS):
   """Hellinger Distance y (HDy) Quantifier.
@@ -150,6 +126,12 @@ class HDy(DyS):
   predict_proba : bool, default=False
       If True, forces the model to use probabilistic `predict_proba` outputs.
 
+  n_jobs : int, default = None
+    Number of jobs to run in parallel while fitting the `cv` folds.
+
+  parallel_backend : str, default = "loky"
+    `joblib.Parallel` backend used for the CV/final-fit jobs.
+
   References
   ----------
   Víctor González-Castro, Rocío Alaiz-Rodríguez, and Enrique Alegre. Class distribution
@@ -161,12 +143,15 @@ class HDy(DyS):
                n_bins: int = 10,
                cv: int = 10,
                use_convex_solver: bool = True,
-               predict_proba: bool = False):
+               predict_proba: bool = False,
+               n_jobs: int = None,
+               parallel_backend: str = "loky"):
     super().__init__(classifier=classifier, distance_metric="HD", n_bins=n_bins, 
-                     cv=cv, use_convex_solver=use_convex_solver, predict_proba=predict_proba)
+                     cv=cv, use_convex_solver=use_convex_solver, predict_proba=predict_proba,
+                     n_jobs=n_jobs, parallel_backend=parallel_backend)
 
 
-class FormanMM(BaseCalibratedQuantifier, BaseMixtureQuantifier):
+class FormanMM(BaseScoreMixtureQuantifier):
   """Forman's Mixture Model (FormanMM) Quantifier.
 
   An adjusting binary quantifier that optimizes the `L1` distance over the 
@@ -185,6 +170,12 @@ class FormanMM(BaseCalibratedQuantifier, BaseMixtureQuantifier):
 
   predict_proba : bool, default = False
     If True, forces the model to use probabilistic `predict_proba` outputs.
+
+  n_jobs : int, default = None
+    Number of jobs to run in parallel while fitting the `cv` folds.
+
+  parallel_backend : str, default = "loky"
+    `joblib.Parallel` backend used for the CV/final-fit jobs.
 
   Attributes
   ----------
@@ -210,26 +201,12 @@ class FormanMM(BaseCalibratedQuantifier, BaseMixtureQuantifier):
   """
 
   def __init__(self, classifier: BaseEstimator = SVC(), cv: int = 10, 
-                use_convex_solver: bool = True, predict_proba: bool = False):
-      BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv)
-      BaseMixtureQuantifier.__init__(self, classifier=classifier, distance_metric="L1", 
-                                     use_convex_solver=use_convex_solver)
-      self.predict_proba = predict_proba
-      self.bins_ = None
-
-  def _get_oof_method(self) -> str:
-    return "predict_proba" if self.predict_proba else ("decision_function" if hasattr(self.classifier, "decision_function") else "predict_proba")
-
-  def _extract_1d_scores(self, y_predictions: np.ndarray) -> np.ndarray:
-    if y_predictions.ndim == 2:
-      return y_predictions[:, 1]
-    return y_predictions
-
-  def fit(self, X: np.ndarray, y: np.ndarray) -> 'FormanMM':
-    unique_classes = np.unique(y)
-    if len(unique_classes) > 2:
-      raise ValueError("FormanMM only works for binary quantification.")
-    return super().fit(X, y)
+               use_convex_solver: bool = True, predict_proba: bool = False,
+               n_jobs: int = None, parallel_backend: str = "loky"):
+    super().__init__(classifier=classifier, distance_metric="L1", cv=cv,
+                     use_convex_solver=use_convex_solver, predict_proba=predict_proba,
+                     n_jobs=n_jobs, parallel_backend=parallel_backend)
+    self.bins_ = None
 
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
     y_scores = self._extract_1d_scores(y_pred_oof)
@@ -258,20 +235,6 @@ class FormanMM(BaseCalibratedQuantifier, BaseMixtureQuantifier):
 
     return test_frequencies / X.shape[0]
 
-  def _quantify(self, X: np.ndarray) -> np.ndarray:
-    test_frequencies = self._compute_score(X)
-    if not self.use_convex_solver:
-      return self._golden_section_search_fallback(test_frequencies)
-    try:
-      prevalence_solution = self._solve_via_convex_programming(test_frequencies)
-      if prevalence_solution is None:
-        warnings.warn("Convex optimization returned an empty result. Falling back to GSS search.")
-        return self._golden_section_search_fallback(test_frequencies)
-      return np.array(prevalence_solution).squeeze()
-    except cvx.SolverError:
-      warnings.warn("CVXPY SolverError encountered. Falling back to GSS search.")
-      return self._golden_section_search_fallback(test_frequencies)
-
 
 class GAC(BaseCalibratedQuantifier, BaseMixtureQuantifier):
   """Generalized Adjusting Confusion Matrix (GAC) Quantifier.
@@ -293,6 +256,12 @@ class GAC(BaseCalibratedQuantifier, BaseMixtureQuantifier):
 
   use_convex_solver : bool, default = True
     If True, optimizes via CVXPY.
+
+  n_jobs : int, default = None
+    Number of jobs to run in parallel while fitting the `cv` folds.
+
+  parallel_backend : str, default = "loky"
+    `joblib.Parallel` backend used for the CV/final-fit jobs.
     
   References
   ----------
@@ -303,8 +272,11 @@ class GAC(BaseCalibratedQuantifier, BaseMixtureQuantifier):
                classifier: BaseEstimator = LogisticRegression(),
                distance_metric: str = "L2", 
                cv: int = 10,
-               use_convex_solver: bool = True):
-    BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv)
+               use_convex_solver: bool = True,
+               n_jobs: int = None,
+               parallel_backend: str = "loky"):
+    BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv,
+                                      n_jobs=n_jobs, parallel_backend=parallel_backend)
     BaseMixtureQuantifier.__init__(self, classifier=classifier, distance_metric=distance_metric, 
                                   use_convex_solver=use_convex_solver)
 
@@ -312,10 +284,16 @@ class GAC(BaseCalibratedQuantifier, BaseMixtureQuantifier):
     return "predict"
 
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
-    confusion_matrix = np.zeros((self.n_classes_, self.n_classes_))
-    for i, true_label in enumerate(self.classes_):
-      for j, pred_label in enumerate(self.classes_):
-        confusion_matrix[j, i] = np.sum((y_true_oof == true_label) & (y_pred_oof == pred_label))
+    # fully vectorized confusion matrix: one-hot encode both true and
+    # predicted labels against the sorted classes_ grid, then a single
+    # matmul (n_classes, n_samples) @ (n_samples, n_classes) tallies
+    # every (pred, true) pair at once, replacing the double Python loop
+    # this used to run over classes_ x classes_
+    true_idx = np.searchsorted(self.classes_, y_true_oof)
+    pred_idx = np.searchsorted(self.classes_, y_pred_oof)
+    one_hot_true = np.eye(self.n_classes_)[true_idx]
+    one_hot_pred = np.eye(self.n_classes_)[pred_idx]
+    confusion_matrix = one_hot_pred.T @ one_hot_true
 
     _, class_counts = np.unique(y_true_oof, return_counts=True)
     self.conditional_matrix_ = confusion_matrix / class_counts
@@ -326,17 +304,7 @@ class GAC(BaseCalibratedQuantifier, BaseMixtureQuantifier):
 
   def _quantify(self, X: np.ndarray) -> np.ndarray:
     test_frequencies = self._compute_score(X)
-    if not self.use_convex_solver:
-      return self._golden_section_search_fallback(test_frequencies)
-    try:
-      prevalence_solution = self._solve_via_convex_programming(test_frequencies)
-      if prevalence_solution is None:
-        warnings.warn("Convex optimization returned an empty result. Falling back to GSS search.")
-        return self._golden_section_search_fallback(test_frequencies)
-      return np.array(prevalence_solution).squeeze()
-    except cvx.SolverError:
-      warnings.warn("CVXPY SolverError encountered. Falling back to GSS search.")
-      return self._golden_section_search_fallback(test_frequencies)
+    return self._solve_mixture(test_frequencies)
 
 
 class GPAC(BaseCalibratedQuantifier, BaseMixtureQuantifier):
@@ -359,6 +327,12 @@ class GPAC(BaseCalibratedQuantifier, BaseMixtureQuantifier):
   use_convex_solver : bool, default = True
     If True, optimizes via CVXPY.
 
+  n_jobs : int, default = None
+    Number of jobs to run in parallel while fitting the `cv` folds.
+
+  parallel_backend : str, default = "loky"
+    `joblib.Parallel` backend used for the CV/final-fit jobs.
+
   References
   ----------
   Aykut Firat. Unified framework for quantification. arXiv preprint arXiv:1606.00868, 2016.
@@ -368,8 +342,11 @@ class GPAC(BaseCalibratedQuantifier, BaseMixtureQuantifier):
                classifier: BaseEstimator = LogisticRegression(),
                distance_metric: str = "L2", 
                cv: int = 10,
-               use_convex_solver: bool = True):
-    BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv)
+               use_convex_solver: bool = True,
+               n_jobs: int = None,
+               parallel_backend: str = "loky"):
+    BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv,
+                                      n_jobs=n_jobs, parallel_backend=parallel_backend)
     BaseMixtureQuantifier.__init__(self, classifier=classifier, distance_metric=distance_metric, 
                                   use_convex_solver=use_convex_solver)
 
@@ -377,11 +354,13 @@ class GPAC(BaseCalibratedQuantifier, BaseMixtureQuantifier):
     return "predict_proba"
 
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
-    probabilistic_matrix = np.zeros((self.n_classes_, self.n_classes_))
-    for l, class_label in enumerate(self.classes_):
-      class_indices = np.where(y_true_oof == class_label)[0]
-      probabilistic_matrix[:, l] += y_pred_oof[class_indices].sum(axis=0)
-        
+    # single matmul replaces the loop over classes_: column l of the
+    # result is the sum of predicted-probability rows whose true label is
+    # class l, i.e. y_pred_oof.T @ one_hot(true_labels)
+    true_idx = np.searchsorted(self.classes_, y_true_oof)
+    one_hot_true = np.eye(self.n_classes_)[true_idx]
+    probabilistic_matrix = y_pred_oof.T @ one_hot_true
+
     _, class_counts = np.unique(y_true_oof, return_counts=True)
     self.conditional_matrix_ = probabilistic_matrix / class_counts
 
@@ -390,17 +369,7 @@ class GPAC(BaseCalibratedQuantifier, BaseMixtureQuantifier):
 
   def _quantify(self, X: np.ndarray) -> np.ndarray:
     test_frequencies = self._compute_score(X)
-    if not self.use_convex_solver:
-      return self._golden_section_search_fallback(test_frequencies)
-    try:
-      prevalence_solution = self._solve_via_convex_programming(test_frequencies)
-      if prevalence_solution is None:
-        warnings.warn("Convex optimization returned an empty result. Falling back to GSS search.")
-        return self._golden_section_search_fallback(test_frequencies)
-      return np.array(prevalence_solution).squeeze()
-    except cvx.SolverError:
-      warnings.warn("CVXPY SolverError encountered. Falling back to GSS search.")
-      return self._golden_section_search_fallback(test_frequencies)
+    return self._solve_mixture(test_frequencies)
 
 
 class FM(BaseCalibratedQuantifier, BaseMixtureQuantifier):
@@ -423,6 +392,12 @@ class FM(BaseCalibratedQuantifier, BaseMixtureQuantifier):
   use_convex_solver : bool, default = True
     If True, optimizes via CVXPY.
 
+  n_jobs : int, default = None
+    Number of jobs to run in parallel while fitting the `cv` folds.
+
+  parallel_backend : str, default = "loky"
+    `joblib.Parallel` backend used for the CV/final-fit jobs.
+
   References
   ----------
   Jerome H. Friedman. Class counts in future unlabeled samples, 2014.
@@ -433,8 +408,11 @@ class FM(BaseCalibratedQuantifier, BaseMixtureQuantifier):
                classifier: BaseEstimator = LogisticRegression(),
                distance_metric: str = "L2",
                cv: int = 10,
-               use_convex_solver: bool = True):
-    BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv)
+               use_convex_solver: bool = True,
+               n_jobs: int = None,
+               parallel_backend: str = "loky"):
+    BaseCalibratedQuantifier.__init__(self, classifier=classifier, cv=cv,
+                                      n_jobs=n_jobs, parallel_backend=parallel_backend)
     BaseMixtureQuantifier.__init__(self, classifier=classifier, distance_metric=distance_metric, 
                                   use_convex_solver=use_convex_solver)
 
@@ -442,10 +420,12 @@ class FM(BaseCalibratedQuantifier, BaseMixtureQuantifier):
     return "predict_proba"
 
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
-    threshold_matrix = np.zeros((self.n_classes_, self.n_classes_))
-    for l, class_label in enumerate(self.classes_):
-      class_indices = np.where(y_true_oof == class_label)[0]
-      threshold_matrix[:, l] += (y_pred_oof[class_indices] > self.train_prevalence_).sum(axis=0)
+    # single matmul replaces the loop over classes_, mirroring GPAC's
+    # vectorization but comparing against train_prevalence_ first
+    true_idx = np.searchsorted(self.classes_, y_true_oof)
+    one_hot_true = np.eye(self.n_classes_)[true_idx]
+    above_prior = (y_pred_oof > self.train_prevalence_).astype(float)
+    threshold_matrix = above_prior.T @ one_hot_true
 
     _, class_counts = np.unique(y_true_oof, return_counts=True)
     self.conditional_matrix_ = threshold_matrix / class_counts
@@ -455,14 +435,4 @@ class FM(BaseCalibratedQuantifier, BaseMixtureQuantifier):
 
   def _quantify(self, X: np.ndarray) -> np.ndarray:
     test_frequencies = self._compute_score(X)
-    if not self.use_convex_solver:
-      return self._golden_section_search_fallback(test_frequencies)
-    try:
-      prevalence_solution = self._solve_via_convex_programming(test_frequencies)
-      if prevalence_solution is None:
-        warnings.warn("Convex optimization returned an empty result. Falling back to GSS search.")
-        return self._golden_section_search_fallback(test_frequencies)
-      return np.array(prevalence_solution).squeeze()
-    except cvx.SolverError:
-      warnings.warn("CVXPY SolverError encountered. Falling back to GSS search.")
-      return self._golden_section_search_fallback(test_frequencies)
+    return self._solve_mixture(test_frequencies)
