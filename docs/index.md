@@ -23,7 +23,7 @@ Unlike standard classification tasks that aim to predict the labels of individua
 | ------------- | ----------------------------------------- |
 | Implement bag generation and test pipelines | <input type="checkbox" disabled/> |
 | Implement ensembles strategies | <input type="checkbox" disabled/> |
-| Create the visualization module    | <input type="checkbox" disabled/> |
+| Create the visualization module    | <input type="checkbox" checked/> |
 
 And some other features that aren't listed here. 
 

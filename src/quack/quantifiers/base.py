@@ -7,9 +7,46 @@ from typing import TypeVar
 from sklearn.base import BaseEstimator, clone
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sklearn.model_selection import check_cv
+from sklearn.utils.parallel import Parallel, delayed
 from sklearn.linear_model import LogisticRegression
 
-T = TypeVar('T', bound='BaseQuantifier')
+
+def _clone_fit_predict_fold(base_classifier: BaseEstimator,
+                            X: np.ndarray,
+                            y: np.ndarray,
+                            train_idx: np.ndarray,
+                            test_idx: np.ndarray,
+                            oof_method: str) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+  """Fits a cloned classifier on one CV fold and predicts on its held-out split.
+
+  Defined at module level (rather than as a closure/method) so it can be
+  pickled and dispatched to worker processes by `joblib`/`Parallel`.
+
+  Returns
+  -------
+  test_idx : ndarray
+    The held-out indices this fold predicted for (echoed back so results
+    can be scattered into the right positions after parallel execution).
+  y_test : ndarray
+    True labels for `test_idx`.
+  y_pred : ndarray
+    Out-of-fold predictions (`predict` or `predict_proba` output) for `test_idx`.
+  """
+  fold_classifier = clone(base_classifier)
+  fold_classifier.fit(X[train_idx], y[train_idx])
+  predict_fn = getattr(fold_classifier, oof_method)
+  return test_idx, y[test_idx], predict_fn(X[test_idx])
+
+
+def _clone_fit_full(base_classifier: BaseEstimator, X: np.ndarray, y: np.ndarray) -> BaseEstimator:
+  """Fits a cloned classifier on the entire dataset.
+
+  Defined at module level so it can run as an independent `joblib` task
+  alongside the per-fold jobs (it does not depend on their results).
+  """
+  classifier = clone(base_classifier)
+  classifier.fit(X, y)
+  return classifier
 
 
 class QuantifierMixin:
@@ -22,7 +59,7 @@ class BaseQuantifier(BaseEstimator, QuantifierMixin, ABC):
   Abstract class for all quantifiers. Inherits from BaseEstimator and QuantifierMixin
   to guarantee compatibility with scikit-learn, as clone of estimators, get or set
   parameters (get_parameter/set_parameter) and the integration with GridSeach (GridSearchCV).
-  
+
   Parameters
   ----------
   classifier: estimator object, default = None
@@ -34,16 +71,16 @@ class BaseQuantifier(BaseEstimator, QuantifierMixin, ABC):
     self.classifier = classifier
 
   @abstractmethod
-  def fit(self, X: np.ndarray, y: np.ndarray) -> T:
+  def fit(self, X: np.ndarray, y: np.ndarray) -> 'BaseQuantifier':
     """ Adjusts the quantifier based on the training data.
-    
+
     Parameters
     ----------
     X: {array-like, sparse matrix} of shape (n_samples, n_features)
       Training data.
     y: array-like of shape (n_samples,)
       Labels for the corresponding classes.
-      
+
     Returns
     -------
     self: object
@@ -54,12 +91,12 @@ class BaseQuantifier(BaseEstimator, QuantifierMixin, ABC):
   @abstractmethod
   def predict(self, X: np.ndarray) -> np.ndarray:
     """ Estimate the prevalences (distribution) for the test bag X.
-    
+
     Parameters
     ----------
     X: {array-like, sparse matrix} of shape (n_samples, n_features)
       The test bag with unlabelled instances.
-    
+
     Returns
     -------
     prevalences: ndarray of shape (n_classes,)
@@ -72,11 +109,11 @@ class BaseQuantifier(BaseEstimator, QuantifierMixin, ABC):
 class BaseCalibratedQuantifier(BaseQuantifier, ABC):
   """
   Base class to quantifiers that requires cross-validation Out-of-Fold.
-  
+
   This class manages automatically the pipeline for training with cross-validation
   needed to create the calibration matrices (or confusion matrix) avoiding the
   overfitting.
-  
+
   Parameters
   ----------
   classifiers: estimator object, default = None
@@ -85,19 +122,32 @@ class BaseCalibratedQuantifier(BaseQuantifier, ABC):
     Determine the strategy for cross validation to generate the predictions Out-of-Fold.
     Options include int (number of folds for `StratifiedKFold`), a generator for CV or an interable
     with custom splits.
+  n_jobs: int, default = None
+    Number of jobs to run in parallel while fitting the `cv` folds (plus the final
+    classifier refit on the whole training set, dispatched as one extra independent
+    job). `None` means 1 (sequential, matching the previous behavior); `-1` means
+    using all available processors. See `joblib.Parallel` for details.
+  parallel_backend: str, default = "loky"
+    Backend passed through to `joblib.Parallel` (e.g. `"loky"` for process-based
+    parallelism, `"threading"` for thread-based parallelism, the latter is
+    preferable when the base classifier releases the GIL during `fit`/`predict`,
+    such as most scikit-learn estimators backed by Cython/BLAS).
   """
 
-  def __init__(self, classifier: BaseEstimator = None, cv: int = 10):
+  def __init__(self, classifier: BaseEstimator = None, cv: int = 10,
+               n_jobs: int = None, parallel_backend: str = "loky"):
     super().__init__(classifier=classifier)
     self.cv = cv
-    
+    self.n_jobs = n_jobs
+    self.parallel_backend = parallel_backend
+
   @abstractmethod
   def _get_oof_method(self) -> str:
     """ Determine which method from the classifier will be used to generate the
     predictions.
-    
+
     Subclasses must return valid strings like `"predict"` or `"predict_proba"`.
-    
+
     Returns
     -------
     method_name: str
@@ -108,7 +158,7 @@ class BaseCalibratedQuantifier(BaseQuantifier, ABC):
   @abstractmethod
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
     """ Internal method to build structures for calibration (matrix CM).
-    
+
     Parameters
     ----------
     y_true_oof: ndarray of shape (n_samples,)
@@ -121,12 +171,12 @@ class BaseCalibratedQuantifier(BaseQuantifier, ABC):
   @abstractmethod
   def _quantify(self, X: np.ndarray) -> np.ndarray:
     """ End-to-end algorithm for prevalence estimation specific for each subclass.
-    
+
     Parameters
     ----------
     X: ndarray of shape (n_samples, n_features)
       Raw data from test bags
-    
+
     Returns
     -------
     prevalences: ndarray of shape (n_classes,)
@@ -134,26 +184,31 @@ class BaseCalibratedQuantifier(BaseQuantifier, ABC):
     """
     pass
 
-  def fit(self, X: np.ndarray, y: np.ndarray) -> T:
+  def fit(self, X: np.ndarray, y: np.ndarray) -> 'BaseCalibratedQuantifier':
     """ Adjust the complete quantification pipeline using predictions out-of-fold.
     
     Executes the cross-validation for internal calibration and, following, adjust
     the model with all.
-    
+
+    The `n_splits` per-fold fits and the final full-data classifier refit are all
+    mutually independent, so they are dispatched together as `n_splits + 1`
+    `joblib` jobs (see `n_jobs`/`parallel_backend`), rather than running the CV
+    loop sequentially and only starting the final fit afterwards.
+
     Parameters
     ----------
     X: {array-like, sparse matrix} of shape (n_samples, n_features)
       Training data features.
     y: array-like of shape (n_samples,)
       True labels for the training data.
-      
+
     Returns
     -------
     self: object
       Returns the fitted estimator instance itself.
     """
     X, y = check_X_y(X, y, accept_sparse=True)
-    
+
     # save the classes and number of classes metadata
     self.classes_, counts = np.unique(y, return_counts=True)
     self.n_classes_ = len(self.classes_)
@@ -161,69 +216,78 @@ class BaseCalibratedQuantifier(BaseQuantifier, ABC):
     self.y_prevs_ = self.train_prevalence_ # compatibility purposes  
 
     base_classifier = self.classifier if self.classifier is not None else LogisticRegression()
-    
+
+    oof_method = self._get_oof_method()
+    if oof_method == "predict_proba" and not hasattr(base_classifier, "predict_proba"):
+      # fail fast, before spending time on cross-validation
+      raise TypeError(
+        f"{self.__class__.__name__} requires a classifier implementing "
+        f"`predict_proba`, but {base_classifier.__class__.__name__} does not "
+        "provide one."
+      )
+
     # check validation and instanciate the cross val strategy
     cv = check_cv(self.cv, y, classifier=True) # Returns a StratifiedKFold object
     n_samples = X.shape[0]
-    
-    oof_method = self._get_oof_method()
+    splits = list(cv.split(X, y))
+
     if oof_method == "predict_proba":
       y_pred_oof = np.zeros((n_samples, self.n_classes_)) # 2d
     else:
       y_pred_oof = np.zeros(n_samples) # 1d
-
     y_true_oof = np.zeros(n_samples, dtype=y.dtype)
-    # cross validation loop
-    for train_idx, test_idx in cv.split(X, y):
-      X_train, X_test = X[train_idx], X[test_idx]
-      y_train, y_test = y[train_idx], y[test_idx]
-      
-      # clone in a clean way to avoid data leak between folds
-      fold_classifier = clone(base_classifier)
-      fold_classifier.fit(X_train, y_train)
-      
+
+    # dispatch every fold fit/predict AND the final full-data refit as
+    # independent parallel jobs, since none of them depend on each other
+    fold_jobs = [
+      delayed(_clone_fit_predict_fold)(base_classifier, X, y, train_idx, test_idx, oof_method)
+      for train_idx, test_idx in splits
+    ]
+    final_fit_job = delayed(_clone_fit_full)(base_classifier, X, y)
+
+    *fold_results, self.classifier_ = Parallel(
+      n_jobs=self.n_jobs, backend=self.parallel_backend,
+    )(fold_jobs + [final_fit_job])
+
+    # cv.split guarantees test_idx never repeats across folds (mutually exclusive),
+    # so scattering results back is race-free even though jobs ran out of order
+    for test_idx, y_test, y_pred in fold_results:
       y_true_oof[test_idx] = y_test
-      pred_func = getattr(fold_classifier, oof_method) # returns the method callable 
-      y_pred_oof[test_idx] = pred_func(X_test) # even if appear that we can have an overhead
-      # the cv.split guarantees the a test_idx do not appears as test more than once
-      # (disjunt or mutually exclusive)
+      y_pred_oof[test_idx] = y_pred
 
     # trigger the calibration method
     self._calibrate(y_true_oof, y_pred_oof)
-    
-    self.classifier_ = clone(base_classifier)
-    self.classifier_.fit(X, y) # train the final classifier with all training data     
 
     return self
 
   def predict(self, X: np.ndarray) -> np.ndarray:
     """ Maps the test bag and estimate the class prevalences.
-    
+
     Ensures that the post-optimization output adopts consistent geometric properties.
-    
+
     Parameters
     ----------
     X: {array-like, sparse matrix} of shape (n_samples, n_features)
       Test bag of unlabelled test samples.
-      
+
     Returns
     -------
     p_adjusted: ndarray of shape (n_classes,)
       Array normalized and with all valid predictions.
     """
     check_is_fitted(self)
-    
+
     X = check_array(X, accept_sparse=True)
     p_adjusted = self._quantify(X) # runs the specific math calculus for the subclass
-    
+
     p_adjusted = np.clip(p_adjusted, 0.0, 1.0) # avoid values outside the valid range
     p_sum = np.sum(p_adjusted)
-    
+
     if p_sum > 0:
       p_adjusted /= p_sum
     else:
       p_adjusted = np.ones(self.n_classes_) / self.n_classes_
-      
+
     return p_adjusted
 
 
@@ -268,6 +332,20 @@ class BaseMixtureQuantifier(BaseQuantifier, ABC):
   conditional_matrix_ : ndarray of shape (n_components, n_classes)
     The conditional probability matrix built during the `fit` phase.
     Represents the expected distribution profile for each class from the training set.
+
+  Notes
+  -----
+  When `use_convex_solver=True`, the underlying CVXPY `Problem` (variable,
+  parameters and constraints) is built lazily on the first `.predict()` call
+  and cached on the instance, keyed by `(n_components, n_classes,
+  distance_metric)`. Subsequent `.predict()` calls only update the cached
+  `Parameter` values (`conditional_matrix_` and the test frequency vector)
+  and re-solve, skipping the relatively expensive problem construction/DCP
+  validation step — this matters a lot when scoring many bags (e.g. from
+  `quack.bag_generator`) with the same fitted quantifier. The cache is
+  automatically rebuilt if `conditional_matrix_`'s shape or
+  `distance_metric` change (e.g. after calling `.fit()` again with
+  different data).
   """
   def __init__(self,
                classifier: BaseEstimator = None,
@@ -277,6 +355,7 @@ class BaseMixtureQuantifier(BaseQuantifier, ABC):
     self.distance_metric = distance_metric
     self.use_convex_solver = use_convex_solver
     self.conditional_matrix_ = None
+    self._cvx_cache_key_ = None
 
   def _compute_distance(self,
                         candidate_prevalence: np.ndarray,
@@ -298,39 +377,83 @@ class BaseMixtureQuantifier(BaseQuantifier, ABC):
       return np.sqrt(np.sum((np.sqrt(projected_frequencies) - np.sqrt(test_frequencies)) ** 2))
 
     if self.distance_metric == 'TS':
-      term_projected = sum(projected_frequencies[i] * np.log(2 * projected_frequencies[i] / (projected_frequencies[i] + test_frequencies[i])) 
-                           if projected_frequencies[i] != 0 else 0 for i in range(projected_frequencies.shape[0]))
-      term_test = sum(test_frequencies[i] * np.log(2 * test_frequencies[i] / (projected_frequencies[i] + test_frequencies[i])) 
-                      if test_frequencies[i] != 0 else 0 for i in range(projected_frequencies.shape[0]))
-      return term_projected + term_test
+      # vectorized Topsoe distance; terms where a frequency is exactly 0
+      # contribute 0 by convention (x*log(x) -> 0 as x -> 0), so they are
+      # masked out instead of computed (which would otherwise emit
+      # divide-by-zero / invalid-value warnings from log(0) or 0/0)
+      denom = projected_frequencies + test_frequencies
+      with np.errstate(divide='ignore', invalid='ignore'):
+        term_projected = np.where(
+          projected_frequencies > 0,
+          projected_frequencies * np.log(2 * projected_frequencies / denom),
+          0.0,
+        )
+        term_test = np.where(
+          test_frequencies > 0,
+          test_frequencies * np.log(2 * test_frequencies / denom),
+          0.0,
+        )
+      return float(np.sum(term_projected) + np.sum(term_test))
 
     raise ValueError(f"Unknown distance metric: {self.distance_metric}")
 
-  def _solve_via_convex_programming(self, test_frequencies: np.ndarray) -> np.ndarray:
-    """Solves the constrained mixture problem using exact convex optimization."""
-    # define the target optimization variable: the estimated prevalence vector
-    estimated_prevalence = cvx.Variable(self.conditional_matrix_.shape[1])
+  def _get_convex_problem(self, n_components: int, n_classes: int):
+    """Returns the cached CVXPY `(problem, matrix_param, test_freq_param, prevalence_var)`
+    tuple for the current `(n_components, n_classes, distance_metric)`, building
+    (and caching) it on first use or whenever that key changes."""
+    cache_key = (n_components, n_classes, self.distance_metric)
+    if self._cvx_cache_key_ == cache_key:
+      return (self._cvx_problem_, self._cvx_matrix_param_,
+              self._cvx_test_freq_param_, self._cvx_prevalence_var_)
 
-    # proportions cannot be negative and must sum to exactly 1.0
+    estimated_prevalence = cvx.Variable(n_classes)
+    matrix_param = cvx.Parameter((n_components, n_classes))
+    test_freq_param = cvx.Parameter(n_components, nonneg=True)
+
     constraints = [estimated_prevalence >= 0, cvx.sum(estimated_prevalence) == 1.0]
-    
-    # map the selected distance metric to CVXPY objective functions
+    projected_frequencies = matrix_param @ estimated_prevalence
+
     if self.distance_metric == 'L1':
-      objective_function = cvx.Minimize(cvx.norm1(self.conditional_matrix_ @ estimated_prevalence - test_frequencies))
+      objective_function = cvx.Minimize(cvx.norm1(projected_frequencies - test_freq_param))
     elif self.distance_metric == 'L2':
-      objective_function = cvx.Minimize(cvx.norm(self.conditional_matrix_ @ estimated_prevalence - test_frequencies))
+      objective_function = cvx.Minimize(cvx.norm(projected_frequencies - test_freq_param))
     elif self.distance_metric == 'HD':
       # maximizing affinity is mathematically equivalent to minimizing Hellinger Distance
-      objective_function = cvx.Maximize(cvx.sum(cvx.sqrt(cvx.multiply(test_frequencies, self.conditional_matrix_ @ estimated_prevalence))))
+      objective_function = cvx.Maximize(cvx.sum(cvx.sqrt(cvx.multiply(test_freq_param, projected_frequencies))))
     elif self.distance_metric == 'TS':
-      objective_function = cvx.Minimize(cvx.sum(cvx.kl_div(2 * self.conditional_matrix_ @ estimated_prevalence, test_frequencies) + 
-                                                cvx.kl_div(2 * test_frequencies, self.conditional_matrix_ @ estimated_prevalence)))
+      objective_function = cvx.Minimize(cvx.sum(
+        cvx.kl_div(2 * projected_frequencies, test_freq_param) +
+        cvx.kl_div(2 * test_freq_param, projected_frequencies)
+      ))
     else:
       raise ValueError(f"Distance metric not supported by the convex solver: {self.distance_metric}")
 
-    # construct and solve the mathematical problem globally
     problem = cvx.Problem(objective_function, constraints)
-    problem.solve()
+
+    self._cvx_cache_key_ = cache_key
+    self._cvx_problem_ = problem
+    self._cvx_matrix_param_ = matrix_param
+    self._cvx_test_freq_param_ = test_freq_param
+    self._cvx_prevalence_var_ = estimated_prevalence
+
+    return problem, matrix_param, test_freq_param, estimated_prevalence
+
+  def _solve_via_convex_programming(self, test_frequencies: np.ndarray) -> np.ndarray:
+    """Solves the constrained mixture problem using exact convex optimization.
+
+    Reuses the cached CVXPY problem for this instance (see
+    `_get_convex_problem`), only updating the `conditional_matrix_` and
+    `test_frequencies` parameter values before re-solving — avoiding the
+    cost of rebuilding the problem graph on every call.
+    """
+    n_components, n_classes = self.conditional_matrix_.shape
+    problem, matrix_param, test_freq_param, estimated_prevalence = self._get_convex_problem(
+      n_components, n_classes
+    )
+
+    matrix_param.value = self.conditional_matrix_
+    test_freq_param.value = test_frequencies
+    problem.solve(warm_start=True)
 
     return estimated_prevalence.value
   
@@ -445,7 +568,7 @@ class BaseMixtureQuantifier(BaseQuantifier, ABC):
     # --- Geometric Post-Processing Pipeline ---
     # Clip edge values into the strict [0.0, 1.0] range to fix floating-point precision noise
     estimated_prevalences = np.clip(estimated_prevalences, 0.0, 1.0)
-    
+
     # Enforce probability closure (The final vector elements must sum to exactly 1.0)
     total_sum = np.sum(estimated_prevalences)
     if total_sum > 0:
@@ -453,5 +576,5 @@ class BaseMixtureQuantifier(BaseQuantifier, ABC):
     else:
       # Safe boundary fallback: apply a uniform distribution if everything collapsed to zero
       estimated_prevalences = np.ones(self.n_classes_) / self.n_classes_
-        
+
     return estimated_prevalences
