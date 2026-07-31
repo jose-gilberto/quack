@@ -11,6 +11,40 @@ from sklearn.utils.parallel import Parallel, delayed
 from sklearn.linear_model import LogisticRegression
 
 
+def normalize_prevalence(p: np.ndarray, n_classes: int) -> np.ndarray:
+  """Clips negative noise from a raw prevalence-like vector and renormalizes it to sum to 1.0.
+
+  Shared by every quantifier's `.predict()` so the exact same geometric
+  post-processing rule is applied everywhere (`CC`, `PCC`,
+  `BaseCalibratedQuantifier`, ...) instead of being copy-pasted with a
+  risk of silently drifting between implementations.
+
+  Only the lower bound (`0.0`) is enforced here, as a guard against
+  floating-point noise producing tiny negative values (e.g. from ACC's
+  subtraction-based adjustment formula). No upper bound is applied to
+  individual components before normalizing: inputs are not guaranteed to
+  be per-component probabilities in `[0, 1]` (e.g. `CC` passes raw class
+  counts, which can be arbitrarily larger than 1) — the division by the
+  total sum is what enforces the `[0, 1]` range and the sum-to-1
+  constraint on the *output*, not a per-component clip on the input.
+
+  Args:
+    p (np.ndarray): Raw prevalence-like vector of shape `(n_classes,)`
+      (e.g. class counts, averaged probabilities, or an optimizer's
+      output), not necessarily non-negative or summing to 1.0.
+    n_classes (int): Number of classes, used for the uniform fallback
+      when `p` collapses entirely to zero/negative mass.
+
+  Returns:
+    np.ndarray: A valid probability vector of shape `(n_classes,)`.
+  """
+  p = np.clip(p, 0.0, None)
+  p_sum = np.sum(p)
+  if p_sum > 0:
+    return p / p_sum
+  return np.ones(n_classes) / n_classes
+
+
 def _clone_fit_predict_fold(base_classifier: BaseEstimator,
                             X: np.ndarray,
                             y: np.ndarray,
