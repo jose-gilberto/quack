@@ -5,10 +5,10 @@
 <head>
     <script>
         /* const base_url = "None"; */
-        const base_url = (new URL("..", window.location)).href.replace(/\/+$/, ""); /* for search plugin notably */
-        /* const root_relative_url = ".."; */
+        const base_url = (new URL("../..", window.location)).href.replace(/\/+$/, ""); /* for search plugin notably */
+        /* const root_relative_url = "../.."; */
     </script>
-    <script integrity="sha384-m6cZ+Whl1ci89lidlu8DH4C+sZLNOYBvImtjUIhUK+iaNffXhqtbYgBVuuPfRsa0" src="../js/dark.js"></script>
+    <script integrity="sha384-m6cZ+Whl1ci89lidlu8DH4C+sZLNOYBvImtjUIhUK+iaNffXhqtbYgBVuuPfRsa0" src="../../js/dark.js"></script>
 
 
     <meta charset="utf-8" />
@@ -18,7 +18,7 @@
     
 
 
-<title>Tutorials Overview</title>
+<title>Ensembles</title>
 
 
 
@@ -31,7 +31,7 @@
 
 <!-- Open Graph (Facebook, LinkedIn) -->
 
-<meta property="og:title" content="Tutorials Overview">
+<meta property="og:title" content="Ensembles">
 
 
 
@@ -44,7 +44,7 @@
 
 <!-- Twitter Card -->
 
-<meta name="twitter:title" content="Tutorials Overview">
+<meta name="twitter:title" content="Ensembles">
 
 
 
@@ -56,18 +56,18 @@
 
 
     
-    <link href="../images/favicon.png" rel="icon" />
+    <link href="../../images/favicon.png" rel="icon" />
 
-    <link href="../css/base.css" rel="stylesheet" />
-    <link href="../css/geist.css" rel="stylesheet" />
+    <link href="../../css/base.css" rel="stylesheet" />
+    <link href="../../css/geist.css" rel="stylesheet" />
 
     
     
 
 <link id="pygments-light" rel="stylesheet"
-    href="../css/pygments/shadcn-light.css">
+    href="../../css/pygments/shadcn-light.css">
 <link id="pygments-dark" rel="stylesheet"
-    href="../css/pygments/github-dark.css"
+    href="../../css/pygments/github-dark.css"
     media="(prefers-color-scheme: dark)">
 
 
@@ -78,13 +78,13 @@
             --theme-accent: oklch(62.3% 0.214 259.815);
         }
     </style>
-    <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
-    <link href="../css/pygments.css" rel="stylesheet" />
+    <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+    <link href="../../css/pygments.css" rel="stylesheet" />
 
     
 
     <script integrity="sha384-V2jkXRy811qODUbfkLlkVJYBbf4h6XHAEjcU6ReASBPrJvTrlYh4GrI4t6GCju6n"
-        src="../js/callbacks.js"></script>
+        src="../../js/callbacks.js"></script>
 
     
 
@@ -271,7 +271,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href=".."
+        data-size="default" href="../.."
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -291,7 +291,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../getting-started/"
+        data-size="default" href="../../getting-started/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -323,8 +323,8 @@
             
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
-    <a data-slot="sidebar-menu-button" data-active="true" data-sidebar="menu-button"
-        data-size="default" href="./"
+    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
+        data-size="default" href="../"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -343,7 +343,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="methods/"
+        data-size="default" href="../methods/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -361,8 +361,8 @@
             
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
-    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="ensembles/"
+    <a data-slot="sidebar-menu-button" data-active="true" data-sidebar="menu-button"
+        data-size="default" href="./"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -381,7 +381,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="bag-generator/"
+        data-size="default" href="../bag-generator/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -400,7 +400,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="uci-datasets/"
+        data-size="default" href="../uci-datasets/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -419,7 +419,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="visualization/"
+        data-size="default" href="../visualization/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -451,7 +451,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/base/"
+        data-size="default" href="../../api/base/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -470,7 +470,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/quantifiers/"
+        data-size="default" href="../../api/quantifiers/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -489,7 +489,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/ensembles/"
+        data-size="default" href="../../api/ensembles/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -508,7 +508,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/bag_generator/"
+        data-size="default" href="../../api/bag_generator/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -527,7 +527,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/metrics/"
+        data-size="default" href="../../api/metrics/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -546,7 +546,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/datasets/"
+        data-size="default" href="../../api/datasets/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -565,7 +565,7 @@
             
             <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
-        data-size="default" href="../api/visualization/"
+        data-size="default" href="../../api/visualization/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
 
         
@@ -607,13 +607,13 @@
     <div class="flex flex-col gap-2">
       <div id="page-header" class="flex items-start justify-between">
         <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
-          Tutorials Overview
+          Ensembles
         </h1>
 
         <div class="flex items-center gap-2 pt-1.5">
           
           <button
-    onclick="fetch(`..`).then((r) => r.text()).then((text) => navigator.clipboard.write([new ClipboardItem({ 'text/plain': text })]))"
+    onclick="fetch(`../..`).then((r) => r.text()).then((text) => navigator.clipboard.write([new ClipboardItem({ 'text/plain': text })]))"
     data-slot="button" class="secondary cursor-pointer">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-copy ">
@@ -628,7 +628,7 @@
           
           <a data-slot="button" id="previous-button"
             class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 extend-touch-target size-8 shadow-none md:size-7"
-            href="../getting-started/">
+            href="../methods/">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
               class="tabler-icon tabler-icon-arrow-left">
@@ -642,7 +642,7 @@
           
           <a data-slot="button" id="next-button"
             class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 extend-touch-target size-8 shadow-none md:size-7"
-            href="methods/">
+            href="../bag-generator/">
             <span class="sr-only">Next</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -656,10 +656,6 @@
         </div>
       </div>
       
-      <p id="summary" class="text-muted-foreground text-[1.05rem] text-balance sm:text-base">
-        An overview about all modules and methods available in Quack
-      </p>
-      
     </div>
     <div class="flex justify-end items-center">
       
@@ -667,46 +663,177 @@
     </div>
   </div>
   <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
-    <ol>
-<li><a href="methods/">Quantification Methods</a><ul>
-<li>1.1. Classify, Count &amp; Correct</li>
-<li>1.2. Distribution Matching<ul>
-<li>1.2.1. Feature Based</li>
-<li>1.2.2. Label Based</li>
-<li>1.2.3. Iterators</li>
+    <p><code>quack.ensembles</code> provides meta-quantifiers that combine several base quantifiers into a single, typically more robust, prevalence estimate. Currently it ships one implementation:</p>
+<ul>
+<li><a href="../../api/ensembles/#ensemble-of-quantifiers-eoq"><code>EoQ</code></a> — Ensemble of Quantifiers, based on Pérez-Gállego et al. (2017, 2019).</li>
 </ul>
-</li>
-<li>1.3. Adaptation of Classification Algorithms</li>
-<li>1.4. Neural Networks (WIP)</li>
-<li>1.5. <a href="ensembles/">Ensembles</a></li>
-</ul>
-</li>
-<li><a href="bag-generator/">Bag Generator</a><ul>
-<li>2.1. Prior Shift</li>
-<li>2.2. Covariate Shift</li>
-</ul>
-</li>
-<li>Evaluation<ul>
-<li>2.1. Evaluation Metrics</li>
-<li>2.2. Evaluation Protocols</li>
-</ul>
-</li>
-<li>Datasets<ul>
-<li>3.1. <a href="uci-datasets/">UCI Datasets</a></li>
-<li>3.2. Forman Datasets</li>
-<li>3.3. PhysioNet Datasets</li>
-<li>3.4. Reviews Datasets</li>
-</ul>
-</li>
-<li>Model Selection</li>
-<li><a href="visualization/">Visualization</a><ul>
-<li>5.1. Prevalence Plot (diagonal plot)</li>
-<li>5.2. Quantification Bias Plot</li>
-<li>5.3. Class Distribution Plot</li>
-</ul>
-</li>
-<li>Utils</li>
-</ol>
+<p><code>EoQ</code> trains <code>n_estimators</code> independent copies of any <code>quack</code> quantifier, each on a bag with an artificially shifted class prevalence drawn via <a href="../bag-generator/"><code>quack.bag_generator</code></a>, then aggregates their individual predictions. Reusing <code>bag_generator</code> means <code>EoQ</code> benefits from every bag generator already available — <code>PriorShiftBagGenerator</code> (default), <code>CovariateShiftBagGenerator</code>, or a custom one you write yourself.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">quack.quantifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">quack.ensembles</span><span class="w"> </span><span class="kn">import</span> <span class="n">EoQ</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.65</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">],</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">ensemble</span> <span class="o">=</span> <span class="n">EoQ</span><span class="p">(</span>
+    <span class="n">base_quantifier</span><span class="o">=</span><span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span>
+    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">selection_policy</span><span class="o">=</span><span class="s2">&quot;average&quot;</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ensemble</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">X_test</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">prevalences</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prevalences</span><span class="p">)</span>  <span class="c1"># array([p_class_0, p_class_1])</span>
+</code></pre></div>
+
+<p><code>base_quantifier</code> can be <strong>any</strong> <code>quack</code> quantifier — <code>CC</code>, <code>ACC</code>, <code>DyS</code>, <code>EM</code>, another <code>EoQ</code>, and so on — since <code>EoQ</code> only relies on the shared <code>.fit(X, y)</code> / <code>.predict(X)</code> contract from <code>BaseQuantifier</code>.</p>
+<hr />
+<h2 id="selection-policies">Selection policies</h2>
+<p><code>EoQ</code> supports three ways of turning <code>n_estimators</code> individual predictions into one final estimate, controlled by <code>selection_policy</code>:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Type</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"average"</code> (default)</td>
+<td>none</td>
+<td>Simple average of every member's prediction.</td>
+</tr>
+<tr>
+<td><code>"performance"</code></td>
+<td>static</td>
+<td>Keeps only the <code>red_size</code> members with the lowest quantification error on a held-out validation split, decided once during <code>fit</code>.</td>
+</tr>
+<tr>
+<td><code>"ptr"</code></td>
+<td>dynamic</td>
+<td>Keeps only the <code>red_size</code> members whose <em>own training bag</em> prevalence is closest to an estimate of the current test bag's prevalence — recomputed for every <code>predict</code> call.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="average-baseline">Average (baseline)</h3>
+<p>No selection — every member contributes equally to the final average. This is <code>EoQ</code>'s default and matches the base ensemble from Pérez-Gállego et al. (2017).</p>
+<div class="codehilite"><pre><span></span><code><span class="n">ensemble</span> <span class="o">=</span> <span class="n">EoQ</span><span class="p">(</span><span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">selection_policy</span><span class="o">=</span><span class="s2">&quot;average&quot;</span><span class="p">)</span>
+<span class="n">ensemble</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="performance-static-selection">Performance (static selection)</h3>
+<p>Reserves a fraction (<code>val_split</code>) of the training data to generate validation bags with <em>known</em> prevalence, measures every member's mean quantification error on them (via any metric in <a href="../../api/metrics/"><code>quack.metrics</code></a>), and permanently keeps only the <code>red_size</code> best members.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">ensemble</span> <span class="o">=</span> <span class="n">EoQ</span><span class="p">(</span>
+    <span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span>
+    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">selection_policy</span><span class="o">=</span><span class="s2">&quot;performance&quot;</span><span class="p">,</span>
+    <span class="n">red_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>        <span class="c1"># keep the 10 best members</span>
+    <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;ae&quot;</span><span class="p">,</span>         <span class="c1"># any key from quack.metrics.MetricRegistry, or a QuantificationMetric instance</span>
+    <span class="n">val_split</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ensemble</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ensemble</span><span class="o">.</span><span class="n">oob_scores_</span><span class="p">)</span>        <span class="c1"># mean validation error per member</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ensemble</span><span class="o">.</span><span class="n">selected_indices_</span><span class="p">)</span>  <span class="c1"># indices of the red_size retained members</span>
+</code></pre></div>
+
+<p>You can also pass a <code>QuantificationMetric</code> instance directly instead of a string key:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">quack.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">KullbackLeiblerDivergence</span>
+
+<span class="n">ensemble</span> <span class="o">=</span> <span class="n">EoQ</span><span class="p">(</span>
+    <span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span>
+    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">selection_policy</span><span class="o">=</span><span class="s2">&quot;performance&quot;</span><span class="p">,</span>
+    <span class="n">red_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">KullbackLeiblerDivergence</span><span class="p">(),</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<h3 id="training-prevalence-ptr-dynamic-selection">Training Prevalence / <code>ptr</code> (dynamic selection)</h3>
+<p>For every test bag passed to <code>predict</code>, <code>EoQ</code> first estimates its prevalence (the average of all <code>n_estimators</code> members), then re-averages only the <code>red_size</code> members whose own training-bag prevalence sits closest to that estimate. Different test bags can therefore select different subsets of members.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">ensemble</span> <span class="o">=</span> <span class="n">EoQ</span><span class="p">(</span>
+    <span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span>
+    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">selection_policy</span><span class="o">=</span><span class="s2">&quot;ptr&quot;</span><span class="p">,</span>
+    <span class="n">red_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ensemble</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">prevalences</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>  <span class="c1"># selection recomputed for this specific bag</span>
+</code></pre></div>
+
+<hr />
+<h2 id="choosing-a-bag-generator">Choosing a bag generator</h2>
+<p>By default, <code>EoQ</code> uses <code>PriorShiftBagGenerator(sampling_strategy="uniform")</code> — a broad, unbiased sweep across the prevalence simplex. Pass your own <code>bag_generator</code> to change the shift protocol used to train (and, for <code>selection_policy="performance"</code>, validate) the ensemble members:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">quack.bag_generator</span><span class="w"> </span><span class="kn">import</span> <span class="n">PriorShiftBagGenerator</span><span class="p">,</span> <span class="n">CovariateShiftBagGenerator</span>
+
+<span class="c1"># concentrate members&#39; training bags on more extreme priors</span>
+<span class="n">ensemble</span> <span class="o">=</span> <span class="n">EoQ</span><span class="p">(</span>
+    <span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span>
+    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">bag_generator</span><span class="o">=</span><span class="n">PriorShiftBagGenerator</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span> <span class="n">dirichlet_alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">bag_size</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># train members under covariate shift instead of prior shift</span>
+<span class="n">ensemble</span> <span class="o">=</span> <span class="n">EoQ</span><span class="p">(</span>
+    <span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span>
+    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">bag_generator</span><span class="o">=</span><span class="n">CovariateShiftBagGenerator</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bag_size</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>Only <code>n_bags</code> (and, internally, <code>random_state</code>) are overridden on the generator you pass in — every other parameter (<code>bag_size</code>, <code>sampling_strategy</code>, <code>dirichlet_alpha</code>, <code>gamma</code>, ...) is respected as-is.</p>
+<div class="admonition note">
+<p class="admonition-title">Every training bag is guaranteed to contain all classes</p>
+<p>Extreme shift configurations (e.g. a very small <code>dirichlet_alpha</code>) can legitimately draw a bag missing one or more classes entirely — most base quantifiers cannot be <code>.fit()</code> on such data. <code>EoQ</code> deterministically tops up any missing class with one instance swapped in from the bag's currently largest class, so this never causes a training failure; <code>member_train_prevalences_</code> always reflects the bag's true final composition.</p>
+</div>
+<hr />
+<h2 id="parallelism">Parallelism</h2>
+<p><code>EoQ</code> accepts the same <code>n_jobs</code>/<code>parallel_backend</code> parameters used throughout <code>quack.quantifiers</code> (see <a href="../methods/#parallelism-n_jobs--parallel_backend">Methods — Parallelism</a>), parallelizing three independent stages: fitting the <code>n_estimators</code> members, scoring them for <code>selection_policy="performance"</code>, and predicting with every member.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">ensemble</span> <span class="o">=</span> <span class="n">EoQ</span><span class="p">(</span>
+    <span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span>
+    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">parallel_backend</span><span class="o">=</span><span class="s2">&quot;loky&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ensemble</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</code></pre></div>
+
+<hr />
+<h2 id="reproducibility">Reproducibility</h2>
+<p>Pass an <code>int</code> to <code>random_state</code> to get the exact same sequence of member training bags (and validation bags, for <code>selection_policy="performance"</code>) across repeated <code>fit</code> calls:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">ens_a</span> <span class="o">=</span> <span class="n">EoQ</span><span class="p">(</span><span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">ens_b</span> <span class="o">=</span> <span class="n">EoQ</span><span class="p">(</span><span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="c1"># ens_a and ens_b produce identical predictions</span>
+</code></pre></div>
+
+<hr />
+<h2 id="inspecting-the-ensemble">Inspecting the ensemble</h2>
+<p>After <code>fit</code>, a few attributes are available for diagnostics:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">ensemble</span><span class="o">.</span><span class="n">estimators_</span>                  <span class="c1"># list of n_estimators fitted BaseQuantifier instances</span>
+<span class="n">ensemble</span><span class="o">.</span><span class="n">member_train_prevalences_</span>    <span class="c1"># ndarray (n_estimators, n_classes): realized prevalence per member</span>
+<span class="n">ensemble</span><span class="o">.</span><span class="n">oob_scores_</span>                  <span class="c1"># ndarray (n_estimators,) or None: validation error (only &#39;performance&#39;)</span>
+<span class="n">ensemble</span><span class="o">.</span><span class="n">selected_indices_</span>            <span class="c1"># indices retained (&#39;performance&#39;/&#39;average&#39;); unused for &#39;ptr&#39;</span>
+</code></pre></div>
+
+<p>Combine <code>member_train_prevalences_</code> with <a href="../visualization/#prevalence-coverage-plot"><code>prevalence_coverage_plot</code></a> to check how well the ensemble's own training bags span the prevalence range for a given class:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">quack.visualization</span><span class="w"> </span><span class="kn">import</span> <span class="n">prevalence_coverage_plot</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">prevalence_coverage_plot</span><span class="p">(</span>
+    <span class="n">ensemble</span><span class="o">.</span><span class="n">member_train_prevalences_</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;EoQ members&quot;</span><span class="p">],</span>
+    <span class="n">class_name</span><span class="o">=</span><span class="s2">&quot;positive class&quot;</span><span class="p">,</span>
+    <span class="n">train_prevalence</span><span class="o">=</span><span class="n">ensemble</span><span class="o">.</span><span class="n">train_prevalence_</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;eoq_member_coverage.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="references">References</h2>
+<p>Pérez-Gállego, P., Quevedo, J. R., &amp; del Coz, J. J. (2017). Using ensembles for problems with characterizable changes in data distribution: A case study on quantification. <em>Information Fusion</em>, 34, 87-100.</p>
+<p>Pérez-Gállego, P., Castaño, A., Quevedo, J. R., &amp; del Coz, J. J. (2019). Dynamic ensemble selection for quantification tasks. <em>Information Fusion</em>, 45, 1-15.</p>
   </div>
   
   <script>
@@ -719,7 +846,7 @@
     
     <a data-slot="button"
         class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5 shadow-none"
-        href="../getting-started/">
+        href="../methods/">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="tabler-icon tabler-icon-arrow-left ">
@@ -727,14 +854,14 @@
             <path d="M5 12l6 6"></path>
             <path d="M5 12l6 -6"></path>
         </svg>
-        <span class="max-[500px]:hidden">Getting Started</span>
+        <span class="max-[500px]:hidden">Methods</span>
     </a>
     
     
     <a data-slot="button"
         class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5 ml-auto shadow-none"
-        href="methods/">
-        <span class="max-[500px]:hidden">Methods</span>
+        href="../bag-generator/">
+        <span class="max-[500px]:hidden">Bag Generator</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="tabler-icon tabler-icon-arrow-right ">
@@ -765,13 +892,13 @@
                 <div class="text-muted-foreground text-sm font-medium">Menu</div>
                 <div class="flex flex-col gap-3">
                     
-                    <a class="text-2xl font-medium" href="..">
+                    <a class="text-2xl font-medium" href="../..">
                         
                         Quack!
                         
                     </a>
                     
-                    <a class="text-2xl font-medium" href="../getting-started/">
+                    <a class="text-2xl font-medium" href="../../getting-started/">
                         
                         Getting Started
                         
@@ -789,37 +916,37 @@
                     
                     <div class="flex flex-col gap-3">
                         
-                        <a class="text-2xl font-medium" href="./">
+                        <a class="text-2xl font-medium" href="../">
                             
                             Overview
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="methods/">
+                        <a class="text-2xl font-medium" href="../methods/">
                             
                             Methods
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="ensembles/">
+                        <a class="text-2xl font-medium" href="./">
                             
                             Ensembles
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="bag-generator/">
+                        <a class="text-2xl font-medium" href="../bag-generator/">
                             
                             Bag Generator
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="uci-datasets/">
+                        <a class="text-2xl font-medium" href="../uci-datasets/">
                             
                             UCI Datasets
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="visualization/">
+                        <a class="text-2xl font-medium" href="../visualization/">
                             
                             Visualization
                             
@@ -834,43 +961,43 @@
                     
                     <div class="flex flex-col gap-3">
                         
-                        <a class="text-2xl font-medium" href="../api/base/">
+                        <a class="text-2xl font-medium" href="../../api/base/">
                             
                             Base Class
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../api/quantifiers/">
+                        <a class="text-2xl font-medium" href="../../api/quantifiers/">
                             
                             Quantifiers
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../api/ensembles/">
+                        <a class="text-2xl font-medium" href="../../api/ensembles/">
                             
                             Ensembles
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../api/bag_generator/">
+                        <a class="text-2xl font-medium" href="../../api/bag_generator/">
                             
                             Bag Generator
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../api/metrics/">
+                        <a class="text-2xl font-medium" href="../../api/metrics/">
                             
                             Metrics
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../api/datasets/">
+                        <a class="text-2xl font-medium" href="../../api/datasets/">
                             
                             Datasets
                             
                         </a>
                         
-                        <a class="text-2xl font-medium" href="../api/visualization/">
+                        <a class="text-2xl font-medium" href="../../api/visualization/">
                             
                             Visualization
                             
@@ -895,6 +1022,80 @@
                                 <div id="toc" view-transition-name="toc" class="no-scrollbar overflow-y-auto px-8">
     <div class="flex flex-col gap-2 p-4 pt-0 text-sm">
         <p class="text-muted-foreground bg-background sticky top-0 h-6 text-xs">On This Page</p>
+        
+        
+        
+        
+        <a href="#selection-policies"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#selection-policies');">
+            Selection policies
+        </a>
+        
+        
+        <a href="#average-baseline"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#average-baseline');">
+            Average (baseline)
+        </a>
+        
+        <a href="#performance-static-selection"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#performance-static-selection');">
+            Performance (static selection)
+        </a>
+        
+        <a href="#training-prevalence-ptr-dynamic-selection"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#training-prevalence-ptr-dynamic-selection');">
+            Training Prevalence / ptr (dynamic selection)
+        </a>
+        
+        
+
+        
+        <a href="#choosing-a-bag-generator"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#choosing-a-bag-generator');">
+            Choosing a bag generator
+        </a>
+        
+
+        
+        <a href="#parallelism"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#parallelism');">
+            Parallelism
+        </a>
+        
+
+        
+        <a href="#reproducibility"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#reproducibility');">
+            Reproducibility
+        </a>
+        
+
+        
+        <a href="#inspecting-the-ensemble"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#inspecting-the-ensemble');">
+            Inspecting the ensemble
+        </a>
+        
+
+        
+        <a href="#references"
+            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
+            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#references');">
+            References
+        </a>
+        
+
+        
+        
+        
         
 
     </div>
@@ -925,23 +1126,23 @@
     </div>
      
 
-<script src="../search/main.js"></script>
+<script src="../../search/main.js"></script>
 
 
     
 
     <script integrity="sha384-JLNLRFGzvOp0up707XKgSnAjjt1w5BF/+lbeLQvlf6mNwf0m89IXFdpNAk4t6Hcs"
-        src="../js/copy-button.js"></script>
+        src="../../js/copy-button.js"></script>
     <script integrity="sha384-JBx6cBEiyhK1KPwZgBHiI6GDaAmvlOxMQFyWAZTEpW5Ifo5XQ2LBcJ61GVOumwF1"
-        src="../js/sidebar.js"></script>
+        src="../../js/sidebar.js"></script>
     <script integrity="sha384-fNURFMRt0p/HqXnQnV4+CT9dX1GiU5F0fC3pFbg7gfoANytoUMErSW7suWSBkSuF"
-        src="../js/slider.js"></script>
+        src="../../js/slider.js"></script>
     <script>updatePygmentsStylesheet();</script>
     
     <script>fetchStargazers("None");</script>
     
     
-    <script integrity="sha384-Oi13RhLSSgEpSmRyDbfsfmU5N1KzT7IBoQqMenKZoi1Mu+0mCDcF1mKtSZw3cd80" src="../js/mkdocstrings.js"></script>
+    <script integrity="sha384-Oi13RhLSSgEpSmRyDbfsfmU5N1KzT7IBoQqMenKZoi1Mu+0mCDcF1mKtSZw3cd80" src="../../js/mkdocstrings.js"></script>
     
     
     <script type="speculationrules">
