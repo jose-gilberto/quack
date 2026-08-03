@@ -2,9 +2,10 @@ from abc import ABC, abstractmethod
 from typing import Generator
 import numpy as np
 from sklearn.utils import check_X_y
+from sklearn.base import BaseEstimator
 
 
-class BaseBagGenerator(ABC):
+class BaseBagGenerator(ABC, BaseEstimator):
   """Abstract base class for all dataset-shift bag generators.
 
   A bag generator draws repeated "bags" (labeled subsets) of a fixed
