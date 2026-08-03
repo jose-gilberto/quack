@@ -9,7 +9,7 @@ summary: An overview about all modules and methods available in Quack
         - 1.2.3. Iterators
     - 1.3. Adaptation of Classification Algorithms
     - 1.4. Neural Networks (WIP)
-    - 1.5. Ensembles (WIP)
+    - 1.5. [Ensembles](./tutorials/ensembles.md)
 2. [Bag Generator](./tutorials/bag-generator.md)
     - 2.1. Prior Shift
     - 2.2. Covariate Shift
