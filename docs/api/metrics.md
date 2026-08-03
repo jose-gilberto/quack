@@ -32,3 +32,10 @@
     options:
       show_source: true
       heading_level: 3
+
+## Normalized Absolute Error (NAE)
+
+::: quack.metrics._nae.NormalizedAbsoluteError
+    options:
+      show_source: true
+      heading_level: 3

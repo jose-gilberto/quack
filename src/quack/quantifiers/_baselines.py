@@ -3,12 +3,8 @@ from typing import TypeVar
 from sklearn.base import BaseEstimator, clone
 from sklearn.utils.validation import check_X_y, check_is_fitted, check_array
 from sklearn.linear_model import LogisticRegression
-from quack.quantifiers.base import BaseQuantifier, BaseCalibratedQuantifier
+from quack.quantifiers.base import BaseQuantifier, BaseCalibratedQuantifier, normalize_prevalence
 
-T_CC = TypeVar('T_CC', bound='CC')
-T_PCC = TypeVar('T_PCC', bound='PCC')
-T_ACC = TypeVar('T_ACC', bound='ACC')
-T_PACC = TypeVar('T_PACC', bound='PACC')
 
 class CC(BaseQuantifier):
   """Classify and Count (CC) quantifier.
@@ -27,7 +23,8 @@ class CC(BaseQuantifier):
   Attributes
   ----------
   classes_ : ndarray of shape (n_classes,)
-    The distinct class labels found during training.
+    The distinct class labels found during training, sorted ascending
+    (as returned by `np.unique`).
   
   n_classes_ : int
     The number of distinct classes.
@@ -74,7 +71,7 @@ class CC(BaseQuantifier):
   def __init__(self, classifier: BaseEstimator = None):
     super().__init__(classifier)
 
-  def fit(self, X: np.ndarray, y: np.ndarray) -> T_CC:
+  def fit(self, X: np.ndarray, y: np.ndarray) -> "CC":
     """Adjusts the CC quantifier by fitting the base classifier.
     
     Parameters
@@ -91,7 +88,6 @@ class CC(BaseQuantifier):
     """
     X, y = check_X_y(X, y, accept_sparse=True)
     
-    # self.classes_ = self.Y 
     self.classes_, counts = np.unique(y, return_counts=True)
     self.n_classes_ = len(self.classes_)
     self.train_prevalence_ = counts / len(y)
@@ -122,21 +118,14 @@ class CC(BaseQuantifier):
     
     y_pred = self.classifier_.predict(X)
 
-    unique_pred, counts_pred = np.unique(y_pred, return_counts=True)
-    pred_counts = dict(zip(unique_pred, counts_pred))
-    # maps back to self.classes_ in order to handle unpredicted classes
-    p_pred = np.array([pred_counts.get(c, 0) for c in self.classes_], dtype=float)
-    
-    # geometrical normalization
-    p_pred = np.clip(p_pred, 0.0, 1.0)
-    p_sum = np.sum(p_pred)
-    
-    if p_sum > 0:
-      p_pred /= p_sum
-    else:
-      p_pred = np.ones(self.n_classes_) / self.n_classes_
+    # fully vectorized counting: since self.classes_ is sorted ascending
+    # (np.unique's guarantee), searchsorted maps every prediction to its
+    # position in self.classes_ and bincount tallies them in one pass,
+    # avoiding the per-call Python dict construction/lookup this replaces
+    class_indices = np.searchsorted(self.classes_, y_pred)
+    counts = np.bincount(class_indices, minlength=self.n_classes_).astype(float)
 
-    return p_pred
+    return normalize_prevalence(counts, self.n_classes_)
 
 
 class PCC(BaseQuantifier):
@@ -206,7 +195,7 @@ class PCC(BaseQuantifier):
   def __init__(self, classifier: BaseEstimator = None):
     super().__init__(classifier=classifier)
     
-  def fit(self, X: np.ndarray, y: np.ndarray) -> T_PCC:
+  def fit(self, X: np.ndarray, y: np.ndarray) -> "PCC":
     """Adjusts the PCC quantifier by fitting the probabilistic base classifier.
     
     Parameters
@@ -267,15 +256,7 @@ class PCC(BaseQuantifier):
     y_probas = self.classifier_.predict_proba(X)
     
     p_pred = np.mean(y_probas, axis=0)
-    p_pred = np.clip(p_pred, 0.0, 1.0)
-    p_sum = np.sum(p_pred)
-
-    if p_sum > 0:
-      p_pred /= p_sum
-    else:
-      p_pred = np.ones(self.n_classes_) / self.n_classes_
-
-    return p_pred
+    return normalize_prevalence(p_pred, self.n_classes_)
   
   
 class ACC(BaseCalibratedQuantifier):
@@ -295,6 +276,12 @@ class ACC(BaseCalibratedQuantifier):
   cv : int, cross-validation generator or an iterable, default = 10
     Determines the cross-validation splitting strategy to generate the 
     Out-of-Fold predictions used for calibration.
+  n_jobs : int, default = None
+    Number of jobs to run in parallel while fitting the `cv` folds (plus
+    the final full-data classifier refit). See `BaseCalibratedQuantifier`.
+  parallel_backend : str, default = "loky"
+    `joblib.Parallel` backend used for the CV/final-fit jobs. See
+    `BaseCalibratedQuantifier`.
     
   Attributes
   ----------
@@ -344,8 +331,9 @@ class ACC(BaseCalibratedQuantifier):
   >>> print(prevalences)
   """
   
-  def __init__(self, classifier: BaseEstimator = None, cv: int = 10):
-    super().__init__(classifier=classifier, cv=cv)
+  def __init__(self, classifier: BaseEstimator = None, cv: int = 10,
+               n_jobs: int = None, parallel_backend: str = "loky"):
+    super().__init__(classifier=classifier, cv=cv, n_jobs=n_jobs, parallel_backend=parallel_backend)
 
   def _get_oof_method(self) -> str:
     return "predict"
@@ -405,9 +393,16 @@ class ACC(BaseCalibratedQuantifier):
 
     return np.array([p_neg_adjusted, p_pos_adjusted])
 
-  def fit(self, X: np.ndarray, y: np.ndarray) -> T_ACC:
+  def fit(self, X: np.ndarray, y: np.ndarray) -> "ACC":
+    """Fits the ACC quantifier, enforcing the binary-only constraint.
+
+    Raises
+    ------
+    ValueError
+      If `y` contains more than 2 distinct classes.
+    """
     if len(np.unique(y)) > 2:
-      return ValueError(
+      raise ValueError(
         "ACC method only works for binary quantification. Multiclass "
         "quantification is possible via OVR strategies, but not recommended due to "
         "theoretical issues with that approach."
@@ -435,6 +430,12 @@ class PACC(BaseCalibratedQuantifier):
   cv : int, cross-validation generator or an iterable, default = 10
     Determines the cross-validation splitting strategy to generate the 
     Out-of-Fold predictions used for calibration.  
+  n_jobs : int, default = None
+    Number of jobs to run in parallel while fitting the `cv` folds (plus
+    the final full-data classifier refit). See `BaseCalibratedQuantifier`.
+  parallel_backend : str, default = "loky"
+    `joblib.Parallel` backend used for the CV/final-fit jobs. See
+    `BaseCalibratedQuantifier`.
     
   Attributes
   ----------
@@ -490,10 +491,20 @@ class PACC(BaseCalibratedQuantifier):
   >>> print(prevalences)
   """
 
-  def __init__(self, classifier: BaseEstimator = None, cv: int = 10):
-    super().__init__(classifier=classifier, cv=cv)
+  def __init__(self, classifier: BaseEstimator = None, cv: int = 10,
+               n_jobs: int = None, parallel_backend: str = "loky"):
+    super().__init__(classifier=classifier, cv=cv, n_jobs=n_jobs, parallel_backend=parallel_backend)
 
-  def fit(self, X: np.ndarray, y: np.ndarray) -> T_PACC:
+  def fit(self, X: np.ndarray, y: np.ndarray) -> "PACC":
+    """Fits the PACC quantifier, validating classifier and class-count constraints.
+
+    Raises
+    ------
+    TypeError
+      If the provided classifier does not support probability estimation.
+    ValueError
+      If `y` contains more than 2 distinct classes.
+    """
     base_clf = self.classifier if self.classifier is not None else LogisticRegression()
     
     if not hasattr(base_clf, "predict_proba"):
@@ -503,7 +514,7 @@ class PACC(BaseCalibratedQuantifier):
       )
     
     if len(np.unique(y)) > 2:
-      return ValueError(
+      raise ValueError(
         "PACC method only works for binary quantification. Multiclass "
         "quantification is possible via OVR strategies, but not recommended due to "
         "theoretical issues with that approach."

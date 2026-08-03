@@ -1,9 +1,20 @@
 import numpy as np
 import cvxpy as cvx
 from sklearn.metrics import pairwise_distances_chunked
+from sklearn.utils.parallel import Parallel, delayed
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 
 from quack.quantifiers.base import BaseQuantifier
+
+
+def _sum_pairwise_distances(samples_i: np.ndarray, samples_j: np.ndarray) -> float:
+  """Sums all pairwise distances between two sample blocks, in memory-safe chunks.
+
+  Defined at module level (rather than as a closure/method) so it can be
+  pickled and dispatched to worker processes by `joblib`/`Parallel`, the
+  same pattern used for the per-fold jobs in `quack.quantifiers.base`.
+  """
+  return float(sum(np.sum(chunk) for chunk in pairwise_distances_chunked(samples_i, samples_j)))
 
 
 class ED(BaseQuantifier):
@@ -14,6 +25,19 @@ class ED(BaseQuantifier):
   training distributions and the unlabelled test batch. It uses an exact 
   analytical solution for binary settings and a quadratic programming solver 
   (via CVXPY) for multiclass problems.
+
+  Parameters
+  ----------
+  n_jobs : int, default = None
+    Number of jobs to run in parallel while computing the pairwise-distance
+    sums that make up `class_distances_matrix_` (during `fit`) and
+    `test_cross_distances` (during `predict`). Each `(class_i, class_j)`
+    pair (fit) or `(class_i, test_bag)` pair (predict) is mutually
+    independent, so they are dispatched as independent `joblib` jobs.
+    `None` means sequential (matching the previous behavior); `-1` uses
+    all available processors.
+  parallel_backend : str, default = "loky"
+    `joblib.Parallel` backend used for the distance-sum jobs.
 
   Attributes
   ----------
@@ -40,11 +64,22 @@ class ED(BaseQuantifier):
   Hideko Kawakubo, Marthinus Christoffel du Plessis, and Masashi Sugiyama.
   Computationally efficient class-prior estimation under class balance change using
   energy distance. IEICE Transactions on Information and Systems, 99(1):176-186, 2016.
+
+  Examples
+  --------
+  >>> from sklearn.datasets import make_classification
+  >>> X, y = make_classification(n_samples=500, n_classes=2, random_state=0)
+  >>> quantifier = ED()
+  >>> quantifier.fit(X, y)
+  >>> X_test, _ = make_classification(n_samples=100, n_classes=2, random_state=7)
+  >>> prevalences = quantifier.predict(X_test)
   """
 
-  def __init__(self):
+  def __init__(self, n_jobs: int = None, parallel_backend: str = "loky"):
     # energy distance operates directly on raw features, bypassing an underlying classifier
     super().__init__(classifier=None)
+    self.n_jobs = n_jobs
+    self.parallel_backend = parallel_backend
     self.class_distances_matrix_ = None
     self.quadratic_matrix_ = None
     self.train_class_samples_ = None
@@ -73,33 +108,37 @@ class ED(BaseQuantifier):
 
     # isolate training coordinates grouped by class
     self.train_class_samples_ = [X[y == class_label] for class_label in self.classes_]
+    class_sizes = np.array([samples.shape[0] for samples in self.train_class_samples_])
 
-    # initialize and populate the cross-class expected pairwise distance matrix (Matrix A)
+    # dispatch every upper-triangular (i, j) pair as an independent job,
+    # since each pairwise distance sum only depends on its own two class
+    # blocks; matters most when n_classes_ or the class blocks are large
+    pairs = [(i, j) for i in range(self.n_classes_) for j in range(i, self.n_classes_)]
+    jobs = [
+      delayed(_sum_pairwise_distances)(self.train_class_samples_[i], self.train_class_samples_[j])
+      for i, j in pairs
+    ]
+    pair_sums = Parallel(n_jobs=self.n_jobs, backend=self.parallel_backend)(jobs)
+
     self.class_distances_matrix_ = np.zeros((self.n_classes_, self.n_classes_))
-    for i in range(self.n_classes_):
-      for j in range(i, self.n_classes_):
-        samples_i, samples_j = self.train_class_samples_[i], self.train_class_samples_[j]
-        count_i, count_j = samples_i.shape[0], samples_j.shape[0]
-        
-        # linearly accumulate chunked combinations to minimize RAM overhead
-        total_pairwise_distance = sum(np.sum(chunk) for chunk in pairwise_distances_chunked(samples_i, samples_j))
-        self.class_distances_matrix_[i, j] = total_pairwise_distance / (count_i * count_j)
-        
-        # exploit symmetry properties to populate lower triangular blocks
-        if j > i:
-          self.class_distances_matrix_[j, i] = self.class_distances_matrix_[i, j]
+    for (i, j), total_distance in zip(pairs, pair_sums):
+      value = total_distance / (class_sizes[i] * class_sizes[j])
+      self.class_distances_matrix_[i, j] = value
+      self.class_distances_matrix_[j, i] = value  # exploit symmetry
 
     # construct the optimization matrix (Matrix B) for multi-dimensional spaces
     if self.n_classes_ > 2:
       last_idx = self.n_classes_ - 1
-      self.quadratic_matrix_ = np.zeros((last_idx, last_idx))
       A = self.class_distances_matrix_
-
-      for i in range(last_idx):
-        for j in range(i, last_idx):
-          self.quadratic_matrix_[i, j] = - A[i, j] + A[i, last_idx] + A[last_idx, j] - A[last_idx, last_idx]
-          if j > i:
-            self.quadratic_matrix_[j, i] = self.quadratic_matrix_[i, j]
+      # fully vectorized: quadratic_matrix_[i, j] = -A[i,j] + A[i,last] + A[last,j] - A[last,last].
+      # Since A is symmetric this expression is automatically symmetric in
+      # (i, j) too, matching the previous loop's explicit upper-triangle-then-mirror.
+      self.quadratic_matrix_ = (
+        -A[:last_idx, :last_idx]
+        + A[:last_idx, last_idx][:, np.newaxis]
+        + A[last_idx, :last_idx][np.newaxis, :]
+        - A[last_idx, last_idx]
+      )
 
     return self
 
@@ -121,14 +160,16 @@ class ED(BaseQuantifier):
     X = check_array(X, accept_sparse=False)
 
     n_test_samples = X.shape[0]
-    test_cross_distances = np.zeros(self.n_classes_)
+    class_sizes = np.array([samples.shape[0] for samples in self.train_class_samples_])
 
-    # compute the average distance profile from each training class subset to the test bag
-    for i in range(self.n_classes_):
-      samples_i = self.train_class_samples_[i]
-      count_i = samples_i.shape[0]
-      total_distance = sum(np.sum(chunk) for chunk in pairwise_distances_chunked(samples_i, X))
-      test_cross_distances[i] = total_distance / (count_i * n_test_samples)
+    # compute the average distance profile from each training class subset
+    # to the test bag; independent per class, dispatched as parallel jobs
+    jobs = [
+      delayed(_sum_pairwise_distances)(self.train_class_samples_[i], X)
+      for i in range(self.n_classes_)
+    ]
+    class_sums = Parallel(n_jobs=self.n_jobs, backend=self.parallel_backend)(jobs)
+    test_cross_distances = np.array(class_sums) / (class_sizes * n_test_samples)
 
     A = self.class_distances_matrix_
     s = test_cross_distances
@@ -146,14 +187,13 @@ class ED(BaseQuantifier):
     # Route B: constrained Quadratic Programming optimization for multiclass scenarios
     else:
       last_idx = self.n_classes_ - 1
-      linear_vector = np.zeros(last_idx)
-      for i in range(last_idx):
-        linear_vector[i] = - s[i] + A[i, last_idx] + s[last_idx] - A[last_idx, last_idx]
+      # fully vectorized: linear_vector[i] = -s[i] + A[i,last] + s[last] - A[last,last]
+      linear_vector = -s[:last_idx] + A[:last_idx, last_idx] + s[last_idx] - A[last_idx, last_idx]
 
       # set up the constrained convex problem: minimize (P.T @ B @ P) - (2 * P.T @ t)
       estimated_proportions = cvx.Variable(last_idx)
       constraints = [estimated_proportions >= 0, cvx.sum(estimated_proportions) <= 1.0]
-      
+
       objective_function = cvx.Minimize(
         cvx.quad_form(estimated_proportions, self.quadratic_matrix_) - 2 * estimated_proportions.T @ linear_vector
       )

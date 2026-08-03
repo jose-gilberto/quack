@@ -1,4 +1,7 @@
+# src/quack/quantifiers/_features.py
 import numpy as np
+from sklearn.utils import check_random_state
+from sklearn.utils.parallel import Parallel, delayed
 from sklearn.utils.validation import check_X_y, check_is_fitted, check_array
 from quack.quantifiers.base import BaseMixtureQuantifier, BaseQuantifier
 
@@ -74,30 +77,34 @@ class HDx(BaseMixtureQuantifier):
       raise ValueError("HDx requires at least 2 distinct classes to fit.")
 
     n_features = X.shape[1]
-    
+    class_idx = np.searchsorted(self.classes_, y)
+
     # map and store the unique token space for each individual feature column
     self.feature_spaces_ = [np.unique(X[:, j]) for j in range(n_features)]
 
-    # build the conditional matrix (CM) using an optimized pure NumPy block-stacking alternative
+    # build the conditional matrix (CM): the loop over features is
+    # unavoidable (each column has a different number of unique values,
+    # so the blocks can't be stacked into a single rectangular operation),
+    # but within each feature the value x class crosstab is fully
+    # vectorized via a combined-index bincount instead of the previous
+    # nested (class x unique_value) Python loop
     conditional_blocks = []
     for j in range(n_features):
       unique_values = self.feature_spaces_[j]
-      crosstab_counts = np.zeros((len(unique_values), self.n_classes_))
+      val_idx = np.searchsorted(unique_values, X[:, j])
 
-      # Count feature occurrences per class matching the target unique space
-      for class_idx, class_label in enumerate(self.classes_):
-        X_class_subset = X[y == class_label, j]
-        for val_idx, val in enumerate(unique_values):
-          crosstab_counts[val_idx, class_idx] = np.sum(X_class_subset == val)
-      
+      combined_idx = val_idx * self.n_classes_ + class_idx
+      counts_flat = np.bincount(combined_idx, minlength=len(unique_values) * self.n_classes_)
+      crosstab_counts = counts_flat.reshape(len(unique_values), self.n_classes_)
+
       # normalize counts by each class size to form conditional probabilities
       conditional_blocks.append(crosstab_counts / class_counts)
-        
+
     # vertically stack all independent column representations into a single global system matrix
     self.conditional_matrix_ = np.vstack(conditional_blocks)
-    
+
     return self
-  
+
   def _compute_score(self, X: np.ndarray) -> np.ndarray:
     """Extracts the empirical marginal test frequencies across all features.
 
@@ -117,14 +124,28 @@ class HDx(BaseMixtureQuantifier):
     n_samples = X.shape[0]
     n_features = X.shape[1]
     frequencies_list = []
-    
-    # compute marginal frequencies matching the exact bins established during training
+
+    # compute marginal frequencies matching the exact bins established
+    # during training; the per-feature loop remains for the same reason
+    # as in fit (ragged bin counts across columns), but the inner
+    # per-unique-value counting is now a single searchsorted + bincount
+    # pass instead of one np.count_nonzero comparison per unique value.
+    # Test values absent from the trained feature space (i.e. not an
+    # exact match to any trained unique value) contribute 0, exactly
+    # matching the original np.count_nonzero(X[:, j] == val) semantics.
     for j in range(n_features):
-      feature_counts = np.array([np.count_nonzero(X[:, j] == val) for val in self.feature_spaces_[j]])
-      frequencies_list.append((1.0 / n_samples) * feature_counts)
-        
-    # combine the individual frequency vectors horizontally and transpose to match the solver interface
-    return np.hstack(frequencies_list).T
+      unique_values = self.feature_spaces_[j]
+      col = X[:, j]
+
+      idx = np.searchsorted(unique_values, col)
+      idx_clipped = np.clip(idx, 0, len(unique_values) - 1)
+      exact_match = unique_values[idx_clipped] == col
+
+      counts = np.bincount(idx_clipped[exact_match], minlength=len(unique_values))
+      frequencies_list.append(counts / n_samples)
+
+    # combine the individual frequency vectors into the stacked global vector
+    return np.hstack(frequencies_list)
 
 
 class _RawSubspaceMixture(BaseMixtureQuantifier):
@@ -151,7 +172,9 @@ class _RawSubspaceMixture(BaseMixtureQuantifier):
     """Optimized multi-column binary search over a lexically sorted 2D array.
 
     Speeds up row-matching allocations by leveraging sequential search window 
-    narrowing via np.searchsorted across active columns.
+    narrowing via np.searchsorted across active columns. Used at prediction
+    time, where test rows are scanned sequentially against `unique_rows_`
+    (already sorted by `np.unique` during `fit_subspace`).
     """
     current_col = 0
     n_cols = unique_matrix.shape[1]
@@ -187,24 +210,27 @@ class _RawSubspaceMixture(BaseMixtureQuantifier):
                    y: np.ndarray,
                    classes: np.ndarray,
                    class_counts: np.ndarray) -> '_RawSubspaceMixture':
-    """Fits the sub-matrix profile over the targeted feature subspace."""
+    """Fits the sub-matrix profile over the targeted feature subspace.
+
+    Delegates row deduplication and index assignment to `np.unique(...,
+    axis=0, return_inverse=True)`, which performs the exact same
+    lexicographic sort `_binary_search_row` assumes at prediction time,
+    but as a single vectorized C-level call instead of a per-row Python
+    binary search loop.
+    """
     self.classes_ = classes
     self.n_classes_ = len(classes)
     self.train_prevalence_ = class_counts / len(y)
 
-    # extract unique joint combinations (rows) present in this feature subspace
-    self.unique_rows_ = np.unique(X, axis=0)
-    self.conditional_matrix_ = np.zeros((self.unique_rows_.shape[0], self.n_classes_))
+    self.unique_rows_, row_indices = np.unique(X, axis=0, return_inverse=True)
+    row_indices = row_indices.ravel()
 
-    # populate joint distribution frequencies per class
-    class_to_index = {class_label: idx for idx, class_label in enumerate(self.classes_)}
-    for i in range(len(y)):
-      row_index = self._binary_search_row(X[i, :], self.unique_rows_)
-      if row_index is not None:
-        self.conditional_matrix_[row_index, class_to_index[y[i]]] += 1
+    class_to_idx = np.searchsorted(self.classes_, y)
+    combined_idx = row_indices * self.n_classes_ + class_to_idx
+    counts_flat = np.bincount(combined_idx, minlength=self.unique_rows_.shape[0] * self.n_classes_)
 
     # normalize across class columns to create valid conditional probabilities
-    self.conditional_matrix_ = self.conditional_matrix_ / class_counts
+    self.conditional_matrix_ = counts_flat.reshape(self.unique_rows_.shape[0], self.n_classes_) / class_counts
     return self
 
   def _compute_score(self, X: np.ndarray) -> np.ndarray:
@@ -225,6 +251,32 @@ class _RawSubspaceMixture(BaseMixtureQuantifier):
       row_counts[row_index] += 1
 
     return row_counts * 1.0 / X.shape[0]
+
+
+def _fit_subspace_job(X: np.ndarray,
+                      y: np.ndarray,
+                      classes: np.ndarray,
+                      class_counts: np.ndarray,
+                      feature_indices: np.ndarray,
+                      distance_metric: str,
+                      use_convex_solver: bool) -> '_RawSubspaceMixture':
+  """Fits one independent random-subspace sub-quantifier.
+
+  Defined at module level (rather than as a closure/method) so it can be
+  pickled and dispatched to worker processes by `joblib`/`Parallel`, the
+  same pattern used for the per-fold jobs in `quack.quantifiers.base`.
+  """
+  sub_quantifier = _RawSubspaceMixture(distance_metric=distance_metric, use_convex_solver=use_convex_solver)
+  sub_quantifier.fit_subspace(X[:, feature_indices], y, classes, class_counts)
+  return sub_quantifier
+
+
+def _predict_subspace_job(sub_quantifier: '_RawSubspaceMixture', X_subspace: np.ndarray) -> np.ndarray:
+  """Scores one test bag against a single fitted sub-quantifier.
+
+  Defined at module level for the same pickling reasons as `_fit_subspace_job`.
+  """
+  return sub_quantifier.predict(X_subspace)
 
 
 class ReadMe(BaseQuantifier):
@@ -250,6 +302,20 @@ class ReadMe(BaseQuantifier):
 
   n_subsets : int, default=100
     The total number of random subspace sub-quantifiers to ensemble.
+
+  n_jobs : int, default = None
+    Number of jobs to run in parallel while fitting/predicting the
+    `n_subsets` independent sub-quantifiers, since none of them depend
+    on each other. `None` means sequential (matching the previous
+    behavior); `-1` uses all available processors. See `joblib.Parallel`.
+
+  parallel_backend : str, default = "loky"
+    `joblib.Parallel` backend used for the subspace jobs (`"loky"` for
+    process-based parallelism, `"threading"` for thread-based).
+
+  random_state : int, RandomState instance or None, default = None
+    Controls the randomness of the per-subset feature selection. Pass an
+    int for reproducible subspaces across repeated `fit` calls.
 
   Attributes
   ----------
@@ -278,18 +344,28 @@ class ReadMe(BaseQuantifier):
                distance_metric: str = "L2",
                use_convex_solver: bool = True, 
                n_features: int = None,
-               n_subsets: int = 100):
+               n_subsets: int = 100,
+               n_jobs: int = None,
+               parallel_backend: str = "loky",
+               random_state=None):
     # ReadMe manages an internal collection of sub-quantifiers, bypassing a single core classifier
     super().__init__(classifier=None)
     self.distance_metric = distance_metric
     self.use_convex_solver = use_convex_solver
     self.n_features = n_features
     self.n_subsets = n_subsets
+    self.n_jobs = n_jobs
+    self.parallel_backend = parallel_backend
+    self.random_state = random_state
     self.feature_subsets_ = []
     self.sub_quantifiers_ = []
 
   def fit(self, X: np.ndarray, y: np.ndarray) -> 'ReadMe':
     """Fits the ReadMe ensemble by training multiple subspace mixture models.
+
+    The `n_subsets` sub-quantifiers are mutually independent, so they are
+    dispatched as independent `joblib` jobs (see `n_jobs`/`parallel_backend`)
+    instead of a sequential Python loop.
 
     Parameters
     ----------
@@ -309,7 +385,7 @@ class ReadMe(BaseQuantifier):
     self.train_prevalence_ = class_counts / len(y)
 
     total_features = X.shape[1]
-    
+
     # dynamically determine the subspace feature size if not explicitly provided
     if self.n_features is None:
       if total_features > 25:
@@ -317,21 +393,17 @@ class ReadMe(BaseQuantifier):
       else:
         self.n_features = max(int(total_features / 5), 2)
 
-    self.feature_subsets_ = []
-    self.sub_quantifiers_ = []
+    rng = check_random_state(self.random_state)
+    self.feature_subsets_ = [
+      rng.choice(total_features, self.n_features, replace=False) for _ in range(self.n_subsets)
+    ]
 
-    # construct and fit independent random subspace models
-    for _ in range(self.n_subsets):
-      chosen_feature_indices = np.random.choice(range(total_features), self.n_features, replace=False)
-      self.feature_subsets_.append(chosen_feature_indices)
-
-      sub_quantifier = _RawSubspaceMixture(
-        distance_metric=self.distance_metric, 
-        use_convex_solver=self.use_convex_solver
-      )
-      # train the subspace model using shared class counts to reduce redundant allocations
-      sub_quantifier.fit_subspace(X[:, chosen_feature_indices], y, self.classes_, class_counts)
-      self.sub_quantifiers_.append(sub_quantifier)
+    jobs = [
+      delayed(_fit_subspace_job)(X, y, self.classes_, class_counts, feature_indices,
+                                 self.distance_metric, self.use_convex_solver)
+      for feature_indices in self.feature_subsets_
+    ]
+    self.sub_quantifiers_ = Parallel(n_jobs=self.n_jobs, backend=self.parallel_backend)(jobs)
 
     return self
 
@@ -351,12 +423,11 @@ class ReadMe(BaseQuantifier):
     check_is_fitted(self)
     X = check_array(X, accept_sparse=False)
 
-    ensemble_prevalences = np.zeros(self.n_classes_)
-    
-    # aggregate the predicted distribution vectors from all feature subsets
-    for i in range(self.n_subsets):
-      subspace_features = self.feature_subsets_[i]
-      ensemble_prevalences += self.sub_quantifiers_[i].predict(X[:, subspace_features])
+    jobs = [
+      delayed(_predict_subspace_job)(sub_quantifier, X[:, feature_indices])
+      for sub_quantifier, feature_indices in zip(self.sub_quantifiers_, self.feature_subsets_)
+    ]
+    subspace_predictions = Parallel(n_jobs=self.n_jobs, backend=self.parallel_backend)(jobs)
 
     # compute the final ensemble mean distribution
-    return ensemble_prevalences / self.n_subsets
+    return np.mean(subspace_predictions, axis=0)

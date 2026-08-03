@@ -21,7 +21,8 @@ dependencies = [
     "scipy>=1.17.0",
     "pandas>=3.0.3",
     "numpy>=2.5.0",
-    "cvxpy>=1.9.2"
+    "cvxpy>=1.9.2",
+    "tqdm>=4.66.0"
 ]
 
 [project.optional-dependencies]
@@ -34,6 +35,9 @@ docs = [
     "mkdocs-shadcn",
     "mkdocstrings[python]>=0.24.0",
     "Pygments"
+]
+viz = [
+    "matplotlib>=3.8",
 ]
 
 [tool.setuptools.packages.find]

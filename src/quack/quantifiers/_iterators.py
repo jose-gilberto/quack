@@ -1,7 +1,6 @@
 import warnings
 import numpy as np
 from sklearn.base import BaseEstimator
-from sklearn.linear_model import LogisticRegression
 from sklearn.utils.validation import check_array, check_is_fitted, check_X_y
 from quack.quantifiers.base import BaseCalibratedQuantifier
 
@@ -17,7 +16,7 @@ class EM(BaseCalibratedQuantifier):
   ----------
   classifier : estimator object, default = None
     The underlying base classifier implementing `predict_proba`. If None, 
-    defaults to `LogisticRegression(solver='lbfgs', max_iter=1000, multi_class='auto')`.
+    defaults to `LogisticRegression()`.
 
   cv : int, cross-validation generator or an iterable, default = 10
     Determines the cross-validation splitting strategy for the calibration phase.
@@ -28,6 +27,13 @@ class EM(BaseCalibratedQuantifier):
 
   max_iter : int, default = 1000
     The maximum allowable optimization iterations.
+
+  n_jobs : int, default = None
+    Number of jobs to run in parallel while fitting the `cv` folds (plus
+    the final full-data classifier refit). See `BaseCalibratedQuantifier`.
+
+  parallel_backend : str, default = "loky"
+    `joblib.Parallel` backend used for the CV/final-fit jobs.
 
   Attributes
   ----------
@@ -50,9 +56,10 @@ class EM(BaseCalibratedQuantifier):
   Neural Computation, 14(1): 21-41, 2002.
   """
 
-  def __init__(self, classifier: BaseEstimator = None, cv: int = 10, 
-               epsilon: float = 1e-06, max_iter: int = 1000):
-    super().__init__(classifier=classifier, cv=cv)
+  def __init__(self, classifier: BaseEstimator = None, cv: int = 10,
+               epsilon: float = 1e-06, max_iter: int = 1000,
+               n_jobs: int = None, parallel_backend: str = "loky"):
+    super().__init__(classifier=classifier, cv=cv, n_jobs=n_jobs, parallel_backend=parallel_backend)
     self.epsilon = epsilon
     self.max_iter = max_iter
 
@@ -64,8 +71,6 @@ class EM(BaseCalibratedQuantifier):
     pass
 
   def _quantify(self, X: np.ndarray) -> np.ndarray:
-    n_samples = X.shape[0]
-    
     # extract probabilistic scores
     predicted_probabilities = self.classifier_.predict_proba(X)
 
@@ -77,19 +82,16 @@ class EM(BaseCalibratedQuantifier):
     # convergence logic loop
     while (np.linalg.norm(prevalence_old - prevalence_new) > self.epsilon) and iteration_count < self.max_iter:
       prevalence_old = np.array(prevalence_new)
-      
-      # compute updated sample posteriors adjusted by current prior weights
-      posterior_matrix = np.array([
-        (prevalence_old / self.train_prevalence_) * predicted_probabilities[i] 
-        for i in range(n_samples)
-      ])
-      
-      # row-wise normalization to enforce true probability distributions
-      row_sums = np.sum(posterior_matrix, axis=1)[:, np.newaxis]
-      posterior_matrix = posterior_matrix / row_sums
+
+      # vectorized update: row-wise multiply every sample's posterior
+      # vector by the (prior_new / prior_train) ratio via broadcasting,
+      # then renormalize each row to sum to 1.0 — mathematically identical
+      # to the previous per-sample Python loop, just without the loop
+      posterior_matrix = predicted_probabilities * (prevalence_old / self.train_prevalence_)
+      posterior_matrix /= posterior_matrix.sum(axis=1, keepdims=True)
 
       # update step: average the adjusted sample posterior profiles
-      prevalence_new = (1.0 / n_samples) * np.sum(posterior_matrix, axis=0)
+      prevalence_new = posterior_matrix.mean(axis=0)
       iteration_count += 1
 
     return prevalence_new
@@ -105,7 +107,7 @@ class CDE(BaseCalibratedQuantifier):
   ----------
   classifier : estimator object, default = None
     The underlying base classifier implementing `predict_proba`. If None, 
-    defaults to `LogisticRegression(solver='lbfgs', max_iter=1000, multi_class='auto')`.
+    defaults to `LogisticRegression()`.
 
   cv : int, cross-validation generator or an iterable, default = 10
     Determines the cross-validation splitting strategy for the calibration phase.
@@ -115,6 +117,13 @@ class CDE(BaseCalibratedQuantifier):
 
   max_iter : int, default = 1000
     The maximum allowable optimization iterations.
+
+  n_jobs : int, default = None
+    Number of jobs to run in parallel while fitting the `cv` folds. See
+    `BaseCalibratedQuantifier`.
+
+  parallel_backend : str, default = "loky"
+    `joblib.Parallel` backend used for the CV/final-fit jobs.
 
   Attributes
   ----------
@@ -136,9 +145,10 @@ class CDE(BaseCalibratedQuantifier):
   Journal of Machine Learning Research, 18(95):1-32, 2017.
   """
 
-  def __init__(self, classifier: BaseEstimator = None, cv: int = 10, 
-               epsilon: float = 1e-06, max_iter: int = 1000):
-    super().__init__(classifier=classifier, cv=cv)
+  def __init__(self, classifier: BaseEstimator = None, cv: int = 10,
+               epsilon: float = 1e-06, max_iter: int = 1000,
+               n_jobs: int = None, parallel_backend: str = "loky"):
+    super().__init__(classifier=classifier, cv=cv, n_jobs=n_jobs, parallel_backend=parallel_backend)
     self.epsilon = epsilon
     self.max_iter = max_iter
 
@@ -162,7 +172,8 @@ class CDE(BaseCalibratedQuantifier):
 
   def _quantify(self, X: np.ndarray) -> np.ndarray:
     predicted_probabilities = self.classifier_.predict_proba(X)
-    
+    pos_probs = predicted_probabilities[:, 1]
+
     # initialize directional weight arrays matching the original state
     weights = np.ones(2)
     weights_old = np.zeros(2)
@@ -172,14 +183,14 @@ class CDE(BaseCalibratedQuantifier):
 
     # strict preservation of your original termination criteria (<= max_iter)
     while np.linalg.norm(weights - weights_old) > self.epsilon and iteration_count <= self.max_iter:
-      # row-by-row hard label assignment based on current directional weights
-      threshold_labels = np.apply_along_axis(
-        lambda prob: self.classes_[1] if prob[1] > weights[0] / np.sum(weights) else self.classes_[0], 
-        axis=1, 
-        arr=predicted_probabilities
-      )
+      # vectorized hard-label assignment: replaces the previous
+      # np.apply_along_axis(lambda, ...) call, which is a thin Python-loop
+      # wrapper around each row and not actually vectorized; np.where
+      # performs the exact same row-wise comparison in a single C-level pass
+      threshold = weights[0] / np.sum(weights)
+      threshold_labels = np.where(pos_probs > threshold, self.classes_[1], self.classes_[0])
       weights_old = np.copy(weights)
-      
+
       # calculate the empirical mean of positive labels
       positive_prevalence = np.mean(threshold_labels == self.classes_[1])
 
