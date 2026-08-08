@@ -86,7 +86,7 @@ class CC(BaseQuantifier):
     self : object
         Returns the fitted estimator instance itself.
     """
-    X, y = check_X_y(X, y, accept_sparse=True)
+    X, y = check_X_y(X, y, accept_sparse=True, dtype=None)
     
     self.classes_, counts = np.unique(y, return_counts=True)
     self.n_classes_ = len(self.classes_)
@@ -114,7 +114,7 @@ class CC(BaseQuantifier):
       normalized to sum up to 1.0.
     """
     check_is_fitted(self)
-    X = check_array(X, accept_sparse=True)
+    X = check_array(X, accept_sparse=True, dtype=None)
     
     y_pred = self.classifier_.predict(X)
 
@@ -216,7 +216,7 @@ class PCC(BaseQuantifier):
       If the provided classifier does not support probability estimation 
       (i.e., lacks a `predict_proba` method).
     """
-    X, y = check_X_y(X, y, accept_sparse=True)
+    X, y = check_X_y(X, y, accept_sparse=True, dtype=None)
     
     self.classes_, counts = np.unique(y, return_counts=True)
     self.n_classes_ = len(self.classes_)
@@ -251,7 +251,7 @@ class PCC(BaseQuantifier):
       normalized to sum up to 1.0.
     """
     check_is_fitted(self)
-    X = check_array(X, accept_sparse=True)
+    X = check_array(X, accept_sparse=True, dtype=None)
     # obtain the soft probability matrix (n_samples, n_classes)
     y_probas = self.classifier_.predict_proba(X)
     

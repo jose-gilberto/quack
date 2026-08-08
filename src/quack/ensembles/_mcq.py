@@ -183,7 +183,7 @@ class MCSQ(BaseQuantifier):
     self : object
       Returns the fitted estimator instance itself.
     """
-    X, y = check_X_y(X, y, accept_sparse=True)
+    X, y = check_X_y(X, y, accept_sparse=True, dtype=None)
     self._validate_params()
 
     self.classes_, counts = np.unique(y, return_counts=True)
@@ -209,7 +209,7 @@ class MCSQ(BaseQuantifier):
       The merged, normalized prevalence estimate.
     """
     check_is_fitted(self)
-    X = check_array(X, accept_sparse=True)
+    X = check_array(X, accept_sparse=True, dtype=None)
 
     predict_jobs = [delayed(_predict_member_job)(member, X) for member in self.quantifiers_]
     prediction_stack = np.array(Parallel(n_jobs=self.n_jobs, backend=self.parallel_backend)(predict_jobs))
@@ -328,7 +328,7 @@ class MCMQ(BaseQuantifier):
     self : object
       Returns the fitted estimator instance itself.
     """
-    X, y = check_X_y(X, y, accept_sparse=True)
+    X, y = check_X_y(X, y, accept_sparse=True, dtype=None)
     self._validate_params()
 
     self.classes_, counts = np.unique(y, return_counts=True)
@@ -354,7 +354,7 @@ class MCMQ(BaseQuantifier):
       The doubly-merged, normalized prevalence estimate.
     """
     check_is_fitted(self)
-    X = check_array(X, accept_sparse=True)
+    X = check_array(X, accept_sparse=True, dtype=None)
 
     predict_jobs = [
       delayed(_predict_scmq_group_job)(members, X, self.fusion, self.n_classes_)

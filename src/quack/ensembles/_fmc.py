@@ -444,7 +444,7 @@ class FMCSQ(_BaseFMC):
     self : object
       Returns the fitted estimator instance itself.
     """
-    X, y = check_X_y(X, y, accept_sparse=True)
+    X, y = check_X_y(X, y, accept_sparse=True, dtype=None)
     self._validate_fusion()
 
     self.classes_, counts = np.unique(y, return_counts=True)
@@ -472,7 +472,7 @@ class FMCSQ(_BaseFMC):
       The estimated, normalized prevalence vector.
     """
     check_is_fitted(self)
-    X = check_array(X, accept_sparse=True)
+    X = check_array(X, accept_sparse=True, dtype=None)
 
     fused_test = self._fuse_test_scores(X)
     prevalences = self.quantifier_.predict(fused_test)
@@ -606,7 +606,7 @@ class FMCMQ(_BaseFMC):
     self : object
       Returns the fitted estimator instance itself.
     """
-    X, y = check_X_y(X, y, accept_sparse=True)
+    X, y = check_X_y(X, y, accept_sparse=True, dtype=None)
     self._validate_params()
 
     self.classes_, counts = np.unique(y, return_counts=True)
@@ -635,7 +635,7 @@ class FMCMQ(_BaseFMC):
       The estimated, normalized prevalence vector.
     """
     check_is_fitted(self)
-    X = check_array(X, accept_sparse=True)
+    X = check_array(X, accept_sparse=True, dtype=None)
 
     fused_test = self._fuse_test_scores(X)
 

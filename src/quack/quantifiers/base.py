@@ -246,7 +246,7 @@ class BaseCalibratedQuantifier(BaseQuantifier, ABC):
     self: object
       Returns the fitted estimator instance itself.
     """
-    X, y = check_X_y(X, y, accept_sparse=True)
+    X, y = check_X_y(X, y, accept_sparse=True, dtype=None)
 
     # save the classes and number of classes metadata
     self.classes_, counts = np.unique(y, return_counts=True)
@@ -316,7 +316,7 @@ class BaseCalibratedQuantifier(BaseQuantifier, ABC):
     """
     check_is_fitted(self)
 
-    X = check_array(X, accept_sparse=True)
+    X = check_array(X, accept_sparse=True, dtype=None)
     p_adjusted = self._quantify(X) # runs the specific math calculus for the subclass
 
     p_adjusted = np.clip(p_adjusted, 0.0, 1.0) # avoid values outside the valid range
