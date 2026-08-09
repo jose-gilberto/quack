@@ -35,6 +35,7 @@ nav:
       - Metrics: api/metrics.md
       - Datasets: api/datasets.md
       - Visualization: api/visualization.md
+      - Utils: api/utils.md
 
 plugins:
 - search

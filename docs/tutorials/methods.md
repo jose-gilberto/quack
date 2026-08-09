@@ -271,6 +271,88 @@ prevalences = quantifier.predict(X_test)
 
 ---
 
+## Using non-scikit-learn classifiers
+
+Every `quack` quantifier clones its base classifier internally (once per
+CV fold for `BaseCalibratedQuantifier` subclasses, once per ensemble
+member for `EoQ`/`FMCSQ`/`FMCMQ`/`MCSQ`/`MCMQ`), which requires
+`get_params()`/`set_params()`/`sklearn.base.clone()` support. If your
+model doesn't follow that convention — a PyTorch/TensorFlow module, a
+remote/API-backed classifier, an LLM-based classifier, or anything with
+non-standard method names — wrap it with `SklearnClassifierWrapper`
+instead of passing it directly:
+
+```python
+from quack.quantifiers import SklearnClassifierWrapper, CC
+
+class LLMClassifier:
+    def __init__(self, prompt_template="Classify: {text}"):
+        self.prompt_template = prompt_template
+    def train(self, X, y):
+        self.labels_seen_ = sorted(set(y))
+        return self
+    def classify(self, X):
+        return [self.labels_seen_[0] for _ in X]
+
+classifier = SklearnClassifierWrapper(
+    model_factory=LLMClassifier,             # a class, or any zero-arg callable
+    fit_fn=lambda model, X, y: model.train(X.ravel().tolist(), y),
+    predict_fn=lambda model, X: model.classify(X.ravel().tolist()),
+)
+
+quantifier = CC(classifier=classifier)
+```
+
+`SklearnClassifierWrapper` never stores a live model instance as a
+constructor argument — only the *recipe* to build one (`model_factory`)
+— so `clone()` always produces a fresh, unfitted wrapper instead of
+deep-copying a possibly large or unpicklable object.
+
+### Text / string input
+
+`X` is still expected in the usual `(n_samples, n_features)` shape, so
+wrap a column of raw documents as a single-feature object array:
+
+```python
+import numpy as np
+
+X = np.array(["I loved this movie", "terrible film"], dtype=object).reshape(-1, 1)
+y = np.array([1, 0])
+```
+
+Quantifiers built directly on scikit-learn's own text-handling estimators
+don't need the wrapper at all — a `Pipeline` is already a valid `classifier`:
+
+```python
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import FunctionTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from quack.quantifiers import CC
+
+text_pipeline = Pipeline([
+    ("ravel", FunctionTransformer(lambda x: np.asarray(x).ravel())),
+    ("tfidf", TfidfVectorizer()),
+    ("clf", LogisticRegression(max_iter=1000)),
+])
+
+quantifier = CC(classifier=text_pipeline)
+quantifier.fit(X, y)
+```
+
+!!! note "Which quantifiers accept text/string `X`"
+    `CC`, `PCC`, and everything built on `BaseCalibratedQuantifier`
+    (`ACC`, `PACC`, `X`/`Max`/`T50`/`MedianSweep`, `HDy`/`DyS`/`FormanMM`,
+    `GAC`/`GPAC`/`FM`, `EM`, `CDE`) validate `X` with `dtype=None`, so raw
+    text/object arrays pass through untouched — `X` is only ever forwarded
+    to the classifier, never touched arithmetically. Feature-space
+    quantifiers that compute distances or histograms directly on `X`
+    (`HDx`, `ReadMe`, `ED`) still require numeric features, since they
+    operate on `X`'s values themselves rather than delegating to a
+    classifier.
+
+---
+
 ## Choosing a method: quick reference
 
 | Method | Binary only? | Needs `predict_proba`? | Notes |
