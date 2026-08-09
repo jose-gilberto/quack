@@ -154,14 +154,6 @@ pytest
 
 ---
 
-## Roadmap
-
-- [ ] Bag generation and shift-simulation test pipelines
-- [ ] Ensemble strategies (e.g., `EoQ`)
-- [ ] Visualization module improvements
-
----
-
 ## Contributing
 
 Contributions are welcome! Please see `CONTRIBUTING.md` for guidelines before opening a pull request.
