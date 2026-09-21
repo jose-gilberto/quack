@@ -123,11 +123,11 @@ class TestBaseMixtureQuantifierConvexCaching:
 
     quantifier._next_test_frequencies = np.array([0.5, 0.5])
     p1 = quantifier.predict(np.zeros((4, 1)))
-    cached_problem_id_1 = id(quantifier._cvx_problem_)
+    cached_problem_id_1 = id(quantifier._cvx_problem)
 
     quantifier._next_test_frequencies = np.array([0.8, 0.2])
     p2 = quantifier.predict(np.zeros((4, 1)))
-    cached_problem_id_2 = id(quantifier._cvx_problem_)
+    cached_problem_id_2 = id(quantifier._cvx_problem)
 
     assert cached_problem_id_1 == cached_problem_id_2  # same object, not rebuilt
     assert p1.sum() == pytest.approx(1.0)
@@ -138,11 +138,11 @@ class TestBaseMixtureQuantifierConvexCaching:
     quantifier = _DummyMixtureQuantifier(distance_metric="L1")
     quantifier.fit(np.zeros((10, 1)), np.array([0] * 5 + [1] * 5))
     quantifier.predict(np.zeros((4, 1)))
-    key_l1 = quantifier._cvx_cache_key_
+    key_l1 = quantifier._cvx_cache_key
 
     quantifier.distance_metric = "L2"
     quantifier.predict(np.zeros((4, 1)))
-    key_l2 = quantifier._cvx_cache_key_
+    key_l2 = quantifier._cvx_cache_key
 
     assert key_l1 != key_l2
 

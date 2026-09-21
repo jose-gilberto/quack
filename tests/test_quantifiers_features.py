@@ -149,4 +149,5 @@ class TestReadMe:
   def test_auto_n_features_low_dimensional(self, categorical_dataset):
     X, y = categorical_dataset  # 4 features -> max(int(4/5), 2) == 2
     quantifier = ReadMe(n_subsets=3, random_state=0).fit(X, y)
-    assert quantifier.n_features == 2
+    assert quantifier.n_features_ == 2
+    assert quantifier.n_features is None  # hyper-parameter left untouched by fit

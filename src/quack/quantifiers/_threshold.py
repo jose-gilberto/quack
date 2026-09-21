@@ -24,8 +24,12 @@ class BaseThresholdQuantifier(BaseCalibratedQuantifier, ABC):
     Determines the cross-validation splitting strategy to generate the 
     Out-of-Fold predictions used for calibration.
   precision : int, default = 3
-    The decimal precision used to round the Out-of-Fold probabilities 
+    The decimal precision used to round the Out-of-Fold probabilities
     before extracting unique threshold candidates via `np.unique`.
+    Rounding keeps the candidate grid small (and the calibration fast) at
+    the cost of a slightly coarser threshold search. Pass `None` to use
+    every distinct Out-of-Fold score as a candidate, which reproduces
+    `QuaPy`'s threshold-selection grid exactly.
   n_jobs : int, default = None
     Number of jobs to run in parallel while fitting the `cv` folds (plus
     the final full-data classifier refit). See `BaseCalibratedQuantifier`.

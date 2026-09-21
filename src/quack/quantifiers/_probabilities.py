@@ -80,9 +80,6 @@ class ED(BaseQuantifier):
     super().__init__(classifier=None)
     self.n_jobs = n_jobs
     self.parallel_backend = parallel_backend
-    self.class_distances_matrix_ = None
-    self.quadratic_matrix_ = None
-    self.train_class_samples_ = None
 
   def fit(self, X: np.ndarray, y: np.ndarray) -> 'ED':
     """Fits the ED quantifier by computing expected intra-class pairwise distances.
@@ -126,7 +123,11 @@ class ED(BaseQuantifier):
       self.class_distances_matrix_[i, j] = value
       self.class_distances_matrix_[j, i] = value  # exploit symmetry
 
-    # construct the optimization matrix (Matrix B) for multi-dimensional spaces
+    # construct the optimization matrix (Matrix B) for multi-dimensional
+    # spaces; binary problems use the analytical route instead, but the
+    # attribute is still defined (as None) so the fitted estimator always
+    # exposes the same public surface
+    self.quadratic_matrix_ = None
     if self.n_classes_ > 2:
       last_idx = self.n_classes_ - 1
       A = self.class_distances_matrix_

@@ -393,8 +393,13 @@ class BaseMixtureQuantifier(BaseQuantifier, ABC):
     super().__init__(classifier=classifier)
     self.distance_metric = distance_metric
     self.use_convex_solver = use_convex_solver
-    self.conditional_matrix_ = None
-    self._cvx_cache_key_ = None
+    # NOTE: `conditional_matrix_` (and every other trailing-underscore
+    # attribute) is deliberately NOT initialized here. `sklearn`'s
+    # `check_is_fitted` treats the presence of any such attribute as proof
+    # that the estimator has been fitted, so pre-setting them to None makes
+    # an unfitted quantifier look fitted and turns a clear `NotFittedError`
+    # into an obscure `TypeError` deeper in `predict`.
+    self._cvx_cache_key = None
 
   def _compute_distance(self,
                         candidate_prevalence: np.ndarray,
@@ -441,9 +446,9 @@ class BaseMixtureQuantifier(BaseQuantifier, ABC):
     tuple for the current `(n_components, n_classes, distance_metric)`, building
     (and caching) it on first use or whenever that key changes."""
     cache_key = (n_components, n_classes, self.distance_metric)
-    if self._cvx_cache_key_ == cache_key:
-      return (self._cvx_problem_, self._cvx_matrix_param_,
-              self._cvx_test_freq_param_, self._cvx_prevalence_var_)
+    if self._cvx_cache_key == cache_key:
+      return (self._cvx_problem, self._cvx_matrix_param,
+              self._cvx_test_freq_param, self._cvx_prevalence_var)
 
     estimated_prevalence = cvx.Variable(n_classes)
     matrix_param = cvx.Parameter((n_components, n_classes))
@@ -460,20 +465,28 @@ class BaseMixtureQuantifier(BaseQuantifier, ABC):
       # maximizing affinity is mathematically equivalent to minimizing Hellinger Distance
       objective_function = cvx.Maximize(cvx.sum(cvx.sqrt(cvx.multiply(test_freq_param, projected_frequencies))))
     elif self.distance_metric == 'TS':
+      # Topsoe is the symmetrized KL against the mixture m = (p + t)/2:
+      #   TS(p, t) = sum p*log(2p/(p+t)) + t*log(2t/(p+t))
+      #           = KL(p || m) + KL(t || m)
+      # `cvx.kl_div(x, y) = x*log(x/y) - x + y`, so summing the two terms
+      # contributes `-(p + t) + 2m`, which cancels exactly because
+      # `2m = p + t`. The result is therefore the Topsoe distance itself,
+      # matching `_compute_distance` (and the GSS fallback) exactly.
+      mixture = (projected_frequencies + test_freq_param) / 2
       objective_function = cvx.Minimize(cvx.sum(
-        cvx.kl_div(2 * projected_frequencies, test_freq_param) +
-        cvx.kl_div(2 * test_freq_param, projected_frequencies)
+        cvx.kl_div(projected_frequencies, mixture) +
+        cvx.kl_div(test_freq_param, mixture)
       ))
     else:
       raise ValueError(f"Distance metric not supported by the convex solver: {self.distance_metric}")
 
     problem = cvx.Problem(objective_function, constraints)
 
-    self._cvx_cache_key_ = cache_key
-    self._cvx_problem_ = problem
-    self._cvx_matrix_param_ = matrix_param
-    self._cvx_test_freq_param_ = test_freq_param
-    self._cvx_prevalence_var_ = estimated_prevalence
+    self._cvx_cache_key = cache_key
+    self._cvx_problem = problem
+    self._cvx_matrix_param = matrix_param
+    self._cvx_test_freq_param = test_freq_param
+    self._cvx_prevalence_var = estimated_prevalence
 
     return problem, matrix_param, test_freq_param, estimated_prevalence
 
