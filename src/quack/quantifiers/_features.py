@@ -50,7 +50,6 @@ class HDx(BaseMixtureQuantifier):
     super().__init__(classifier=None,
                      distance_metric="HD",
                      use_convex_solver=use_convex_solver)
-    self.feature_spaces_ = None
 
   def fit(self, X: np.ndarray, y: np.ndarray) -> 'HDx':
     """Fits the HDx mixture model by building the marginal conditional matrix.
@@ -160,7 +159,6 @@ class _RawSubspaceMixture(BaseMixtureQuantifier):
     super().__init__(classifier=None,
                      distance_metric=distance_metric,
                      use_convex_solver=use_convex_solver)
-    self.unique_rows_ = None
 
   def fit(self, X: np.ndarray, y: np.ndarray) -> '_RawSubspaceMixture':
     pass
@@ -297,8 +295,9 @@ class ReadMe(BaseQuantifier):
     If True, internal sub-quantifiers utilize `cvxpy` optimization.
 
   n_features : int, default=None
-    Number of random features selected per subset. If None, it automatically 
-    defaults to `max(int(D/5), 2)` or bit length depending on dataset dimensionality.
+    Number of random features selected per subset. If None, it is resolved
+    at `fit` time into `n_features_` as `max(int(D/5), 2)` or the bit length
+    of `D`, depending on dataset dimensionality.
 
   n_subsets : int, default=100
     The total number of random subspace sub-quantifiers to ensemble.
@@ -327,6 +326,9 @@ class ReadMe(BaseQuantifier):
 
   train_prevalence_ : ndarray of shape (n_classes,)
     The baseline prevalence proportion of each class observed in the training data.
+
+  n_features_ : int
+    The subspace size actually used, resolved from `n_features` during `fit`.
 
   feature_subsets_ : list of ndarray
     A list containing the chosen feature column indices for each random subset.
@@ -357,8 +359,6 @@ class ReadMe(BaseQuantifier):
     self.n_jobs = n_jobs
     self.parallel_backend = parallel_backend
     self.random_state = random_state
-    self.feature_subsets_ = []
-    self.sub_quantifiers_ = []
 
   def fit(self, X: np.ndarray, y: np.ndarray) -> 'ReadMe':
     """Fits the ReadMe ensemble by training multiple subspace mixture models.
@@ -387,15 +387,22 @@ class ReadMe(BaseQuantifier):
     total_features = X.shape[1]
 
     # dynamically determine the subspace feature size if not explicitly provided
+    # resolve the subspace size into a fitted attribute instead of writing
+    # back into the `n_features` hyper-parameter: scikit-learn's estimator
+    # contract requires `__init__` parameters to stay untouched by `fit`,
+    # otherwise `clone`/`get_params` (and therefore `GridSearchCV`) would
+    # silently carry over a value the user never set.
     if self.n_features is None:
       if total_features > 25:
-        self.n_features = total_features.bit_length()
+        self.n_features_ = total_features.bit_length()
       else:
-        self.n_features = max(int(total_features / 5), 2)
+        self.n_features_ = max(int(total_features / 5), 2)
+    else:
+      self.n_features_ = self.n_features
 
     rng = check_random_state(self.random_state)
     self.feature_subsets_ = [
-      rng.choice(total_features, self.n_features, replace=False) for _ in range(self.n_subsets)
+      rng.choice(total_features, self.n_features_, replace=False) for _ in range(self.n_subsets)
     ]
 
     jobs = [

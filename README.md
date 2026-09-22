@@ -34,7 +34,7 @@ cd quack
 pip install -e ".[test,docs]"
 ```
 
-**Requirements**: Python >= 3.8, `scikit-learn>=1.9.0`, `scipy>=1.17.0`, `pandas>=3.0.3`, `numpy>=2.5.0`, `cvxpy>=1.9.2`.
+**Requirements**: Python >= 3.10, `scikit-learn>=1.4`, `scipy>=1.11`, `pandas>=2.1`, `numpy>=1.26`, `cvxpy>=1.4`, `tqdm>=4.66`.
 
 ---
 
@@ -97,19 +97,26 @@ from quack.datasets import load_uci, UCI_DATASETS, load_forman, FORMAN_DATASETS
 ### Metrics
 
 ```python
-from quack.metrics import ae, rae, kld, nkld
+from quack.metrics import ae, rae, nae, kld, nkld
 ```
 
 - `ae` — Absolute Error
 - `rae` — Relative Absolute Error
+- `nae` — Normalized Absolute Error
 - `kld` — Kullback-Leibler Divergence
 - `nkld` — Normalized Kullback-Leibler Divergence
 
 ### Visualization
 
+Requires the optional `viz` extra (`pip install "quack[viz]"`):
+
 ```python
-from quack.visualization.binary import binary_prevalence_plot
-from quack.visualization.utils import plot_class_distribution
+from quack.visualization import (
+    prevalence_plot,
+    bias_plot,
+    class_distribution_plot,
+    prevalence_coverage_plot,
+)
 ```
 
 ---
@@ -121,7 +128,7 @@ src/quack/
 ├── quantifiers/     # Quantification algorithms (BaseQuantifier subclasses)
 ├── datasets/        # Dataset loaders (UCI, Forman, Reviews)
 ├── metrics/         # Quantification-specific error metrics
-├── ensembles/        # Ensemble strategies (WIP)
+├── ensembles/       # Ensemble strategies (EoQ, FMC-SQ, FMC-MQ)
 └── visualization/   # Plotting utilities
 ```
 
@@ -157,6 +164,12 @@ pytest
 ## Contributing
 
 Contributions are welcome! Please see `CONTRIBUTING.md` for guidelines before opening a pull request.
+
+---
+
+## License
+
+`quack` is distributed under the terms of the [BSD 3-Clause License](LICENSE).
 
 ---
 
