@@ -26,6 +26,7 @@ nav:
       - Ensembles: tutorials/ensembles.md
       - Bag Generator: tutorials/bag-generator.md
       - UCI Datasets: tutorials/uci-datasets.md
+      - Complex Scenario Datasets: tutorials/complex-datasets.md
       - Visualization: tutorials/visualization.md
   - API Reference:
       - Base Class: api/base.md

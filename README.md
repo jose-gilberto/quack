@@ -14,7 +14,7 @@ Unlike standard classification tasks that predict instance-level labels, quantif
 - **Unified Interface** — every quantifier implements a clean, Scikit-Learn-compatible `.fit(X, y)` / `.predict(X)` API.
 - **Shift Simulation** — built-in bag generators to simulate and test algorithms against controlled dataset shifts.
 - **Core Metrics** — standard error metrics designed specifically to measure quantification performance.
-- **Dataset Loaders** — ready-to-use loaders for ~30 UCI datasets plus review-sentiment and Forman (2008) benchmarks.
+- **Dataset Loaders** — ready-to-use loaders for ~30 UCI datasets plus review-sentiment and Forman (2008) benchmarks, and multi-label, hierarchical and regression datasets with their license terms recorded.
 
 ---
 
@@ -94,6 +94,15 @@ from quack.datasets import load_uci, UCI_DATASETS, load_forman, FORMAN_DATASETS
 - `load_uci(name)` — ~30 UCI Machine Learning Repository datasets (see `UCI_DATASETS` for the full list of keys).
 - `load_forman(name)` — datasets from Forman (2008): `fbis`, `la1`, `la2`, `ohscal`.
 
+```python
+from quack.datasets import load_multilabel, load_hierarchical, load_regression, get_dataset_licenses
+```
+
+- `load_multilabel(name)` — multi-label datasets (Reuters-21578, GoEmotions, ToLD-Br, Jigsaw, Mulan collection); returns `(X, Y)`.
+- `load_hierarchical(name)` — datasets with a class taxonomy (RCV1, 20 Newsgroups, DBPedia, Web of Science, MultiEURLEX, arXiv, Clus-HMC); returns `(X, Y, hierarchy)`.
+- `load_regression(name)` — continuous targets for regression and ordinal quantification (BlogFeedback, Online News, fried, yolanda, Szeged weather, ACS Income); `make_ordinal` bins them.
+- `get_dataset_licenses()` — license, redistribution terms and access mode of each of these datasets. Datasets with use conditions require `accept_terms=True`.
+
 ### Metrics
 
 ```python
@@ -126,7 +135,7 @@ from quack.visualization import (
 ```
 src/quack/
 ├── quantifiers/     # Quantification algorithms (BaseQuantifier subclasses)
-├── datasets/        # Dataset loaders (UCI, Forman, Reviews)
+├── datasets/        # Dataset loaders (UCI, Forman, Reviews, multi-label, hierarchical, regression)
 ├── metrics/         # Quantification-specific error metrics
 ├── ensembles/       # Ensemble strategies (EoQ, FMC-SQ, FMC-MQ)
 └── visualization/   # Plotting utilities
