@@ -6,8 +6,10 @@ on:
       - main
     paths:
       - "docs/**"
-      - "mkdocs.yml"
-      - ".github/workflows/deploy-docs.yml"
+      - "mkdocs.yaml"
+      - "src/quack/**"
+      - ".github/workflows/docs.yaml"
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -30,12 +32,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          
+          cache: pip
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install .[docs]
-          
+
       - name: Deploy to GitHub Pages
         run: |
           mkdocs gh-deploy --force

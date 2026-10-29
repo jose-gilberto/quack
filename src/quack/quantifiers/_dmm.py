@@ -75,7 +75,6 @@ class DyS(BaseScoreMixtureQuantifier):
                      use_convex_solver=use_convex_solver, predict_proba=predict_proba,
                      n_jobs=n_jobs, parallel_backend=parallel_backend)
     self.n_bins = n_bins
-    self.score_range_ = None
 
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
     y_scores = self._extract_1d_scores(y_pred_oof)
@@ -131,6 +130,15 @@ class HDy(DyS):
 
   parallel_backend : str, default = "loky"
     `joblib.Parallel` backend used for the CV/final-fit jobs.
+
+  Notes
+  -----
+  `quack` matches the Hellinger distance over a single, user-chosen
+  histogram resolution (`n_bins`). The original paper also suggests
+  sweeping `b` from 10 to 110 in steps of 10 and taking the median of the
+  11 resulting estimates; that variant is what `QuaPy`'s `HDy` implements,
+  so the two libraries agree only when compared at a fixed number of bins
+  (`quapy.method.aggregative.DyS(n_bins=b, divergence='HD')`).
 
   References
   ----------
@@ -206,7 +214,6 @@ class FormanMM(BaseScoreMixtureQuantifier):
     super().__init__(classifier=classifier, distance_metric="L1", cv=cv,
                      use_convex_solver=use_convex_solver, predict_proba=predict_proba,
                      n_jobs=n_jobs, parallel_backend=parallel_backend)
-    self.bins_ = None
 
   def _calibrate(self, y_true_oof: np.ndarray, y_pred_oof: np.ndarray):
     y_scores = self._extract_1d_scores(y_pred_oof)

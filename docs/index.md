@@ -13,19 +13,7 @@ Unlike standard classification tasks that aim to predict the labels of individua
 * **Pure Python & SciPy Stack**: Built on top of NumPy, SciPy, and Scikit-Learn.
 * **Unified Interface**: All quantifiers implement a clean, Scikit-Learn-compatible `fit`/`predict` API.
 * **Shift Simulation**: Built-in bag generators allow you to easily simulate and test algorithms against controlled dataset shifts.
-* **Core Metrics**: Standard error metrics specifically designed to measure quantification performance.
-
----
-
-## Next Steps
-
-| Feature       | Status                                    |
-| ------------- | ----------------------------------------- |
-| Implement bag generation and test pipelines | <input type="checkbox" checked/> |
-| Implement ensembles strategies | <input type="checkbox" disabled/> |
-| Create the visualization module    | <input type="checkbox" checked/> |
-
-And some other features that aren't listed here. 
+* **Core Metrics**: Standard error metrics specifically designed to measure quantification performance. 
 
 ---
 

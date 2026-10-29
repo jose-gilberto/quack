@@ -21,6 +21,7 @@ summary: An overview about all modules and methods available in Quack
     - 3.2. Forman Datasets
     - 3.3. PhysioNet Datasets
     - 3.4. Reviews Datasets
+    - 3.5. [Multi-label, Hierarchical and Regression Datasets](./tutorials/complex-datasets.md)
 5. Model Selection
 6. [Visualization](./tutorials/visualization.md)
     - 5.1. Prevalence Plot (diagonal plot)
