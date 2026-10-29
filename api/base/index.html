@@ -4,9 +4,7 @@
 
 <head>
     <script>
-        /* const base_url = "None"; */
         const base_url = (new URL("../..", window.location)).href.replace(/\/+$/, ""); /* for search plugin notably */
-        /* const root_relative_url = "../.."; */
     </script>
     <script integrity="sha384-m6cZ+Whl1ci89lidlu8DH4C+sZLNOYBvImtjUIhUK+iaNffXhqtbYgBVuuPfRsa0" src="../../js/dark.js"></script>
 
@@ -83,8 +81,10 @@
 
     
 
-    <script integrity="sha384-V2jkXRy811qODUbfkLlkVJYBbf4h6XHAEjcU6ReASBPrJvTrlYh4GrI4t6GCju6n"
+    <script integrity="sha384-2hn3q9jeDV70Gb3DuyWPKgeRxkowIjEpcHeOXSvWCEq2uHJHvXiVer7rbM8HYzYz"
         src="../../js/callbacks.js"></script>
+    <script defer="" integrity="sha384-ljmRPFWw/c4kKFaKY5DIe8bgppHI9VBBrg7WZa8UPd23U9dEFesxZ1Ng8Hzjq2WB"
+        src="../../js/toc.js"></script>
 
     
 
@@ -116,74 +116,71 @@
 </head>
 
 <body
-    class="text-foreground group/body overscroll-none font-sans antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)] theme-default">
+    class="text-foreground group/body overscroll-none font-sans antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] lg:[--header-height:calc(var(--spacing)*16)] xl:[--footer-height:calc(var(--spacing)*24)] theme-default">
     <div class="bg-background relative z-10 flex min-h-svh flex-col" id="inner-body">
         <header class="bg-background sticky top-0 z-50 w-full" view-transition-name="header">
     <div class="container-wrapper 3xl:fixed:px-0 px-6">
         <div class="3xl:fixed:container flex h-(--header-height) items-center gap-2 **:data-[slot=separator]:!h-4">
-            <button id="menu-button" data-slot="popover-trigger" onclick="onMobileMenuButtonClick(event)"
-                class="group whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:text-accent-foreground px-4 py-2 has-[&gt;svg]:px-3 extend-touch-target h-8 touch-manipulation items-center justify-start gap-2.5 !p-0 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 active:bg-transparent dark:hover:bg-transparent flex lg:hidden"
-                type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-«Rmplb»"
-                data-state="closed">
-                <div class="relative flex h-8 w-4 items-center justify-center">
-                    <div class="relative size-4">
-                        <!-- 16px x 16px -->
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="0" x2="16" y1="5" y2="5"
-                                class="group-data-[state=open]:translate-y-[2.25px] group-data-[state=open]:-translate-x-[2.25px] group-data-[state=open]:rotate-45 transition-all duration-300 origin-center" />
-                            <line x1="0" x2="16" y1="11" y2="11"
-                                class="group-data-[state=open]:-translate-y-[2.25px] group-data-[state=open]:-translate-x-[2.25px] group-data-[state=open]:-rotate-45 transition-all duration-300 origin-center" />
-                        </svg>
-                    </div>
+            <button id="burger-button" data-slot="popover-trigger" onclick="onMobileMenuButtonClick(event)" class="group"
+    
+    type="button" aria-haspopup="dialog" data-state="closed">
+    <div class="relative flex h-8 w-4 items-center justify-center">
+        <div class="relative size-4">
+            <!-- 16px x 16px -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="0" x2="16" y1="5" y2="5"
+                    class="group-data-[state=open]:translate-y-[2.25px] group-data-[state=open]:-translate-x-[2.25px] group-data-[state=open]:rotate-45 transition-all duration-300 origin-center" />
+                <line x1="0" x2="16" y1="11" y2="11"
+                    class="group-data-[state=open]:-translate-y-[2.25px] group-data-[state=open]:-translate-x-[2.25px] group-data-[state=open]:-rotate-45 transition-all duration-300 origin-center" />
+            </svg>
+        </div>
 
-                    <span class="sr-only">Toggle Menu</span>
-                </div>
-                <span class="flex h-8 items-center text-lg leading-none font-medium">Menu</span>
-            </button>
-            <a data-slot="button"
-                class="items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-5 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 hidden h-8 lg:flex"
-                href="None">
-                <span class="size-8 flex flex-row justify-center items-center">
-                    
+        <span class="sr-only">Toggle Menu</span>
+    </div>
+    <span class="flex h-8 items-center text-lg leading-none font-medium">Menu</span>
+</button>
+            <a data-slot="button" class="button ghost gap-2 hidden lg:flex"
+    
+    href="None">
+    <span class="flex flex-row justify-center items-center">
+        
 
 <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 72 72"><path fill="#6a462f" d="M34.602 63.93h8.582s3.028.505-.505-3.028c0 0 .505-1.01.505-1.514s1.093-1.01.799-2.02"/><path fill="#6a462f" stroke="#6a462f" stroke-miterlimit="10" stroke-width="2" d="M37.8 61.432c1.13-.152 1.947-.423 2.355-1.035c1.01-1.514 1.01-1.01.505-2.019s0-2.02 0-2.02L45 57"/><path fill="#a57939" d="M33.79 53.97c9.417 4.737 29.518 3.798 25.572-.148c-4.439-4.439-5.073-6.341-5.707-10.146S47.947 32.26 39.069 30.358s0-13.951-6.342-19.658s-13.95-.635-13.95 2.536s-3.172 5.073-3.172 5.073c-1.268.635-9.512 3.805 1.269 3.805s10.146 2.537 6.975 4.44c0 0-10.808 4.585-7.849 14.446c3 10 17.996 13.456 17.996 13.456s-.634 1.269 0 2.537s-.366 1.634-1.634 3.537c-1.269 1.902-4.074.268-6.61.902c-1.946.486-3.171 2.537.634 2.537h10.78s3.805.634-.634-3.805c0 0 .635-1.269.635-1.903s1.373-1.268 1.004-2.536"/><path fill="#5c9e31" d="M39.07 30.358c-8.88-1.902 0-13.951-6.343-19.658s-13.95-.635-13.95 2.536s-3.172 5.073-3.172 5.073c-1.268.635-9.512 3.805 1.269 3.805s10.146 2.537 6.975 4.44"/><path fill="#fcea2b" d="M15.605 18.31c-1.268.634-9.512 3.804 1.269 3.804"/><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"><path d="M47.947 46.212c6.976 5.708 0 6.342 0 6.342c-17.122 1.902-21.561-16.488-21.561-16.488"/><path d="M34.017 54.46c10.796 2.908 29.29 3.308 25.345-.638c-4.44-4.439-5.073-6.341-5.707-10.146S47.947 32.26 39.069 30.358s0-13.951-6.342-19.658s-13.951-.635-13.951 2.536s-3.17 5.073-3.17 5.073c-1.27.635-9.513 3.805 1.268 3.805s10.146 2.537 6.975 4.44c0 0-10.808 4.585-7.85 14.446c3 10 17.997 13.456 17.997 13.456s-.635 1.269 0 2.537s-.366 1.634-1.635 3.537c-1.268 1.902-4.073.268-6.61.902c-1.945.486-3.17 2.537.635 2.537h10.78s3.805.634-.634-3.805c0 0 .634-1.269.634-1.903s1.374-1.268 1.004-2.536"/><path d="M34.602 63.93h8.582s3.028.505-.505-3.028c0 0 .505-1.01.505-1.514s1.093-1.01.799-2.02"/><path d="M40.66 56.359s-.505 1.01 0 2.019s.505.505-.505 2.019c-.408.612-1.225.883-2.354 1.035"/></g></svg>
 
 
-                </span>
+    </span>
 
-                
-                <h1 class="pr-2">quack</h1>
-                
-            </a>
+    
+    <h1>quack</h1>
+    
+</a>
             
             <div class="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
                 <div class="hidden w-full flex-1 md:flex md:w-auto md:flex-none">
                     <div class="hidden w-full flex-1 md:flex md:w-auto md:flex-none">
     <button onclick="onSearchBarClick(event)" data-slot="dialog-trigger" data-variant="outline" data-size="default"
-        class="inline-flex shrink-0 items-center gap-2 text-sm whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border bg-background hover:text-accent-foreground dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[&gt;svg]:px-3 relative h-8 w-full justify-start rounded-lg pl-3 font-normal text-foreground shadow-none hover:bg-muted/50 sm:pr-12 md:w-48 lg:w-56 xl:w-64 dark:bg-card"
-        type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-_r_1_" data-state="closed">
-        <span class="hidden lg:inline-flex">Search documentation...</span>
-        <span class="inline-flex lg:hidden">Search...</span>
-    </button>
+    class="search secondary" type="button" aria-haspopup="dialog" aria-controls="search-dialog" data-state="closed">
+    <span class="hidden lg:inline-flex">Search documentation...</span>
+    <span class="inline-flex lg:hidden">Search...</span>
+</button>
 </div>
 <dialog id="search-dialog" onclick="onSearchDialogClick(event)"
     class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background rounded-lg shadow-lg border overflow-hidden p-0">
     <div class="w-lg gap-4">
         <div class="flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground">
-            <div data-slot="command-input-wrapper" class="flex h-9 items-center gap-2 border-b px-3"><svg
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-search size-4 shrink-0 opacity-50">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.3-4.3"></path>
-                </svg>
+            <div data-slot="command-input-wrapper" class="flex h-9 items-center gap-2 border-b px-3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="lucide lucide-search size-4 shrink-0 opacity-50">
+    <circle cx="11" cy="11" r="8"></circle>
+    <path d="m21 21-4.3-4.3"></path>
+</svg>
                 <input data-slot="command-input"
                     class="placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50"
                     placeholder="Search documentation..." cmdk-input="" autocomplete="off" autocorrect="off"
-                    spellcheck="false" aria-autocomplete="list" role="combobox" aria-expanded="true"
-                    aria-controls="radix-«r1t6»" aria-labelledby="radix-«r1t7»" id="radix-«r1t8»" type="text" value=""
-                    aria-activedescendant="radix-«r1th»" oninput="onInputHandler(event)">
+                    spellcheck="false" aria-label="Search documentation" type="search" value=""
+                    oninput="onInputHandler(event)">
             </div>
         </div>
         <div id="mkdocs-search-results">
@@ -197,40 +194,38 @@
 </script>
                 </div>
                 
-                <div data-orientation="vertical" role="none" data-slot="separator"
-                    class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px 3xl:flex hidden">
-                </div>
                 
-                <button data-slot="button"
-                    class="items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 size-8 3xl:flex hidden"
-                    title="Toggle layout" onclick="toggleLayout(event)">
-                    <span class="sr-only">Toggle layout</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-gallery-horizontal">
-                        <path d="M2 3v18"></path>
-                        <rect width="12" height="18" x="6" y="3" rx="2"></rect>
-                        <path d="M22 3v18"></path>
-                    </svg>
-                </button>
+
+
+                
+
                 <div data-orientation="vertical" role="none" data-slot="separator"
-                    class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px">
-                </div>
-                <button data-slot="button"
-                    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 group/toggle extend-touch-target size-8"
-                    title="Toggle theme" onclick="onThemeSwitch(event)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="size-4.5">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
-                        <path d="M12 3l0 18"></path>
-                        <path d="M12 9l4.65 -4.65"></path>
-                        <path d="M12 14.3l7.37 -7.37"></path>
-                        <path d="M12 19.6l8.85 -8.85"></path>
-                    </svg>
-                    <span class="sr-only">Toggle theme</span>
-                </button>
+    class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px">
+</div>
+                <button class="ghost icon" title="Toggle layout" onclick="toggleLayout(event)">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="lucide lucide-gallery-horizontal">
+    <path d="M2 3v18"></path>
+    <rect width="12" height="18" x="6" y="3" rx="2"></rect>
+    <path d="M22 3v18"></path>
+</svg>
+</button>
+                <div data-orientation="vertical" role="none" data-slot="separator"
+    class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px">
+</div>
+                <button class="ghost icon" onclick="onThemeSwitch(event)" title="Toggle theme">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="size-4.5">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+    <path d="M12 3l0 18"></path>
+    <path d="M12 9l4.65 -4.65"></path>
+    <path d="M12 14.3l7.37 -7.37"></path>
+    <path d="M12 19.6l8.85 -8.85"></path>
+</svg>
+</button>
             </div>
         </div>
     </div>
@@ -240,7 +235,7 @@
                 <div class="group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex w-full 3xl:fixed:container 3xl:fixed:px-3 min-h-min flex-1 items-start px-0 [--sidebar-width:220px] [--top-spacing:0] lg:grid lg:grid-cols-[var(--sidebar-width)_minmax(0,1fr)] lg:[--sidebar-width:240px] lg:[--top-spacing:calc(var(--spacing)*4)]"
                     data-slot="sidebar-wrapper"
                     style="--sidebar-width:calc(var(--spacing) * 72);--sidebar-width-icon:3rem;">
-                    <div class="w-(--sidebar-width) flex-col text-sidebar-foreground sticky top-[calc(var(--header-height)+0.6rem)] z-30 hidden h-[calc(100svh-10rem)] overscroll-none bg-transparent [--sidebar-menu-width:--spacing(56)] lg:flex"
+                    <div class="w-(--sidebar-width) flex-col text-sidebar-foreground sticky top-[calc(var(--header-height)+0.6rem)] z-30 hidden max-h-[calc(100svh-10rem)] overscroll-none bg-transparent [--sidebar-menu-width:--spacing(56)] lg:flex"
                         data-slot="sidebar">
                         <div class="h-9"></div>
                         <div
@@ -273,15 +268,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../.."
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Quack!
         
-
         
-
         
-
         
     </a>
 </li>
@@ -293,15 +284,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../getting-started/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Getting Started
         
-
         
-
         
-
         
     </a>
 </li>
@@ -326,15 +313,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../tutorials/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Overview
         
-
         
-
         
-
         
     </a>
 </li>
@@ -345,15 +328,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../tutorials/methods/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Methods
         
-
         
-
         
-
         
     </a>
 </li>
@@ -364,15 +343,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../tutorials/ensembles/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Ensembles
         
-
         
-
         
-
         
     </a>
 </li>
@@ -383,15 +358,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../tutorials/bag-generator/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Bag Generator
         
-
         
-
         
-
         
     </a>
 </li>
@@ -402,15 +373,26 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../tutorials/uci-datasets/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         UCI Datasets
         
-
         
-
         
-
+        
+    </a>
+</li>
+            
+            
+            
+            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
+    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
+        data-size="default" href="../../tutorials/complex-datasets/"
+        class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
+        
+        Complex Scenario Datasets
+        
+        
+        
         
     </a>
 </li>
@@ -421,15 +403,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../tutorials/visualization/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Visualization
         
-
         
-
         
-
         
     </a>
 </li>
@@ -453,15 +431,11 @@
     <a data-slot="sidebar-menu-button" data-active="true" data-sidebar="menu-button"
         data-size="default" href="./"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Base Class
         
-
         
-
         
-
         
     </a>
 </li>
@@ -472,15 +446,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../quantifiers/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Quantifiers
         
-
         
-
         
-
         
     </a>
 </li>
@@ -491,15 +461,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../ensembles/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Ensembles
         
-
         
-
         
-
         
     </a>
 </li>
@@ -510,15 +476,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../bag_generator/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Bag Generator
         
-
         
-
         
-
         
     </a>
 </li>
@@ -529,15 +491,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../metrics/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Metrics
         
-
         
-
         
-
         
     </a>
 </li>
@@ -548,15 +506,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../datasets/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Datasets
         
-
         
-
         
-
         
     </a>
 </li>
@@ -567,15 +521,26 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../visualization/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Visualization
         
-
         
-
         
-
+        
+    </a>
+</li>
+            
+            
+            
+            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
+    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
+        data-size="default" href="../utils/"
+        class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
+        
+        Utils
+        
+        
+        
         
     </a>
 </li>
@@ -597,7 +562,6 @@
                     </div>
                     <div class="h-full w-full">
                         <div class="flex items-stretch text-[1.05rem] sm:text-[15px] xl:w-full" data-slot="docs">
-
                             <div class="flex min-w-0 flex-1 flex-col">
                                 <div class="h-(--top-spacing) shrink-0"></div>
                                 
@@ -609,12 +573,11 @@
         <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
           Base Class
         </h1>
-
-        <div class="flex items-center gap-2 pt-1.5">
+        <div class="flex items-start gap-2">
           
-          <button
-    onclick="fetch(`../..`).then((r) => r.text()).then((text) => navigator.clipboard.write([new ClipboardItem({ 'text/plain': text })]))"
-    data-slot="button" class="secondary cursor-pointer">
+          <button id="copy-page"
+    onclick="fetch(`/api/base.md`).then((r) => r.text()).then((text) => navigator.clipboard.write([new ClipboardItem({ 'text/plain': text })]))"
+    data-slot="button" class="secondary cursor-pointer sm">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-copy ">
         <path
@@ -626,32 +589,28 @@
 </button>
           
           
-          <a data-slot="button" id="previous-button"
-            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 extend-touch-target size-8 shadow-none md:size-7"
-            href="../../tutorials/visualization/">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="tabler-icon tabler-icon-arrow-left">
-              <path d="M5 12l14 0"></path>
-              <path d="M5 12l6 6"></path>
-              <path d="M5 12l6 -6"></path>
-            </svg>
-            <span class="sr-only">Previous</span>
-          </a>
+          <a id="previous-button" class="button secondary icon sm" href="../../tutorials/visualization/">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="tabler-icon tabler-icon-arrow-left">
+    <path d="M5 12l14 0"></path>
+    <path d="M5 12l6 6"></path>
+    <path d="M5 12l6 -6"></path>
+</svg>
+    <span class="sr-only">Previous</span>
+</a>
           
           
-          <a data-slot="button" id="next-button"
-            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 extend-touch-target size-8 shadow-none md:size-7"
-            href="../quantifiers/">
-            <span class="sr-only">Next</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="tabler-icon tabler-icon-arrow-right">
-              <path d="M5 12l14 0"></path>
-              <path d="M13 18l6 -6"></path>
-              <path d="M13 6l6 6"></path>
-            </svg>
-          </a>
+          <a id="next-button" class="button secondary icon sm" href="../quantifiers/">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="tabler-icon tabler-icon-arrow-right">
+    <path d="M5 12l14 0"></path>
+    <path d="M13 18l6 -6"></path>
+    <path d="M13 6l6 6"></path>
+</svg>
+    <span class="sr-only">Next</span>
+</a>
           
         </div>
       </div>
@@ -659,6 +618,7 @@
     </div>
     <div class="flex justify-end items-center">
       
+
       
     </div>
   </div>
@@ -695,8 +655,8 @@
                 <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">91</span>
 <span class="normal">92</span>
 <span class="normal">93</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">QuantifierMixin</span><span class="p">:</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;Mixin to identify that this class belongs to quantifiers family.&quot;&quot;&quot;</span>
-  <span class="n">_estimator_type</span> <span class="o">=</span> <span class="s2">&quot;quantifier&quot;</span>
+<span class="w">  </span><span class="sd">"""Mixin to identify that this class belongs to quantifiers family."""</span>
+  <span class="n">_estimator_type</span> <span class="o">=</span> <span class="s2">"quantifier"</span>
 </code></pre></div></td></tr></table></div></div>
               </details>
 
@@ -834,7 +794,7 @@ If its None, an instance of <code>LogisticRegression()</code> will be created.</
 <span class="normal">143</span>
 <span class="normal">144</span>
 <span class="normal">145</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BaseQuantifier</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">QuantifierMixin</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">  </span><span class="sd">"""</span>
 <span class="sd">  Abstract class for all quantifiers. Inherits from BaseEstimator and QuantifierMixin</span>
 <span class="sd">  to guarantee compatibility with scikit-learn, as clone of estimators, get or set</span>
 <span class="sd">  parameters (get_parameter/set_parameter) and the integration with GridSeach (GridSearchCV).</span>
@@ -844,14 +804,14 @@ If its None, an instance of <code>LogisticRegression()</code> will be created.</
 <span class="sd">  classifier: estimator object, default = None</span>
 <span class="sd">    The classifier that will be used as a base for the quantifier.</span>
 <span class="sd">    If its None, an instance of `LogisticRegression()` will be created.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
+<span class="sd">  """</span>
 
   <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classifier</span><span class="p">:</span> <span class="n">BaseEstimator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">classifier</span>
 
   <span class="nd">@abstractmethod</span>
-  <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;BaseQuantifier&#39;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Adjusts the quantifier based on the training data.</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'BaseQuantifier'</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">""" Adjusts the quantifier based on the training data.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -864,12 +824,12 @@ If its None, an instance of <code>LogisticRegression()</code> will be created.</
 <span class="sd">    -------</span>
 <span class="sd">    self: object</span>
 <span class="sd">      Returns the fitted estimator instance itself.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">pass</span>
 
   <span class="nd">@abstractmethod</span>
   <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Estimate the prevalences (distribution) for the test bag X.</span>
+<span class="w">    </span><span class="sd">""" Estimate the prevalences (distribution) for the test bag X.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -881,7 +841,7 @@ If its None, an instance of <code>LogisticRegression()</code> will be created.</
 <span class="sd">    prevalences: ndarray of shape (n_classes,)</span>
 <span class="sd">      An array with the estimated prevalences for each class.</span>
 <span class="sd">      The sum of the elements in this array must be equals to 1.0.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">pass</span>
 </code></pre></div></td></tr></table></div></div>
               </details>
@@ -1006,8 +966,8 @@ If its None, an instance of <code>LogisticRegression()</code> will be created.</
 <span class="normal">126</span>
 <span class="normal">127</span>
 <span class="normal">128</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abstractmethod</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;BaseQuantifier&#39;</span><span class="p">:</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot; Adjusts the quantifier based on the training data.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'BaseQuantifier'</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">""" Adjusts the quantifier based on the training data.</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
@@ -1020,7 +980,7 @@ If its None, an instance of <code>LogisticRegression()</code> will be created.</
 <span class="sd">  -------</span>
 <span class="sd">  self: object</span>
 <span class="sd">    Returns the fitted estimator instance itself.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
+<span class="sd">  """</span>
   <span class="k">pass</span>
 </code></pre></div></td></tr></table></div></div>
             </details>
@@ -1120,7 +1080,7 @@ The sum of the elements in this array must be equals to 1.0.</p>
 <span class="normal">144</span>
 <span class="normal">145</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abstractmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot; Estimate the prevalences (distribution) for the test bag X.</span>
+<span class="w">  </span><span class="sd">""" Estimate the prevalences (distribution) for the test bag X.</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
@@ -1132,7 +1092,7 @@ The sum of the elements in this array must be equals to 1.0.</p>
 <span class="sd">  prevalences: ndarray of shape (n_classes,)</span>
 <span class="sd">    An array with the estimated prevalences for each class.</span>
 <span class="sd">    The sum of the elements in this array must be equals to 1.0.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
+<span class="sd">  """</span>
   <span class="k">pass</span>
 </code></pre></div></td></tr></table></div></div>
             </details>
@@ -1448,7 +1408,7 @@ such as most scikit-learn estimators backed by Cython/BLAS).</p>
 <span class="normal">328</span>
 <span class="normal">329</span>
 <span class="normal">330</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BaseCalibratedQuantifier</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">  </span><span class="sd">"""</span>
 <span class="sd">  Base class to quantifiers that requires cross-validation Out-of-Fold.</span>
 
 <span class="sd">  This class manages automatically the pipeline for training with cross-validation</span>
@@ -1468,15 +1428,15 @@ such as most scikit-learn estimators backed by Cython/BLAS).</p>
 <span class="sd">    classifier refit on the whole training set, dispatched as one extra independent</span>
 <span class="sd">    job). `None` means 1 (sequential, matching the previous behavior); `-1` means</span>
 <span class="sd">    using all available processors. See `joblib.Parallel` for details.</span>
-<span class="sd">  parallel_backend: str, default = &quot;loky&quot;</span>
-<span class="sd">    Backend passed through to `joblib.Parallel` (e.g. `&quot;loky&quot;` for process-based</span>
-<span class="sd">    parallelism, `&quot;threading&quot;` for thread-based parallelism, the latter is</span>
+<span class="sd">  parallel_backend: str, default = "loky"</span>
+<span class="sd">    Backend passed through to `joblib.Parallel` (e.g. `"loky"` for process-based</span>
+<span class="sd">    parallelism, `"threading"` for thread-based parallelism, the latter is</span>
 <span class="sd">    preferable when the base classifier releases the GIL during `fit`/`predict`,</span>
 <span class="sd">    such as most scikit-learn estimators backed by Cython/BLAS).</span>
-<span class="sd">  &quot;&quot;&quot;</span>
+<span class="sd">  """</span>
 
   <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classifier</span><span class="p">:</span> <span class="n">BaseEstimator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cv</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-               <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">parallel_backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;loky&quot;</span><span class="p">):</span>
+               <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">parallel_backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"loky"</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">classifier</span><span class="o">=</span><span class="n">classifier</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">cv</span> <span class="o">=</span> <span class="n">cv</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
@@ -1484,21 +1444,21 @@ such as most scikit-learn estimators backed by Cython/BLAS).</p>
 
   <span class="nd">@abstractmethod</span>
   <span class="k">def</span><span class="w"> </span><span class="nf">_get_oof_method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Determine which method from the classifier will be used to generate the</span>
+<span class="w">    </span><span class="sd">""" Determine which method from the classifier will be used to generate the</span>
 <span class="sd">    predictions.</span>
 
-<span class="sd">    Subclasses must return valid strings like `&quot;predict&quot;` or `&quot;predict_proba&quot;`.</span>
+<span class="sd">    Subclasses must return valid strings like `"predict"` or `"predict_proba"`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    method_name: str</span>
 <span class="sd">      Name of the method of the base estimator.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">pass</span>
 
   <span class="nd">@abstractmethod</span>
   <span class="k">def</span><span class="w"> </span><span class="nf">_calibrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true_oof</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_pred_oof</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Internal method to build structures for calibration (matrix CM).</span>
+<span class="w">    </span><span class="sd">""" Internal method to build structures for calibration (matrix CM).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1506,12 +1466,12 @@ such as most scikit-learn estimators backed by Cython/BLAS).</p>
 <span class="sd">      True labels colected out-of-fold.</span>
 <span class="sd">    y_pred_oof: ndarray of shape (n_samples, n_classes) or (n_samples,)</span>
 <span class="sd">      Predictions (continuous or crisp) generated out-of-fold.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">pass</span>
 
   <span class="nd">@abstractmethod</span>
   <span class="k">def</span><span class="w"> </span><span class="nf">_quantify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; End-to-end algorithm for prevalence estimation specific for each subclass.</span>
+<span class="w">    </span><span class="sd">""" End-to-end algorithm for prevalence estimation specific for each subclass.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1522,11 +1482,11 @@ such as most scikit-learn estimators backed by Cython/BLAS).</p>
 <span class="sd">    -------</span>
 <span class="sd">    prevalences: ndarray of shape (n_classes,)</span>
 <span class="sd">      Prevalences estimated by the method.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">pass</span>
 
-  <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;BaseCalibratedQuantifier&#39;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Adjust the complete quantification pipeline using predictions out-of-fold.</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'BaseCalibratedQuantifier'</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">""" Adjust the complete quantification pipeline using predictions out-of-fold.</span>
 
 <span class="sd">    Executes the cross-validation for internal calibration and, following, adjust</span>
 <span class="sd">    the model with all.</span>
@@ -1547,8 +1507,8 @@ such as most scikit-learn estimators backed by Cython/BLAS).</p>
 <span class="sd">    -------</span>
 <span class="sd">    self: object</span>
 <span class="sd">      Returns the fitted estimator instance itself.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="c1"># save the classes and number of classes metadata</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1559,12 +1519,12 @@ such as most scikit-learn estimators backed by Cython/BLAS).</p>
     <span class="n">base_classifier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">LogisticRegression</span><span class="p">()</span>
 
     <span class="n">oof_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_oof_method</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">oof_method</span> <span class="o">==</span> <span class="s2">&quot;predict_proba&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">base_classifier</span><span class="p">,</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">oof_method</span> <span class="o">==</span> <span class="s2">"predict_proba"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">base_classifier</span><span class="p">,</span> <span class="s2">"predict_proba"</span><span class="p">):</span>
       <span class="c1"># fail fast, before spending time on cross-validation</span>
       <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> requires a classifier implementing &quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;`predict_proba`, but </span><span class="si">{</span><span class="n">base_classifier</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> does not &quot;</span>
-        <span class="s2">&quot;provide one.&quot;</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> requires a classifier implementing "</span>
+        <span class="sa">f</span><span class="s2">"`predict_proba`, but </span><span class="si">{</span><span class="n">base_classifier</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> does not "</span>
+        <span class="s2">"provide one."</span>
       <span class="p">)</span>
 
     <span class="c1"># check validation and instanciate the cross val strategy</span>
@@ -1572,7 +1532,7 @@ such as most scikit-learn estimators backed by Cython/BLAS).</p>
     <span class="n">n_samples</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">splits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
 
-    <span class="k">if</span> <span class="n">oof_method</span> <span class="o">==</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">oof_method</span> <span class="o">==</span> <span class="s2">"predict_proba"</span><span class="p">:</span>
       <span class="n">y_pred_oof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">))</span> <span class="c1"># 2d</span>
     <span class="k">else</span><span class="p">:</span>
       <span class="n">y_pred_oof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="c1"># 1d</span>
@@ -1602,7 +1562,7 @@ such as most scikit-learn estimators backed by Cython/BLAS).</p>
     <span class="k">return</span> <span class="bp">self</span>
 
   <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Maps the test bag and estimate the class prevalences.</span>
+<span class="w">    </span><span class="sd">""" Maps the test bag and estimate the class prevalences.</span>
 
 <span class="sd">    Ensures that the post-optimization output adopts consistent geometric properties.</span>
 
@@ -1615,10 +1575,10 @@ such as most scikit-learn estimators backed by Cython/BLAS).</p>
 <span class="sd">    -------</span>
 <span class="sd">    p_adjusted: ndarray of shape (n_classes,)</span>
 <span class="sd">      Array normalized and with all valid predictions.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="n">p_adjusted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quantify</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="c1"># runs the specific math calculus for the subclass</span>
 
     <span class="n">p_adjusted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">p_adjusted</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c1"># avoid values outside the valid range</span>
@@ -1812,8 +1772,8 @@ loop sequentially and only starting the final fit afterwards.</p>
 <span class="normal">297</span>
 <span class="normal">298</span>
 <span class="normal">299</span>
-<span class="normal">300</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;BaseCalibratedQuantifier&#39;</span><span class="p">:</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot; Adjust the complete quantification pipeline using predictions out-of-fold.</span>
+<span class="normal">300</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'BaseCalibratedQuantifier'</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">""" Adjust the complete quantification pipeline using predictions out-of-fold.</span>
 
 <span class="sd">  Executes the cross-validation for internal calibration and, following, adjust</span>
 <span class="sd">  the model with all.</span>
@@ -1834,8 +1794,8 @@ loop sequentially and only starting the final fit afterwards.</p>
 <span class="sd">  -------</span>
 <span class="sd">  self: object</span>
 <span class="sd">    Returns the fitted estimator instance itself.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="sd">  """</span>
+  <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
   <span class="c1"># save the classes and number of classes metadata</span>
   <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1846,12 +1806,12 @@ loop sequentially and only starting the final fit afterwards.</p>
   <span class="n">base_classifier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">LogisticRegression</span><span class="p">()</span>
 
   <span class="n">oof_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_oof_method</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">oof_method</span> <span class="o">==</span> <span class="s2">&quot;predict_proba&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">base_classifier</span><span class="p">,</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">oof_method</span> <span class="o">==</span> <span class="s2">"predict_proba"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">base_classifier</span><span class="p">,</span> <span class="s2">"predict_proba"</span><span class="p">):</span>
     <span class="c1"># fail fast, before spending time on cross-validation</span>
     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> requires a classifier implementing &quot;</span>
-      <span class="sa">f</span><span class="s2">&quot;`predict_proba`, but </span><span class="si">{</span><span class="n">base_classifier</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> does not &quot;</span>
-      <span class="s2">&quot;provide one.&quot;</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> requires a classifier implementing "</span>
+      <span class="sa">f</span><span class="s2">"`predict_proba`, but </span><span class="si">{</span><span class="n">base_classifier</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> does not "</span>
+      <span class="s2">"provide one."</span>
     <span class="p">)</span>
 
   <span class="c1"># check validation and instanciate the cross val strategy</span>
@@ -1859,7 +1819,7 @@ loop sequentially and only starting the final fit afterwards.</p>
   <span class="n">n_samples</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
   <span class="n">splits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
 
-  <span class="k">if</span> <span class="n">oof_method</span> <span class="o">==</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">oof_method</span> <span class="o">==</span> <span class="s2">"predict_proba"</span><span class="p">:</span>
     <span class="n">y_pred_oof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">))</span> <span class="c1"># 2d</span>
   <span class="k">else</span><span class="p">:</span>
     <span class="n">y_pred_oof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="c1"># 1d</span>
@@ -1993,7 +1953,7 @@ loop sequentially and only starting the final fit afterwards.</p>
 <span class="normal">328</span>
 <span class="normal">329</span>
 <span class="normal">330</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot; Maps the test bag and estimate the class prevalences.</span>
+<span class="w">  </span><span class="sd">""" Maps the test bag and estimate the class prevalences.</span>
 
 <span class="sd">  Ensures that the post-optimization output adopts consistent geometric properties.</span>
 
@@ -2006,10 +1966,10 @@ loop sequentially and only starting the final fit afterwards.</p>
 <span class="sd">  -------</span>
 <span class="sd">  p_adjusted: ndarray of shape (n_classes,)</span>
 <span class="sd">    Array normalized and with all valid predictions.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
+<span class="sd">  """</span>
   <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-  <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
   <span class="n">p_adjusted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quantify</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="c1"># runs the specific math calculus for the subclass</span>
 
   <span class="n">p_adjusted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">p_adjusted</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c1"># avoid values outside the valid range</span>
@@ -2514,8 +2474,21 @@ different data).</p>
 <span class="normal">632</span>
 <span class="normal">633</span>
 <span class="normal">634</span>
-<span class="normal">635</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BaseMixtureQuantifier</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;Base class for Distance-based Mixture Models (DMM) for quantification.</span>
+<span class="normal">635</span>
+<span class="normal">636</span>
+<span class="normal">637</span>
+<span class="normal">638</span>
+<span class="normal">639</span>
+<span class="normal">640</span>
+<span class="normal">641</span>
+<span class="normal">642</span>
+<span class="normal">643</span>
+<span class="normal">644</span>
+<span class="normal">645</span>
+<span class="normal">646</span>
+<span class="normal">647</span>
+<span class="normal">648</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BaseMixtureQuantifier</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">"""Base class for Distance-based Mixture Models (DMM) for quantification.</span>
 
 <span class="sd">  This abstract class manages the core optimization engine (via cvxpy) and </span>
 <span class="sd">  the Golden Section Search (GSS) binary fallback mechanism for quantifiers </span>
@@ -2529,12 +2502,12 @@ different data).</p>
 <span class="sd">    models (e.g., HDx, ReadMe) or an instance of a classifier for prediction-based </span>
 <span class="sd">    mixture models (e.g., HDy, EDy).</span>
 
-<span class="sd">  distance_metric : str, default=&#39;L1&#39;</span>
+<span class="sd">  distance_metric : str, default='L1'</span>
 <span class="sd">    The mathematical distance metric to minimize. Supported metrics:</span>
-<span class="sd">    - &#39;L1&#39;: Manhattan Distance (Sum of absolute errors).</span>
-<span class="sd">    - &#39;L2&#39;: Euclidean Distance (Root of the sum of squared errors).</span>
-<span class="sd">    - &#39;HD&#39;: Hellinger Divergence (Measures overlap between probability distributions).</span>
-<span class="sd">    - &#39;TS&#39;: Topsoe Distance (Symmetric version of Kullback-Leibler Divergence).</span>
+<span class="sd">    - 'L1': Manhattan Distance (Sum of absolute errors).</span>
+<span class="sd">    - 'L2': Euclidean Distance (Root of the sum of squared errors).</span>
+<span class="sd">    - 'HD': Hellinger Divergence (Measures overlap between probability distributions).</span>
+<span class="sd">    - 'TS': Topsoe Distance (Symmetric version of Kullback-Leibler Divergence).</span>
 
 <span class="sd">  use_convex_solver : bool, default=True</span>
 <span class="sd">    If True, attempts to find the exact global minimum using `cvxpy`.</span>
@@ -2566,46 +2539,51 @@ different data).</p>
 <span class="sd">  and re-solve, skipping the relatively expensive problem construction/DCP</span>
 <span class="sd">  validation step — this matters a lot when scoring many bags (e.g. from</span>
 <span class="sd">  `quack.bag_generator`) with the same fitted quantifier. The cache is</span>
-<span class="sd">  automatically rebuilt if `conditional_matrix_`&#39;s shape or</span>
+<span class="sd">  automatically rebuilt if `conditional_matrix_`'s shape or</span>
 <span class="sd">  `distance_metric` change (e.g. after calling `.fit()` again with</span>
 <span class="sd">  different data).</span>
-<span class="sd">  &quot;&quot;&quot;</span>
+<span class="sd">  """</span>
   <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                <span class="n">classifier</span><span class="p">:</span> <span class="n">BaseEstimator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-               <span class="n">distance_metric</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;L1&#39;</span><span class="p">,</span>
+               <span class="n">distance_metric</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">'L1'</span><span class="p">,</span>
                <span class="n">use_convex_solver</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">classifier</span><span class="o">=</span><span class="n">classifier</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">=</span> <span class="n">distance_metric</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">use_convex_solver</span> <span class="o">=</span> <span class="n">use_convex_solver</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">conditional_matrix_</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_cache_key_</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># NOTE: `conditional_matrix_` (and every other trailing-underscore</span>
+    <span class="c1"># attribute) is deliberately NOT initialized here. `sklearn`'s</span>
+    <span class="c1"># `check_is_fitted` treats the presence of any such attribute as proof</span>
+    <span class="c1"># that the estimator has been fitted, so pre-setting them to None makes</span>
+    <span class="c1"># an unfitted quantifier look fitted and turns a clear `NotFittedError`</span>
+    <span class="c1"># into an obscure `TypeError` deeper in `predict`.</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_cache_key</span> <span class="o">=</span> <span class="kc">None</span>
 
   <span class="k">def</span><span class="w"> </span><span class="nf">_compute_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                         <span class="n">candidate_prevalence</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                         <span class="n">test_frequencies</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the selected distance error for a given prevalence candidate.</span>
+<span class="w">    </span><span class="sd">"""Computes the selected distance error for a given prevalence candidate.</span>
 
 <span class="sd">    Simulates how the test dataset should look if the true prevalence matched </span>
 <span class="sd">    `candidate_prevalence`, comparing the result against the actual observed </span>
 <span class="sd">    `test_frequencies`. Used primarily as a cost function for the GSS optimizer.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># project the candidate prevalence using the training distribution profile (CM * p)</span>
     <span class="n">projected_frequencies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conditional_matrix_</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">candidate_prevalence</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;L1&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">'L1'</span><span class="p">:</span>
       <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">projected_frequencies</span> <span class="o">-</span> <span class="n">test_frequencies</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;L2&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">'L2'</span><span class="p">:</span>
       <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">projected_frequencies</span> <span class="o">-</span> <span class="n">test_frequencies</span><span class="p">)</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;HD&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">'HD'</span><span class="p">:</span>
       <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">projected_frequencies</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
 
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;TS&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">'TS'</span><span class="p">:</span>
       <span class="c1"># vectorized Topsoe distance; terms where a frequency is exactly 0</span>
       <span class="c1"># contribute 0 by convention (x*log(x) -&gt; 0 as x -&gt; 0), so they are</span>
       <span class="c1"># masked out instead of computed (which would otherwise emit</span>
       <span class="c1"># divide-by-zero / invalid-value warnings from log(0) or 0/0)</span>
       <span class="n">denom</span> <span class="o">=</span> <span class="n">projected_frequencies</span> <span class="o">+</span> <span class="n">test_frequencies</span>
-      <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+      <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">):</span>
         <span class="n">term_projected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
           <span class="n">projected_frequencies</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
           <span class="n">projected_frequencies</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">projected_frequencies</span> <span class="o">/</span> <span class="n">denom</span><span class="p">),</span>
@@ -2618,16 +2596,16 @@ different data).</p>
         <span class="p">)</span>
       <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">term_projected</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">term_test</span><span class="p">))</span>
 
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown distance metric: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown distance metric: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
   <span class="k">def</span><span class="w"> </span><span class="nf">_get_convex_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_components</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the cached CVXPY `(problem, matrix_param, test_freq_param, prevalence_var)`</span>
+<span class="w">    </span><span class="sd">"""Returns the cached CVXPY `(problem, matrix_param, test_freq_param, prevalence_var)`</span>
 <span class="sd">    tuple for the current `(n_components, n_classes, distance_metric)`, building</span>
-<span class="sd">    (and caching) it on first use or whenever that key changes.&quot;&quot;&quot;</span>
+<span class="sd">    (and caching) it on first use or whenever that key changes."""</span>
     <span class="n">cache_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_components</span><span class="p">,</span> <span class="n">n_classes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span><span class="p">)</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_cache_key_</span> <span class="o">==</span> <span class="n">cache_key</span><span class="p">:</span>
-      <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cvx_problem_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_matrix_param_</span><span class="p">,</span>
-              <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_test_freq_param_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_prevalence_var_</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_cache_key</span> <span class="o">==</span> <span class="n">cache_key</span><span class="p">:</span>
+      <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cvx_problem</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_matrix_param</span><span class="p">,</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_test_freq_param</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_prevalence_var</span><span class="p">)</span>
 
     <span class="n">estimated_prevalence</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">n_classes</span><span class="p">)</span>
     <span class="n">matrix_param</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Parameter</span><span class="p">((</span><span class="n">n_components</span><span class="p">,</span> <span class="n">n_classes</span><span class="p">))</span>
@@ -2636,39 +2614,47 @@ different data).</p>
     <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">estimated_prevalence</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">estimated_prevalence</span><span class="p">)</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">]</span>
     <span class="n">projected_frequencies</span> <span class="o">=</span> <span class="n">matrix_param</span> <span class="o">@</span> <span class="n">estimated_prevalence</span>
 
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;L1&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">'L1'</span><span class="p">:</span>
       <span class="n">objective_function</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span><span class="n">projected_frequencies</span> <span class="o">-</span> <span class="n">test_freq_param</span><span class="p">))</span>
-    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;L2&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">'L2'</span><span class="p">:</span>
       <span class="n">objective_function</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">projected_frequencies</span> <span class="o">-</span> <span class="n">test_freq_param</span><span class="p">))</span>
-    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;HD&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">'HD'</span><span class="p">:</span>
       <span class="c1"># maximizing affinity is mathematically equivalent to minimizing Hellinger Distance</span>
       <span class="n">objective_function</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Maximize</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">test_freq_param</span><span class="p">,</span> <span class="n">projected_frequencies</span><span class="p">))))</span>
-    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">&#39;TS&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span> <span class="o">==</span> <span class="s1">'TS'</span><span class="p">:</span>
+      <span class="c1"># Topsoe is the symmetrized KL against the mixture m = (p + t)/2:</span>
+      <span class="c1">#   TS(p, t) = sum p*log(2p/(p+t)) + t*log(2t/(p+t))</span>
+      <span class="c1">#           = KL(p || m) + KL(t || m)</span>
+      <span class="c1"># `cvx.kl_div(x, y) = x*log(x/y) - x + y`, so summing the two terms</span>
+      <span class="c1"># contributes `-(p + t) + 2m`, which cancels exactly because</span>
+      <span class="c1"># `2m = p + t`. The result is therefore the Topsoe distance itself,</span>
+      <span class="c1"># matching `_compute_distance` (and the GSS fallback) exactly.</span>
+      <span class="n">mixture</span> <span class="o">=</span> <span class="p">(</span><span class="n">projected_frequencies</span> <span class="o">+</span> <span class="n">test_freq_param</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
       <span class="n">objective_function</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
-        <span class="n">cvx</span><span class="o">.</span><span class="n">kl_div</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">projected_frequencies</span><span class="p">,</span> <span class="n">test_freq_param</span><span class="p">)</span> <span class="o">+</span>
-        <span class="n">cvx</span><span class="o">.</span><span class="n">kl_div</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">test_freq_param</span><span class="p">,</span> <span class="n">projected_frequencies</span><span class="p">)</span>
+        <span class="n">cvx</span><span class="o">.</span><span class="n">kl_div</span><span class="p">(</span><span class="n">projected_frequencies</span><span class="p">,</span> <span class="n">mixture</span><span class="p">)</span> <span class="o">+</span>
+        <span class="n">cvx</span><span class="o">.</span><span class="n">kl_div</span><span class="p">(</span><span class="n">test_freq_param</span><span class="p">,</span> <span class="n">mixture</span><span class="p">)</span>
       <span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Distance metric not supported by the convex solver: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Distance metric not supported by the convex solver: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_metric</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="n">problem</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">objective_function</span><span class="p">,</span> <span class="n">constraints</span><span class="p">)</span>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_cache_key_</span> <span class="o">=</span> <span class="n">cache_key</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_problem_</span> <span class="o">=</span> <span class="n">problem</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_matrix_param_</span> <span class="o">=</span> <span class="n">matrix_param</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_test_freq_param_</span> <span class="o">=</span> <span class="n">test_freq_param</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_prevalence_var_</span> <span class="o">=</span> <span class="n">estimated_prevalence</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_cache_key</span> <span class="o">=</span> <span class="n">cache_key</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_problem</span> <span class="o">=</span> <span class="n">problem</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_matrix_param</span> <span class="o">=</span> <span class="n">matrix_param</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_test_freq_param</span> <span class="o">=</span> <span class="n">test_freq_param</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_cvx_prevalence_var</span> <span class="o">=</span> <span class="n">estimated_prevalence</span>
 
     <span class="k">return</span> <span class="n">problem</span><span class="p">,</span> <span class="n">matrix_param</span><span class="p">,</span> <span class="n">test_freq_param</span><span class="p">,</span> <span class="n">estimated_prevalence</span>
 
   <span class="k">def</span><span class="w"> </span><span class="nf">_solve_via_convex_programming</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_frequencies</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solves the constrained mixture problem using exact convex optimization.</span>
+<span class="w">    </span><span class="sd">"""Solves the constrained mixture problem using exact convex optimization.</span>
 
 <span class="sd">    Reuses the cached CVXPY problem for this instance (see</span>
 <span class="sd">    `_get_convex_problem`), only updating the `conditional_matrix_` and</span>
 <span class="sd">    `test_frequencies` parameter values before re-solving — avoiding the</span>
 <span class="sd">    cost of rebuilding the problem graph on every call.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">n_components</span><span class="p">,</span> <span class="n">n_classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conditional_matrix_</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">problem</span><span class="p">,</span> <span class="n">matrix_param</span><span class="p">,</span> <span class="n">test_freq_param</span><span class="p">,</span> <span class="n">estimated_prevalence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_convex_problem</span><span class="p">(</span>
       <span class="n">n_components</span><span class="p">,</span> <span class="n">n_classes</span>
@@ -2681,12 +2667,12 @@ different data).</p>
     <span class="k">return</span> <span class="n">estimated_prevalence</span><span class="o">.</span><span class="n">value</span>
 
   <span class="k">def</span><span class="w"> </span><span class="nf">_golden_section_search_fallback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_frequencies</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-04</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Golden Section Search (GSS) algorithm for binary optimization fallback.</span>
+<span class="w">    </span><span class="sd">"""Golden Section Search (GSS) algorithm for binary optimization fallback.</span>
 
 <span class="sd">    Approximates the minimum point of the distance function by narrowing down </span>
 <span class="sd">    the search window based on the Golden Ratio (phi). Automatically triggered </span>
 <span class="sd">    if the convex solver fails or is disabled.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># golden Section mathematical constants (1/phi and 1/phi^2)</span>
     <span class="n">inverse_phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
     <span class="n">inverse_phi_squared</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
@@ -2741,19 +2727,19 @@ different data).</p>
 
   <span class="nd">@abstractmethod</span>
   <span class="k">def</span><span class="w"> </span><span class="nf">_compute_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the empirical frequency distribution of the test batch X.</span>
+<span class="w">    </span><span class="sd">"""Extracts the empirical frequency distribution of the test batch X.</span>
 
 <span class="sd">    Must be implemented by specific sub-quantifiers (e.g., HDx, HDy, ReadMe) </span>
 <span class="sd">    to map the testing data into the matching distribution space.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">pass</span>
 
   <span class="k">def</span><span class="w"> </span><span class="nf">_solve_mixture</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_frequencies</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solves for the class prevalences that best explain `test_frequencies`,</span>
+<span class="w">    </span><span class="sd">"""Solves for the class prevalences that best explain `test_frequencies`,</span>
 <span class="sd">    trying the exact convex solver first and falling back to Golden Section</span>
 <span class="sd">    Search on failure or when the solver is disabled.</span>
 
-<span class="sd">    Shared by every DMM-style quantifier&#39;s prevalence estimation step</span>
+<span class="sd">    Shared by every DMM-style quantifier's prevalence estimation step</span>
 <span class="sd">    (`BaseMixtureQuantifier.predict` for feature-based methods like `HDx`/</span>
 <span class="sd">    `ReadMe`/`ED`, and `_quantify` in score/confusion-matrix-based methods</span>
 <span class="sd">    like `DyS`/`FormanMM`/`GAC`/`GPAC`/`FM` in `quack.quantifiers._dmm`) so</span>
@@ -2770,22 +2756,22 @@ different data).</p>
 <span class="sd">    raw_prevalences: np.ndarray</span>
 <span class="sd">      Raw (not yet clipped/renormalized) prevalence solution</span>
 <span class="sd">      of shape `(n_classes,)`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_convex_solver</span><span class="p">:</span>
       <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_golden_section_search_fallback</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
       <span class="n">prevalence_solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_solve_via_convex_programming</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">)</span>
       <span class="k">if</span> <span class="n">prevalence_solution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Convex optimization returned an empty result. Falling back to GSS search.&quot;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">"Convex optimization returned an empty result. Falling back to GSS search."</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_golden_section_search_fallback</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">)</span>
       <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">prevalence_solution</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
     <span class="k">except</span> <span class="n">cvx</span><span class="o">.</span><span class="n">SolverError</span><span class="p">:</span>
-      <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;CVXPY SolverError encountered. Falling back to GSS search as a safety measure.&quot;</span><span class="p">)</span>
+      <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">"CVXPY SolverError encountered. Falling back to GSS search as a safety measure."</span><span class="p">)</span>
       <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_golden_section_search_fallback</span><span class="p">(</span><span class="n">test_frequencies</span><span class="p">)</span>
 
   <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimates the class prevalences for the given test data.</span>
+<span class="w">    </span><span class="sd">"""Estimates the class prevalences for the given test data.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -2797,7 +2783,7 @@ different data).</p>
 <span class="sd">    estimated_prevalences : ndarray of shape (n_classes,)</span>
 <span class="sd">      A normalized probability vector indicating the estimated prevalence </span>
 <span class="sd">      proportions for each class.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -2904,20 +2890,7 @@ proportions for each class.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>quack/quantifiers/base.py</code></summary>
-              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">603</span>
-<span class="normal">604</span>
-<span class="normal">605</span>
-<span class="normal">606</span>
-<span class="normal">607</span>
-<span class="normal">608</span>
-<span class="normal">609</span>
-<span class="normal">610</span>
-<span class="normal">611</span>
-<span class="normal">612</span>
-<span class="normal">613</span>
-<span class="normal">614</span>
-<span class="normal">615</span>
-<span class="normal">616</span>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">616</span>
 <span class="normal">617</span>
 <span class="normal">618</span>
 <span class="normal">619</span>
@@ -2936,8 +2909,21 @@ proportions for each class.</p>
 <span class="normal">632</span>
 <span class="normal">633</span>
 <span class="normal">634</span>
-<span class="normal">635</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;Estimates the class prevalences for the given test data.</span>
+<span class="normal">635</span>
+<span class="normal">636</span>
+<span class="normal">637</span>
+<span class="normal">638</span>
+<span class="normal">639</span>
+<span class="normal">640</span>
+<span class="normal">641</span>
+<span class="normal">642</span>
+<span class="normal">643</span>
+<span class="normal">644</span>
+<span class="normal">645</span>
+<span class="normal">646</span>
+<span class="normal">647</span>
+<span class="normal">648</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">"""Estimates the class prevalences for the given test data.</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
@@ -2949,7 +2935,7 @@ proportions for each class.</p>
 <span class="sd">  estimated_prevalences : ndarray of shape (n_classes,)</span>
 <span class="sd">    A normalized probability vector indicating the estimated prevalence </span>
 <span class="sd">    proportions for each class.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
+<span class="sd">  """</span>
   <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
   <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -2983,41 +2969,31 @@ proportions for each class.</p>
 
 </div>
   </div>
-  
-  <script>
-    document.querySelectorAll('article h2, article h3').forEach((header) => {
-      toc.observer.observe(header);
-    });
-  </script>
 </article>
-                                <div class="mx-auto flex flex-wrap h-16 w-full max-w-2xl items-center gap-2 px-4 md:px-0">
+                                <div id="bottom-navigation" class="mx-auto flex h-16 w-full max-w-2xl items-center justify-between gap-2 px-4 md:px-0">
     
-    <a data-slot="button"
-        class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5 shadow-none"
-        href="../../tutorials/visualization/">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="tabler-icon tabler-icon-arrow-left ">
-            <path d="M5 12l14 0"></path>
-            <path d="M5 12l6 6"></path>
-            <path d="M5 12l6 -6"></path>
-        </svg>
-        <span class="max-[500px]:hidden">Visualization</span>
-    </a>
+    <a class="button secondary" href="../../tutorials/visualization/">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="tabler-icon tabler-icon-arrow-left">
+    <path d="M5 12l14 0"></path>
+    <path d="M5 12l6 6"></path>
+    <path d="M5 12l6 -6"></path>
+</svg>
+    <span class="max-[500px]:hidden truncate">Visualization</span>
+</a>
     
     
-    <a data-slot="button"
-        class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5 ml-auto shadow-none"
-        href="../quantifiers/">
-        <span class="max-[500px]:hidden">Quantifiers</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="tabler-icon tabler-icon-arrow-right ">
-            <path d="M5 12l14 0"></path>
-            <path d="M13 18l6 -6"></path>
-            <path d="M13 6l6 6"></path>
-        </svg>
-    </a>
+    <a class="button secondary" href="../quantifiers/">
+    <span class="max-[500px]:hidden truncate">Quantifiers</span>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="tabler-icon tabler-icon-arrow-right">
+    <path d="M5 12l14 0"></path>
+    <path d="M13 18l6 -6"></path>
+    <path d="M13 6l6 6"></path>
+</svg>
+</a>
     
 </div>
                                 
@@ -3094,6 +3070,12 @@ proportions for each class.</p>
                             
                         </a>
                         
+                        <a class="text-2xl font-medium" href="../../tutorials/complex-datasets/">
+                            
+                            Complex Scenario Datasets
+                            
+                        </a>
+                        
                         <a class="text-2xl font-medium" href="../../tutorials/visualization/">
                             
                             Visualization
@@ -3151,6 +3133,12 @@ proportions for each class.</p>
                             
                         </a>
                         
+                        <a class="text-2xl font-medium" href="../utils/">
+                            
+                            Utils
+                            
+                        </a>
+                        
                     </div>
                     
                 </div>
@@ -3174,44 +3162,32 @@ proportions for each class.</p>
         
         
         
-        <a href="#mixins"
-            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#mixins');">
+        <a href="#mixins" data-active="false" data-depth="2">
             Mixins
         </a>
         
         
-        <a href="#quack.quantifiers.base.QuantifierMixin"
-            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.quantifiers.base.QuantifierMixin');">
+        <a href="#quack.quantifiers.base.QuantifierMixin" data-active="false" data-depth="3">
             QuantifierMixin
         </a>
         
         
 
         
-        <a href="#bases"
-            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#bases');">
+        <a href="#bases" data-active="false" data-depth="2">
             Bases
         </a>
         
         
-        <a href="#quack.quantifiers.base.BaseQuantifier"
-            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.quantifiers.base.BaseQuantifier');">
+        <a href="#quack.quantifiers.base.BaseQuantifier" data-active="false" data-depth="3">
             BaseQuantifier
         </a>
         
-        <a href="#quack.quantifiers.base.BaseCalibratedQuantifier"
-            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.quantifiers.base.BaseCalibratedQuantifier');">
+        <a href="#quack.quantifiers.base.BaseCalibratedQuantifier" data-active="false" data-depth="3">
             BaseCalibratedQuantifier
         </a>
         
-        <a href="#quack.quantifiers.base.BaseMixtureQuantifier"
-            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.quantifiers.base.BaseMixtureQuantifier');">
+        <a href="#quack.quantifiers.base.BaseMixtureQuantifier" data-active="false" data-depth="3">
             BaseMixtureQuantifier
         </a>
         
@@ -3229,7 +3205,6 @@ proportions for each class.</p>
                                 
                                 
                             </div>
-
                         </div>
                     </div>
                 </div>

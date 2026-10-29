@@ -4,9 +4,7 @@
 
 <head>
     <script>
-        /* const base_url = "None"; */
         const base_url = (new URL("../..", window.location)).href.replace(/\/+$/, ""); /* for search plugin notably */
-        /* const root_relative_url = "../.."; */
     </script>
     <script integrity="sha384-m6cZ+Whl1ci89lidlu8DH4C+sZLNOYBvImtjUIhUK+iaNffXhqtbYgBVuuPfRsa0" src="../../js/dark.js"></script>
 
@@ -83,8 +81,10 @@
 
     
 
-    <script integrity="sha384-V2jkXRy811qODUbfkLlkVJYBbf4h6XHAEjcU6ReASBPrJvTrlYh4GrI4t6GCju6n"
+    <script integrity="sha384-2hn3q9jeDV70Gb3DuyWPKgeRxkowIjEpcHeOXSvWCEq2uHJHvXiVer7rbM8HYzYz"
         src="../../js/callbacks.js"></script>
+    <script defer="" integrity="sha384-ljmRPFWw/c4kKFaKY5DIe8bgppHI9VBBrg7WZa8UPd23U9dEFesxZ1Ng8Hzjq2WB"
+        src="../../js/toc.js"></script>
 
     
 
@@ -116,74 +116,71 @@
 </head>
 
 <body
-    class="text-foreground group/body overscroll-none font-sans antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)] theme-default">
+    class="text-foreground group/body overscroll-none font-sans antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] lg:[--header-height:calc(var(--spacing)*16)] xl:[--footer-height:calc(var(--spacing)*24)] theme-default">
     <div class="bg-background relative z-10 flex min-h-svh flex-col" id="inner-body">
         <header class="bg-background sticky top-0 z-50 w-full" view-transition-name="header">
     <div class="container-wrapper 3xl:fixed:px-0 px-6">
         <div class="3xl:fixed:container flex h-(--header-height) items-center gap-2 **:data-[slot=separator]:!h-4">
-            <button id="menu-button" data-slot="popover-trigger" onclick="onMobileMenuButtonClick(event)"
-                class="group whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:text-accent-foreground px-4 py-2 has-[&gt;svg]:px-3 extend-touch-target h-8 touch-manipulation items-center justify-start gap-2.5 !p-0 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 active:bg-transparent dark:hover:bg-transparent flex lg:hidden"
-                type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-«Rmplb»"
-                data-state="closed">
-                <div class="relative flex h-8 w-4 items-center justify-center">
-                    <div class="relative size-4">
-                        <!-- 16px x 16px -->
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="0" x2="16" y1="5" y2="5"
-                                class="group-data-[state=open]:translate-y-[2.25px] group-data-[state=open]:-translate-x-[2.25px] group-data-[state=open]:rotate-45 transition-all duration-300 origin-center" />
-                            <line x1="0" x2="16" y1="11" y2="11"
-                                class="group-data-[state=open]:-translate-y-[2.25px] group-data-[state=open]:-translate-x-[2.25px] group-data-[state=open]:-rotate-45 transition-all duration-300 origin-center" />
-                        </svg>
-                    </div>
+            <button id="burger-button" data-slot="popover-trigger" onclick="onMobileMenuButtonClick(event)" class="group"
+    
+    type="button" aria-haspopup="dialog" data-state="closed">
+    <div class="relative flex h-8 w-4 items-center justify-center">
+        <div class="relative size-4">
+            <!-- 16px x 16px -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="0" x2="16" y1="5" y2="5"
+                    class="group-data-[state=open]:translate-y-[2.25px] group-data-[state=open]:-translate-x-[2.25px] group-data-[state=open]:rotate-45 transition-all duration-300 origin-center" />
+                <line x1="0" x2="16" y1="11" y2="11"
+                    class="group-data-[state=open]:-translate-y-[2.25px] group-data-[state=open]:-translate-x-[2.25px] group-data-[state=open]:-rotate-45 transition-all duration-300 origin-center" />
+            </svg>
+        </div>
 
-                    <span class="sr-only">Toggle Menu</span>
-                </div>
-                <span class="flex h-8 items-center text-lg leading-none font-medium">Menu</span>
-            </button>
-            <a data-slot="button"
-                class="items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-5 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 hidden h-8 lg:flex"
-                href="None">
-                <span class="size-8 flex flex-row justify-center items-center">
-                    
+        <span class="sr-only">Toggle Menu</span>
+    </div>
+    <span class="flex h-8 items-center text-lg leading-none font-medium">Menu</span>
+</button>
+            <a data-slot="button" class="button ghost gap-2 hidden lg:flex"
+    
+    href="None">
+    <span class="flex flex-row justify-center items-center">
+        
 
 <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 72 72"><path fill="#6a462f" d="M34.602 63.93h8.582s3.028.505-.505-3.028c0 0 .505-1.01.505-1.514s1.093-1.01.799-2.02"/><path fill="#6a462f" stroke="#6a462f" stroke-miterlimit="10" stroke-width="2" d="M37.8 61.432c1.13-.152 1.947-.423 2.355-1.035c1.01-1.514 1.01-1.01.505-2.019s0-2.02 0-2.02L45 57"/><path fill="#a57939" d="M33.79 53.97c9.417 4.737 29.518 3.798 25.572-.148c-4.439-4.439-5.073-6.341-5.707-10.146S47.947 32.26 39.069 30.358s0-13.951-6.342-19.658s-13.95-.635-13.95 2.536s-3.172 5.073-3.172 5.073c-1.268.635-9.512 3.805 1.269 3.805s10.146 2.537 6.975 4.44c0 0-10.808 4.585-7.849 14.446c3 10 17.996 13.456 17.996 13.456s-.634 1.269 0 2.537s-.366 1.634-1.634 3.537c-1.269 1.902-4.074.268-6.61.902c-1.946.486-3.171 2.537.634 2.537h10.78s3.805.634-.634-3.805c0 0 .635-1.269.635-1.903s1.373-1.268 1.004-2.536"/><path fill="#5c9e31" d="M39.07 30.358c-8.88-1.902 0-13.951-6.343-19.658s-13.95-.635-13.95 2.536s-3.172 5.073-3.172 5.073c-1.268.635-9.512 3.805 1.269 3.805s10.146 2.537 6.975 4.44"/><path fill="#fcea2b" d="M15.605 18.31c-1.268.634-9.512 3.804 1.269 3.804"/><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"><path d="M47.947 46.212c6.976 5.708 0 6.342 0 6.342c-17.122 1.902-21.561-16.488-21.561-16.488"/><path d="M34.017 54.46c10.796 2.908 29.29 3.308 25.345-.638c-4.44-4.439-5.073-6.341-5.707-10.146S47.947 32.26 39.069 30.358s0-13.951-6.342-19.658s-13.951-.635-13.951 2.536s-3.17 5.073-3.17 5.073c-1.27.635-9.513 3.805 1.268 3.805s10.146 2.537 6.975 4.44c0 0-10.808 4.585-7.85 14.446c3 10 17.997 13.456 17.997 13.456s-.635 1.269 0 2.537s-.366 1.634-1.635 3.537c-1.268 1.902-4.073.268-6.61.902c-1.945.486-3.17 2.537.635 2.537h10.78s3.805.634-.634-3.805c0 0 .634-1.269.634-1.903s1.374-1.268 1.004-2.536"/><path d="M34.602 63.93h8.582s3.028.505-.505-3.028c0 0 .505-1.01.505-1.514s1.093-1.01.799-2.02"/><path d="M40.66 56.359s-.505 1.01 0 2.019s.505.505-.505 2.019c-.408.612-1.225.883-2.354 1.035"/></g></svg>
 
 
-                </span>
+    </span>
 
-                
-                <h1 class="pr-2">quack</h1>
-                
-            </a>
+    
+    <h1>quack</h1>
+    
+</a>
             
             <div class="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
                 <div class="hidden w-full flex-1 md:flex md:w-auto md:flex-none">
                     <div class="hidden w-full flex-1 md:flex md:w-auto md:flex-none">
     <button onclick="onSearchBarClick(event)" data-slot="dialog-trigger" data-variant="outline" data-size="default"
-        class="inline-flex shrink-0 items-center gap-2 text-sm whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border bg-background hover:text-accent-foreground dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[&gt;svg]:px-3 relative h-8 w-full justify-start rounded-lg pl-3 font-normal text-foreground shadow-none hover:bg-muted/50 sm:pr-12 md:w-48 lg:w-56 xl:w-64 dark:bg-card"
-        type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-_r_1_" data-state="closed">
-        <span class="hidden lg:inline-flex">Search documentation...</span>
-        <span class="inline-flex lg:hidden">Search...</span>
-    </button>
+    class="search secondary" type="button" aria-haspopup="dialog" aria-controls="search-dialog" data-state="closed">
+    <span class="hidden lg:inline-flex">Search documentation...</span>
+    <span class="inline-flex lg:hidden">Search...</span>
+</button>
 </div>
 <dialog id="search-dialog" onclick="onSearchDialogClick(event)"
     class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background rounded-lg shadow-lg border overflow-hidden p-0">
     <div class="w-lg gap-4">
         <div class="flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground">
-            <div data-slot="command-input-wrapper" class="flex h-9 items-center gap-2 border-b px-3"><svg
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-search size-4 shrink-0 opacity-50">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.3-4.3"></path>
-                </svg>
+            <div data-slot="command-input-wrapper" class="flex h-9 items-center gap-2 border-b px-3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="lucide lucide-search size-4 shrink-0 opacity-50">
+    <circle cx="11" cy="11" r="8"></circle>
+    <path d="m21 21-4.3-4.3"></path>
+</svg>
                 <input data-slot="command-input"
                     class="placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50"
                     placeholder="Search documentation..." cmdk-input="" autocomplete="off" autocorrect="off"
-                    spellcheck="false" aria-autocomplete="list" role="combobox" aria-expanded="true"
-                    aria-controls="radix-«r1t6»" aria-labelledby="radix-«r1t7»" id="radix-«r1t8»" type="text" value=""
-                    aria-activedescendant="radix-«r1th»" oninput="onInputHandler(event)">
+                    spellcheck="false" aria-label="Search documentation" type="search" value=""
+                    oninput="onInputHandler(event)">
             </div>
         </div>
         <div id="mkdocs-search-results">
@@ -197,40 +194,38 @@
 </script>
                 </div>
                 
-                <div data-orientation="vertical" role="none" data-slot="separator"
-                    class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px 3xl:flex hidden">
-                </div>
                 
-                <button data-slot="button"
-                    class="items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 size-8 3xl:flex hidden"
-                    title="Toggle layout" onclick="toggleLayout(event)">
-                    <span class="sr-only">Toggle layout</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-gallery-horizontal">
-                        <path d="M2 3v18"></path>
-                        <rect width="12" height="18" x="6" y="3" rx="2"></rect>
-                        <path d="M22 3v18"></path>
-                    </svg>
-                </button>
+
+
+                
+
                 <div data-orientation="vertical" role="none" data-slot="separator"
-                    class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px">
-                </div>
-                <button data-slot="button"
-                    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 group/toggle extend-touch-target size-8"
-                    title="Toggle theme" onclick="onThemeSwitch(event)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="size-4.5">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
-                        <path d="M12 3l0 18"></path>
-                        <path d="M12 9l4.65 -4.65"></path>
-                        <path d="M12 14.3l7.37 -7.37"></path>
-                        <path d="M12 19.6l8.85 -8.85"></path>
-                    </svg>
-                    <span class="sr-only">Toggle theme</span>
-                </button>
+    class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px">
+</div>
+                <button class="ghost icon" title="Toggle layout" onclick="toggleLayout(event)">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="lucide lucide-gallery-horizontal">
+    <path d="M2 3v18"></path>
+    <rect width="12" height="18" x="6" y="3" rx="2"></rect>
+    <path d="M22 3v18"></path>
+</svg>
+</button>
+                <div data-orientation="vertical" role="none" data-slot="separator"
+    class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px">
+</div>
+                <button class="ghost icon" onclick="onThemeSwitch(event)" title="Toggle theme">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="size-4.5">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+    <path d="M12 3l0 18"></path>
+    <path d="M12 9l4.65 -4.65"></path>
+    <path d="M12 14.3l7.37 -7.37"></path>
+    <path d="M12 19.6l8.85 -8.85"></path>
+</svg>
+</button>
             </div>
         </div>
     </div>
@@ -240,7 +235,7 @@
                 <div class="group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex w-full 3xl:fixed:container 3xl:fixed:px-3 min-h-min flex-1 items-start px-0 [--sidebar-width:220px] [--top-spacing:0] lg:grid lg:grid-cols-[var(--sidebar-width)_minmax(0,1fr)] lg:[--sidebar-width:240px] lg:[--top-spacing:calc(var(--spacing)*4)]"
                     data-slot="sidebar-wrapper"
                     style="--sidebar-width:calc(var(--spacing) * 72);--sidebar-width-icon:3rem;">
-                    <div class="w-(--sidebar-width) flex-col text-sidebar-foreground sticky top-[calc(var(--header-height)+0.6rem)] z-30 hidden h-[calc(100svh-10rem)] overscroll-none bg-transparent [--sidebar-menu-width:--spacing(56)] lg:flex"
+                    <div class="w-(--sidebar-width) flex-col text-sidebar-foreground sticky top-[calc(var(--header-height)+0.6rem)] z-30 hidden max-h-[calc(100svh-10rem)] overscroll-none bg-transparent [--sidebar-menu-width:--spacing(56)] lg:flex"
                         data-slot="sidebar">
                         <div class="h-9"></div>
                         <div
@@ -273,15 +268,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../.."
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Quack!
         
-
         
-
         
-
         
     </a>
 </li>
@@ -293,15 +284,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../getting-started/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Getting Started
         
-
         
-
         
-
         
     </a>
 </li>
@@ -326,15 +313,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../tutorials/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Overview
         
-
         
-
         
-
         
     </a>
 </li>
@@ -345,15 +328,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../tutorials/methods/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Methods
         
-
         
-
         
-
         
     </a>
 </li>
@@ -364,15 +343,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../tutorials/ensembles/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Ensembles
         
-
         
-
         
-
         
     </a>
 </li>
@@ -383,15 +358,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../tutorials/bag-generator/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Bag Generator
         
-
         
-
         
-
         
     </a>
 </li>
@@ -402,15 +373,26 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../tutorials/uci-datasets/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         UCI Datasets
         
-
         
-
         
-
+        
+    </a>
+</li>
+            
+            
+            
+            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
+    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
+        data-size="default" href="../../tutorials/complex-datasets/"
+        class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
+        
+        Complex Scenario Datasets
+        
+        
+        
         
     </a>
 </li>
@@ -421,15 +403,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../../tutorials/visualization/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Visualization
         
-
         
-
         
-
         
     </a>
 </li>
@@ -453,15 +431,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../base/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Base Class
         
-
         
-
         
-
         
     </a>
 </li>
@@ -472,15 +446,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../quantifiers/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Quantifiers
         
-
         
-
         
-
         
     </a>
 </li>
@@ -491,15 +461,11 @@
     <a data-slot="sidebar-menu-button" data-active="true" data-sidebar="menu-button"
         data-size="default" href="./"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Ensembles
         
-
         
-
         
-
         
     </a>
 </li>
@@ -510,15 +476,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../bag_generator/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Bag Generator
         
-
         
-
         
-
         
     </a>
 </li>
@@ -529,15 +491,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../metrics/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Metrics
         
-
         
-
         
-
         
     </a>
 </li>
@@ -548,15 +506,11 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../datasets/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Datasets
         
-
         
-
         
-
         
     </a>
 </li>
@@ -567,15 +521,26 @@
     <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
         data-size="default" href="../visualization/"
         class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
-
         
         Visualization
         
-
         
-
         
-
+        
+    </a>
+</li>
+            
+            
+            
+            <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
+    <a data-slot="sidebar-menu-button" data-active="false" data-sidebar="menu-button"
+        data-size="default" href="../utils/"
+        class="peer/menu-button flex items-center gap-2 rounded-md p-2 text-left ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48">
+        
+        Utils
+        
+        
+        
         
     </a>
 </li>
@@ -597,7 +562,6 @@
                     </div>
                     <div class="h-full w-full">
                         <div class="flex items-stretch text-[1.05rem] sm:text-[15px] xl:w-full" data-slot="docs">
-
                             <div class="flex min-w-0 flex-1 flex-col">
                                 <div class="h-(--top-spacing) shrink-0"></div>
                                 
@@ -609,12 +573,11 @@
         <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
           Ensembles
         </h1>
-
-        <div class="flex items-center gap-2 pt-1.5">
+        <div class="flex items-start gap-2">
           
-          <button
-    onclick="fetch(`../..`).then((r) => r.text()).then((text) => navigator.clipboard.write([new ClipboardItem({ 'text/plain': text })]))"
-    data-slot="button" class="secondary cursor-pointer">
+          <button id="copy-page"
+    onclick="fetch(`/api/ensembles.md`).then((r) => r.text()).then((text) => navigator.clipboard.write([new ClipboardItem({ 'text/plain': text })]))"
+    data-slot="button" class="secondary cursor-pointer sm">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-copy ">
         <path
@@ -626,32 +589,28 @@
 </button>
           
           
-          <a data-slot="button" id="previous-button"
-            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 extend-touch-target size-8 shadow-none md:size-7"
-            href="../quantifiers/">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="tabler-icon tabler-icon-arrow-left">
-              <path d="M5 12l14 0"></path>
-              <path d="M5 12l6 6"></path>
-              <path d="M5 12l6 -6"></path>
-            </svg>
-            <span class="sr-only">Previous</span>
-          </a>
+          <a id="previous-button" class="button secondary icon sm" href="../quantifiers/">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="tabler-icon tabler-icon-arrow-left">
+    <path d="M5 12l14 0"></path>
+    <path d="M5 12l6 6"></path>
+    <path d="M5 12l6 -6"></path>
+</svg>
+    <span class="sr-only">Previous</span>
+</a>
           
           
-          <a data-slot="button" id="next-button"
-            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 extend-touch-target size-8 shadow-none md:size-7"
-            href="../bag_generator/">
-            <span class="sr-only">Next</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="tabler-icon tabler-icon-arrow-right">
-              <path d="M5 12l14 0"></path>
-              <path d="M13 18l6 -6"></path>
-              <path d="M13 6l6 6"></path>
-            </svg>
-          </a>
+          <a id="next-button" class="button secondary icon sm" href="../bag_generator/">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="tabler-icon tabler-icon-arrow-right">
+    <path d="M5 12l14 0"></path>
+    <path d="M13 18l6 -6"></path>
+    <path d="M13 6l6 6"></path>
+</svg>
+    <span class="sr-only">Next</span>
+</a>
           
         </div>
       </div>
@@ -659,6 +618,7 @@
     </div>
     <div class="flex justify-end items-center">
       
+
       
     </div>
   </div>
@@ -1168,7 +1128,7 @@ Fusion, 45, 1-15.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">quack.ensembles</span><span class="w"> </span><span class="kn">import</span> <span class="n">EoQ</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ensemble</span> <span class="o">=</span> <span class="n">EoQ</span><span class="p">(</span><span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-<span class="gp">... </span>               <span class="n">selection_policy</span><span class="o">=</span><span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">... </span>               <span class="n">selection_policy</span><span class="o">=</span><span class="s2">"average"</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ensemble</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prevalences</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
@@ -1466,7 +1426,7 @@ Fusion, 45, 1-15.</p>
 <span class="normal">469</span>
 <span class="normal">470</span>
 <span class="normal">471</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">EoQ</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">):</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;Ensemble of Quantifiers (EoQ).</span>
+<span class="w">  </span><span class="sd">"""Ensemble of Quantifiers (EoQ).</span>
 
 <span class="sd">  Trains `n_estimators` independent copies of `base_quantifier`, each on</span>
 <span class="sd">  a training bag with an artificially shifted class prevalence (drawn via</span>
@@ -1479,16 +1439,16 @@ Fusion, 45, 1-15.</p>
 
 <span class="sd">  Three aggregation strategies are supported via `selection_policy`:</span>
 
-<span class="sd">  - `&#39;average&#39;`: simple average of every member&#39;s prediction (Pérez-Gállego</span>
-<span class="sd">    et al., 2017&#39;s baseline ensemble).</span>
-<span class="sd">  - `&#39;performance&#39;`: static selection. A held-out validation split</span>
+<span class="sd">  - `'average'`: simple average of every member's prediction (Pérez-Gállego</span>
+<span class="sd">    et al., 2017's baseline ensemble).</span>
+<span class="sd">  - `'performance'`: static selection. A held-out validation split</span>
 <span class="sd">    (`val_split`) is used to generate validation bags with known</span>
-<span class="sd">    prevalence; each member&#39;s mean quantification error on them (via</span>
+<span class="sd">    prevalence; each member's mean quantification error on them (via</span>
 <span class="sd">    `metric`) is computed once during `fit`, and only the `red_size`</span>
 <span class="sd">    lowest-error members are kept for every subsequent `predict` call.</span>
-<span class="sd">  - `&#39;ptr&#39;` (Training Prevalence): dynamic selection (Pérez-Gállego et al.,</span>
+<span class="sd">  - `'ptr'` (Training Prevalence): dynamic selection (Pérez-Gállego et al.,</span>
 <span class="sd">    2019). For each test bag, a preliminary prevalence estimate is formed</span>
-<span class="sd">    by averaging every member&#39;s prediction; only the `red_size` members</span>
+<span class="sd">    by averaging every member's prediction; only the `red_size` members</span>
 <span class="sd">    whose *own training bag* prevalence is closest (Euclidean distance) to</span>
 <span class="sd">    that estimate are then re-averaged into the final prediction. Because</span>
 <span class="sd">    the selection depends on the specific test bag, it is recomputed on</span>
@@ -1502,42 +1462,42 @@ Fusion, 45, 1-15.</p>
 <span class="sd">  n_estimators : int, default = 30</span>
 <span class="sd">    Number of ensemble members to train.</span>
 <span class="sd">  bag_generator : BaseBagGenerator, default = None</span>
-<span class="sd">    Bag generator used to resample each member&#39;s training bag (and, for</span>
-<span class="sd">    `selection_policy=&#39;performance&#39;`, the validation bags). If None,</span>
-<span class="sd">    defaults to `PriorShiftBagGenerator(sampling_strategy=&#39;uniform&#39;)`.</span>
+<span class="sd">    Bag generator used to resample each member's training bag (and, for</span>
+<span class="sd">    `selection_policy='performance'`, the validation bags). If None,</span>
+<span class="sd">    defaults to `PriorShiftBagGenerator(sampling_strategy='uniform')`.</span>
 <span class="sd">    Its `n_bags` is overridden internally; any other parameter (e.g.</span>
 <span class="sd">    `bag_size`) set on the instance you pass in is preserved. Every</span>
 <span class="sd">    resulting training bag is guaranteed to contain all training classes</span>
 <span class="sd">    (see Notes).</span>
-<span class="sd">  selection_policy : {&#39;average&#39;, &#39;ptr&#39;, &#39;performance&#39;}, default = &#39;average&#39;</span>
+<span class="sd">  selection_policy : {'average', 'ptr', 'performance'}, default = 'average'</span>
 <span class="sd">    Aggregation/selection strategy, as described above.</span>
 <span class="sd">  red_size : int, default = None</span>
-<span class="sd">    Number of members retained by `&#39;ptr&#39;`/`&#39;performance&#39;`. Required</span>
+<span class="sd">    Number of members retained by `'ptr'`/`'performance'`. Required</span>
 <span class="sd">    (and must not exceed `n_estimators`) for those two policies; unused</span>
-<span class="sd">    for `&#39;average&#39;`.</span>
-<span class="sd">  metric : str | QuantificationMetric, default = &#39;ae&#39;</span>
-<span class="sd">    Quantification error metric used only by `selection_policy=&#39;performance&#39;`</span>
+<span class="sd">    for `'average'`.</span>
+<span class="sd">  metric : str | QuantificationMetric, default = 'ae'</span>
+<span class="sd">    Quantification error metric used only by `selection_policy='performance'`</span>
 <span class="sd">    to rank members. Accepts any key registered in</span>
-<span class="sd">    `quack.metrics.MetricRegistry` (e.g. `&#39;ae&#39;`, `&#39;kld&#39;`) or a</span>
+<span class="sd">    `quack.metrics.MetricRegistry` (e.g. `'ae'`, `'kld'`) or a</span>
 <span class="sd">    `QuantificationMetric` instance directly.</span>
 <span class="sd">  val_split : float, default = 0.4</span>
 <span class="sd">    Fraction of the training data held out (stratified) to build</span>
-<span class="sd">    validation bags for `selection_policy=&#39;performance&#39;`. Unused by the</span>
+<span class="sd">    validation bags for `selection_policy='performance'`. Unused by the</span>
 <span class="sd">    other two policies, which train every member on the full dataset.</span>
 <span class="sd">  n_val_samples : int, default = None</span>
-<span class="sd">    Number of validation bags generated for `selection_policy=&#39;performance&#39;`.</span>
+<span class="sd">    Number of validation bags generated for `selection_policy='performance'`.</span>
 <span class="sd">    If None, defaults to `n_estimators`.</span>
 <span class="sd">  n_jobs : int, default = None</span>
 <span class="sd">    Number of jobs to run in parallel while fitting/predicting/scoring</span>
 <span class="sd">    the `n_estimators` independent members, since none of them depend on</span>
 <span class="sd">    each other. `None` means sequential; `-1` uses all available</span>
 <span class="sd">    processors. See `joblib.Parallel`.</span>
-<span class="sd">  parallel_backend : str, default = &quot;loky&quot;</span>
+<span class="sd">  parallel_backend : str, default = "loky"</span>
 <span class="sd">    `joblib.Parallel` backend used for the member jobs.</span>
 <span class="sd">  random_state : int, RandomState instance or None, default = None</span>
 <span class="sd">    Controls the randomness of every bag resampling step (training and,</span>
 <span class="sd">    when applicable, validation bags, plus the held-out split for</span>
-<span class="sd">    `selection_policy=&#39;performance&#39;`, plus the top-up mechanism below).</span>
+<span class="sd">    `selection_policy='performance'`, plus the top-up mechanism below).</span>
 
 <span class="sd">  Attributes</span>
 <span class="sd">  ----------</span>
@@ -1553,14 +1513,14 @@ Fusion, 45, 1-15.</p>
 <span class="sd">    classes.</span>
 <span class="sd">  member_train_prevalences_ : ndarray of shape (n_estimators, n_classes)</span>
 <span class="sd">    The *actual* realized training-bag prevalence of each member (after</span>
-<span class="sd">    any class top-up, see Notes); used by `selection_policy=&#39;ptr&#39;`.</span>
+<span class="sd">    any class top-up, see Notes); used by `selection_policy='ptr'`.</span>
 <span class="sd">  oob_scores_ : ndarray of shape (n_estimators,) or None</span>
 <span class="sd">    Mean validation error of each member, only populated when</span>
-<span class="sd">    `selection_policy=&#39;performance&#39;`; None otherwise.</span>
+<span class="sd">    `selection_policy='performance'`; None otherwise.</span>
 <span class="sd">  selected_indices_ : ndarray of int</span>
-<span class="sd">    Indices into `estimators_` kept for `selection_policy=&#39;performance&#39;`</span>
-<span class="sd">    (static, decided in `fit`); for `&#39;average&#39;`, this is every member&#39;s</span>
-<span class="sd">    index; unused for `&#39;ptr&#39;` (recomputed per test bag in `predict`).</span>
+<span class="sd">    Indices into `estimators_` kept for `selection_policy='performance'`</span>
+<span class="sd">    (static, decided in `fit`); for `'average'`, this is every member's</span>
+<span class="sd">    index; unused for `'ptr'` (recomputed per test bag in `predict`).</span>
 
 <span class="sd">  Extreme prevalence/covariate shift configurations can legitimately draw</span>
 <span class="sd">  a training bag missing one or more classes entirely — that is precisely</span>
@@ -1569,11 +1529,11 @@ Fusion, 45, 1-15.</p>
 <span class="sd">  than re-drawing the whole bag and hoping for a luckier sample (which may</span>
 <span class="sd">  need arbitrarily many attempts, or never succeed, for a sufficiently</span>
 <span class="sd">  extreme configuration), every training bag is deterministically</span>
-<span class="sd">  &quot;topped up&quot;: any missing class has one instance swapped in from the</span>
-<span class="sd">  bag&#39;s current largest class. This always succeeds in a single pass and</span>
+<span class="sd">  "topped up": any missing class has one instance swapped in from the</span>
+<span class="sd">  bag's current largest class. This always succeeds in a single pass and</span>
 <span class="sd">  only perturbs the handful of missing classes, so `member_train_prevalences_`</span>
-<span class="sd">  reflects the bag&#39;s true final composition (used as-is by</span>
-<span class="sd">  `selection_policy=&#39;ptr&#39;`), which may differ marginally from the</span>
+<span class="sd">  reflects the bag's true final composition (used as-is by</span>
+<span class="sd">  `selection_policy='ptr'`), which may differ marginally from the</span>
 <span class="sd">  originally sampled target for very extreme shift configurations.</span>
 
 <span class="sd">  References</span>
@@ -1595,23 +1555,23 @@ Fusion, 45, 1-15.</p>
 <span class="sd">  &gt;&gt;&gt; from quack.ensembles import EoQ</span>
 <span class="sd">  &gt;&gt;&gt; X, y = make_classification(n_samples=1000, n_classes=2, random_state=0)</span>
 <span class="sd">  &gt;&gt;&gt; ensemble = EoQ(CC(LogisticRegression(max_iter=1000)), n_estimators=30,</span>
-<span class="sd">  ...                selection_policy=&quot;average&quot;, random_state=0)</span>
+<span class="sd">  ...                selection_policy="average", random_state=0)</span>
 <span class="sd">  &gt;&gt;&gt; ensemble.fit(X, y)</span>
 <span class="sd">  &gt;&gt;&gt; X_test, _ = make_classification(n_samples=200, n_classes=2, random_state=7)</span>
 <span class="sd">  &gt;&gt;&gt; prevalences = ensemble.predict(X_test)</span>
-<span class="sd">  &quot;&quot;&quot;</span>
+<span class="sd">  """</span>
 
   <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                <span class="n">base_quantifier</span><span class="p">:</span> <span class="n">BaseQuantifier</span><span class="p">,</span>
                <span class="n">n_estimators</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
                <span class="n">bag_generator</span><span class="p">:</span> <span class="n">BaseBagGenerator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-               <span class="n">selection_policy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+               <span class="n">selection_policy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"average"</span><span class="p">,</span>
                <span class="n">red_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-               <span class="n">metric</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ae&quot;</span><span class="p">,</span>
+               <span class="n">metric</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"ae"</span><span class="p">,</span>
                <span class="n">val_split</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span>
                <span class="n">n_val_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-               <span class="n">parallel_backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;loky&quot;</span><span class="p">,</span>
+               <span class="n">parallel_backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"loky"</span><span class="p">,</span>
                <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">classifier</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">base_quantifier</span> <span class="o">=</span> <span class="n">base_quantifier</span>
@@ -1629,25 +1589,25 @@ Fusion, 45, 1-15.</p>
   <span class="k">def</span><span class="w"> </span><span class="nf">_validate_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_VALID_SELECTION_METHODS</span><span class="p">:</span>
       <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Unknown selection_policy &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;Supported options are </span><span class="si">{</span><span class="n">_VALID_SELECTION_METHODS</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="sa">f</span><span class="s2">"Unknown selection_policy '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span><span class="si">}</span><span class="s2">'. "</span>
+        <span class="sa">f</span><span class="s2">"Supported options are </span><span class="si">{</span><span class="n">_VALID_SELECTION_METHODS</span><span class="si">}</span><span class="s2">."</span>
       <span class="p">)</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;n_estimators must be a positive integer, got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;ptr&quot;</span><span class="p">,</span> <span class="s2">&quot;performance&quot;</span><span class="p">):</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"n_estimators must be a positive integer, got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"ptr"</span><span class="p">,</span> <span class="s2">"performance"</span><span class="p">):</span>
       <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">red_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-          <span class="sa">f</span><span class="s2">&quot;selection_policy=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span><span class="si">}</span><span class="s2">&#39; requires red_size to be set &quot;</span>
-          <span class="s2">&quot;(number of ensemble members to retain after selection).&quot;</span>
+          <span class="sa">f</span><span class="s2">"selection_policy='</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span><span class="si">}</span><span class="s2">' requires red_size to be set "</span>
+          <span class="s2">"(number of ensemble members to retain after selection)."</span>
         <span class="p">)</span>
       <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">red_size</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-          <span class="sa">f</span><span class="s2">&quot;red_size must satisfy 0 &lt; red_size &lt;= n_estimators (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span><span class="si">}</span><span class="s2">), &quot;</span>
-          <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">red_size</span><span class="si">}</span><span class="s2">.&quot;</span>
+          <span class="sa">f</span><span class="s2">"red_size must satisfy 0 &lt; red_size &lt;= n_estimators (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_estimators</span><span class="si">}</span><span class="s2">), "</span>
+          <span class="sa">f</span><span class="s2">"got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">red_size</span><span class="si">}</span><span class="s2">."</span>
         <span class="p">)</span>
 
-  <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;EoQ&#39;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fits every ensemble member on an independently resampled training bag.</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'EoQ'</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Fits every ensemble member on an independently resampled training bag.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1660,7 +1620,7 @@ Fusion, 45, 1-15.</p>
 <span class="sd">    -------</span>
 <span class="sd">    self : object</span>
 <span class="sd">      Returns the fitted estimator instance itself.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_validate_params</span><span class="p">()</span>
 
@@ -1669,10 +1629,10 @@ Fusion, 45, 1-15.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
     <span class="n">base_bag_generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bag_generator</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bag_generator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">PriorShiftBagGenerator</span><span class="p">(</span>
-      <span class="n">sampling_strategy</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
+      <span class="n">sampling_strategy</span><span class="o">=</span><span class="s2">"uniform"</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">&quot;performance&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">"performance"</span><span class="p">:</span>
       <span class="n">X_train_pool</span><span class="p">,</span> <span class="n">X_val_pool</span><span class="p">,</span> <span class="n">y_train_pool</span><span class="p">,</span> <span class="n">y_val_pool</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
         <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">val_split</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
       <span class="p">)</span>
@@ -1690,7 +1650,7 @@ Fusion, 45, 1-15.</p>
     <span class="n">fit_jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">delayed</span><span class="p">(</span><span class="n">_fit_member_job</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_quantifier</span><span class="p">,</span> <span class="n">X_bag</span><span class="p">,</span> <span class="n">y_bag</span><span class="p">)</span> <span class="k">for</span> <span class="n">X_bag</span><span class="p">,</span> <span class="n">y_bag</span> <span class="ow">in</span> <span class="n">train_bags</span><span class="p">]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">estimators_</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">)(</span><span class="n">fit_jobs</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">&quot;performance&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">"performance"</span><span class="p">:</span>
       <span class="n">metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">,</span> <span class="n">QuantificationMetric</span><span class="p">)</span> <span class="k">else</span> <span class="n">MetricRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
 
       <span class="n">val_generator</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_bag_generator</span><span class="p">)</span>
@@ -1717,7 +1677,7 @@ Fusion, 45, 1-15.</p>
     <span class="k">return</span> <span class="bp">self</span>
 
   <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aggregates every ensemble member&#39;s prediction for the test bag X.</span>
+<span class="w">    </span><span class="sd">"""Aggregates every ensemble member's prediction for the test bag X.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1728,20 +1688,20 @@ Fusion, 45, 1-15.</p>
 <span class="sd">    -------</span>
 <span class="sd">    p_adjusted : ndarray of shape (n_classes,)</span>
 <span class="sd">      The aggregated, normalized prevalence estimate.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">predict_jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">delayed</span><span class="p">(</span><span class="n">_predict_member_job</span><span class="p">)(</span><span class="n">member</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span> <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimators_</span><span class="p">]</span>
     <span class="n">member_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">)(</span><span class="n">predict_jobs</span><span class="p">))</span>
 
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">&quot;average&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">"average"</span><span class="p">:</span>
       <span class="n">aggregated</span> <span class="o">=</span> <span class="n">member_predictions</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">&quot;performance&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">"performance"</span><span class="p">:</span>
       <span class="n">aggregated</span> <span class="o">=</span> <span class="n">member_predictions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_indices_</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-    <span class="k">else</span><span class="p">:</span>  <span class="c1"># &quot;ptr&quot;: dynamic selection, recomputed for this specific test bag</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># "ptr": dynamic selection, recomputed for this specific test bag</span>
       <span class="n">p_test_estimate</span> <span class="o">=</span> <span class="n">member_predictions</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
       <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">member_train_prevalences_</span> <span class="o">-</span> <span class="n">p_test_estimate</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
       <span class="n">selected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">distances</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">red_size</span><span class="p">]</span>
@@ -1918,8 +1878,8 @@ Fusion, 45, 1-15.</p>
 <span class="normal">435</span>
 <span class="normal">436</span>
 <span class="normal">437</span>
-<span class="normal">438</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;EoQ&#39;</span><span class="p">:</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;Fits every ensemble member on an independently resampled training bag.</span>
+<span class="normal">438</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'EoQ'</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">"""Fits every ensemble member on an independently resampled training bag.</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
@@ -1932,7 +1892,7 @@ Fusion, 45, 1-15.</p>
 <span class="sd">  -------</span>
 <span class="sd">  self : object</span>
 <span class="sd">    Returns the fitted estimator instance itself.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
+<span class="sd">  """</span>
   <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
   <span class="bp">self</span><span class="o">.</span><span class="n">_validate_params</span><span class="p">()</span>
 
@@ -1941,10 +1901,10 @@ Fusion, 45, 1-15.</p>
   <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
   <span class="n">base_bag_generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bag_generator</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bag_generator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">PriorShiftBagGenerator</span><span class="p">(</span>
-    <span class="n">sampling_strategy</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
+    <span class="n">sampling_strategy</span><span class="o">=</span><span class="s2">"uniform"</span><span class="p">,</span>
   <span class="p">)</span>
 
-  <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">&quot;performance&quot;</span><span class="p">:</span>
+  <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">"performance"</span><span class="p">:</span>
     <span class="n">X_train_pool</span><span class="p">,</span> <span class="n">X_val_pool</span><span class="p">,</span> <span class="n">y_train_pool</span><span class="p">,</span> <span class="n">y_val_pool</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
       <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">val_split</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
     <span class="p">)</span>
@@ -1962,7 +1922,7 @@ Fusion, 45, 1-15.</p>
   <span class="n">fit_jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">delayed</span><span class="p">(</span><span class="n">_fit_member_job</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_quantifier</span><span class="p">,</span> <span class="n">X_bag</span><span class="p">,</span> <span class="n">y_bag</span><span class="p">)</span> <span class="k">for</span> <span class="n">X_bag</span><span class="p">,</span> <span class="n">y_bag</span> <span class="ow">in</span> <span class="n">train_bags</span><span class="p">]</span>
   <span class="bp">self</span><span class="o">.</span><span class="n">estimators_</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">)(</span><span class="n">fit_jobs</span><span class="p">)</span>
 
-  <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">&quot;performance&quot;</span><span class="p">:</span>
+  <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">"performance"</span><span class="p">:</span>
     <span class="n">metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">,</span> <span class="n">QuantificationMetric</span><span class="p">)</span> <span class="k">else</span> <span class="n">MetricRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
 
     <span class="n">val_generator</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_bag_generator</span><span class="p">)</span>
@@ -2095,7 +2055,7 @@ Fusion, 45, 1-15.</p>
 <span class="normal">469</span>
 <span class="normal">470</span>
 <span class="normal">471</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;Aggregates every ensemble member&#39;s prediction for the test bag X.</span>
+<span class="w">  </span><span class="sd">"""Aggregates every ensemble member's prediction for the test bag X.</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
@@ -2106,20 +2066,20 @@ Fusion, 45, 1-15.</p>
 <span class="sd">  -------</span>
 <span class="sd">  p_adjusted : ndarray of shape (n_classes,)</span>
 <span class="sd">    The aggregated, normalized prevalence estimate.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
+<span class="sd">  """</span>
   <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
   <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
   <span class="n">predict_jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">delayed</span><span class="p">(</span><span class="n">_predict_member_job</span><span class="p">)(</span><span class="n">member</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span> <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimators_</span><span class="p">]</span>
   <span class="n">member_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">)(</span><span class="n">predict_jobs</span><span class="p">))</span>
 
-  <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">&quot;average&quot;</span><span class="p">:</span>
+  <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">"average"</span><span class="p">:</span>
     <span class="n">aggregated</span> <span class="o">=</span> <span class="n">member_predictions</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-  <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">&quot;performance&quot;</span><span class="p">:</span>
+  <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_policy</span> <span class="o">==</span> <span class="s2">"performance"</span><span class="p">:</span>
     <span class="n">aggregated</span> <span class="o">=</span> <span class="n">member_predictions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_indices_</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-  <span class="k">else</span><span class="p">:</span>  <span class="c1"># &quot;ptr&quot;: dynamic selection, recomputed for this specific test bag</span>
+  <span class="k">else</span><span class="p">:</span>  <span class="c1"># "ptr": dynamic selection, recomputed for this specific test bag</span>
     <span class="n">p_test_estimate</span> <span class="o">=</span> <span class="n">member_predictions</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">member_train_prevalences_</span> <span class="o">-</span> <span class="n">p_test_estimate</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">selected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">distances</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">red_size</span><span class="p">]</span>
@@ -2138,43 +2098,1614 @@ Fusion, 45, 1-15.</p>
 
     </div>
 
+</div><h2 id="multiple-classifiers-single-quantifier-mcsq">Multiple Classifiers, Single Quantifier (MCSQ)</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="quack.ensembles._mcq.MCSQ" class="doc doc-heading">
+            <code>quack.ensembles._mcq.MCSQ</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="quack.quantifiers.base.BaseQuantifier" href="../base/#quack.quantifiers.base.BaseQuantifier">BaseQuantifier</a></code></p>
+
+
+
+        <p>Multiple Classifiers with a Single Quantifier template (MCSQ).</p>
+<p>Fits one independent copy of <code>quantifier</code> per classifier in
+<code>classifiers</code> (each with its own classifier substituted in), then
+merges the <code>c</code> independent prevalence predictions at the output level
+(median or mean) — as opposed to <code>quack.ensembles.FMCSQ</code>, which fuses
+classifier <em>scores</em> into one matrix before a single quantifier ever
+sees them. Every member is trained on the exact same <code>(X, y)</code>, so
+(unlike <code>quack.ensembles.EoQ</code>) there is no risk of a member missing a
+class and no prediction-alignment step is needed.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>classifiers</code>
+            </td>
+            <td>
+                  <code>list of estimator objects</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The <code>c</code> classifiers; one independent quantifier member is fitted per
+classifier.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>quantifier</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="quack.quantifiers.base.BaseQuantifier" href="../base/#quack.quantifiers.base.BaseQuantifier">BaseQuantifier</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The quantifier template cloned once per classifier. Must expose a
+<code>classifier</code> parameter (e.g. <code>CC</code>, <code>PCC</code>, <code>ACC</code>, <code>PACC</code>, <code>HDy</code>,
+<code>DyS</code>, <code>GAC</code>, <code>GPAC</code>, <code>FM</code>, <code>EM</code>, <code>CDE</code>, any of the threshold
+selectors) so its base classifier can be substituted per member.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fusion</code>
+            </td>
+            <td>
+                  <code>(<span title="median">median</span>, <span title="mean">mean</span>)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>How the <code>c</code> members' individual prevalence predictions are combined.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;median&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>n_jobs</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of jobs to run in parallel while fitting/predicting the <code>c</code>
+independent members, since none of them depend on each other. <code>None</code>
+means sequential; <code>-1</code> uses all available processors.</p>
+              </div>
+            </td>
+            <td>
+                  <code>= None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>parallel_backend</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><code>joblib.Parallel</code> backend used for the member jobs.</p>
+              </div>
+            </td>
+            <td>
+                  <code>= &#34;loky&#34;</code>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="quack.ensembles._mcq.MCSQ.classes_">classes_</span></code></td>
+            <td>
+                  <code>ndarray of shape (n_classes,)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The distinct class labels found during the training phase.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="quack.ensembles._mcq.MCSQ.n_classes_">n_classes_</span></code></td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The total number of unique classes.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="quack.ensembles._mcq.MCSQ.train_prevalence_">train_prevalence_</span></code></td>
+            <td>
+                  <code>ndarray of shape (n_classes,)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The prevalence of each class in the full training dataset.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="quack.ensembles._mcq.MCSQ.quantifiers_">quantifiers_</span></code></td>
+            <td>
+                  <code>list of BaseQuantifier</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The <code>c</code> fitted quantifier members, one per classifier in <code>classifiers</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+<details class="references" open>
+  <summary>References</summary>
+  <p>Z. Donyavi, A. B. S. Serapião and G. Batista, "MC-SQ and MC-MQ: Ensembles for
+Multi-Class Quantification," in IEEE Transactions on Knowledge and Data
+Engineering, vol. 36, no. 8, pp. 4007-4019, Aug. 2024.</p>
+</details>
+
+<p><span class="doc-section-title">Examples:</span></p>
+    <div class="codehilite"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">quack.quantifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">ACC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">quack.ensembles</span><span class="w"> </span><span class="kn">import</span> <span class="n">MCSQ</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ensemble</span> <span class="o">=</span> <span class="n">MCSQ</span><span class="p">(</span>
+<span class="gp">... </span>  <span class="n">classifiers</span><span class="o">=</span><span class="p">[</span><span class="n">RandomForestClassifier</span><span class="p">(),</span> <span class="n">LogisticRegression</span><span class="p">()],</span>
+<span class="gp">... </span>  <span class="n">quantifier</span><span class="o">=</span><span class="n">ACC</span><span class="p">(</span><span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span> <span class="n">fusion</span><span class="o">=</span><span class="s2">"median"</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ensemble</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prevalences</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>quack/ensembles/_mcq.py</code></summary>
+                <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MCSQ</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">"""Multiple Classifiers with a Single Quantifier template (MCSQ).</span>
+
+<span class="sd">  Fits one independent copy of `quantifier` per classifier in</span>
+<span class="sd">  `classifiers` (each with its own classifier substituted in), then</span>
+<span class="sd">  merges the `c` independent prevalence predictions at the output level</span>
+<span class="sd">  (median or mean) — as opposed to `quack.ensembles.FMCSQ`, which fuses</span>
+<span class="sd">  classifier *scores* into one matrix before a single quantifier ever</span>
+<span class="sd">  sees them. Every member is trained on the exact same `(X, y)`, so</span>
+<span class="sd">  (unlike `quack.ensembles.EoQ`) there is no risk of a member missing a</span>
+<span class="sd">  class and no prediction-alignment step is needed.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  classifiers : list of estimator objects</span>
+<span class="sd">    The `c` classifiers; one independent quantifier member is fitted per</span>
+<span class="sd">    classifier.</span>
+<span class="sd">  quantifier : BaseQuantifier</span>
+<span class="sd">    The quantifier template cloned once per classifier. Must expose a</span>
+<span class="sd">    `classifier` parameter (e.g. `CC`, `PCC`, `ACC`, `PACC`, `HDy`,</span>
+<span class="sd">    `DyS`, `GAC`, `GPAC`, `FM`, `EM`, `CDE`, any of the threshold</span>
+<span class="sd">    selectors) so its base classifier can be substituted per member.</span>
+<span class="sd">  fusion : {'median', 'mean'}, default = 'median'</span>
+<span class="sd">    How the `c` members' individual prevalence predictions are combined.</span>
+<span class="sd">  n_jobs : int, default = None</span>
+<span class="sd">    Number of jobs to run in parallel while fitting/predicting the `c`</span>
+<span class="sd">    independent members, since none of them depend on each other. `None`</span>
+<span class="sd">    means sequential; `-1` uses all available processors.</span>
+<span class="sd">  parallel_backend : str, default = "loky"</span>
+<span class="sd">    `joblib.Parallel` backend used for the member jobs.</span>
+
+<span class="sd">  Attributes</span>
+<span class="sd">  ----------</span>
+<span class="sd">  classes_ : ndarray of shape (n_classes,)</span>
+<span class="sd">    The distinct class labels found during the training phase.</span>
+<span class="sd">  n_classes_ : int</span>
+<span class="sd">    The total number of unique classes.</span>
+<span class="sd">  train_prevalence_ : ndarray of shape (n_classes,)</span>
+<span class="sd">    The prevalence of each class in the full training dataset.</span>
+<span class="sd">  quantifiers_ : list of BaseQuantifier</span>
+<span class="sd">    The `c` fitted quantifier members, one per classifier in `classifiers`.</span>
+
+<span class="sd">  References</span>
+<span class="sd">  ----------</span>
+<span class="sd">  Z. Donyavi, A. B. S. Serapião and G. Batista, "MC-SQ and MC-MQ: Ensembles for</span>
+<span class="sd">  Multi-Class Quantification," in IEEE Transactions on Knowledge and Data</span>
+<span class="sd">  Engineering, vol. 36, no. 8, pp. 4007-4019, Aug. 2024.</span>
+
+<span class="sd">  Examples</span>
+<span class="sd">  --------</span>
+<span class="sd">  &gt;&gt;&gt; from sklearn.datasets import make_classification</span>
+<span class="sd">  &gt;&gt;&gt; from sklearn.ensemble import RandomForestClassifier</span>
+<span class="sd">  &gt;&gt;&gt; from sklearn.linear_model import LogisticRegression</span>
+<span class="sd">  &gt;&gt;&gt; from quack.quantifiers import ACC</span>
+<span class="sd">  &gt;&gt;&gt; from quack.ensembles import MCSQ</span>
+<span class="sd">  &gt;&gt;&gt; X, y = make_classification(n_samples=1000, n_classes=2, random_state=0)</span>
+<span class="sd">  &gt;&gt;&gt; ensemble = MCSQ(</span>
+<span class="sd">  ...   classifiers=[RandomForestClassifier(), LogisticRegression()],</span>
+<span class="sd">  ...   quantifier=ACC(cv=5), fusion="median",</span>
+<span class="sd">  ... )</span>
+<span class="sd">  &gt;&gt;&gt; ensemble.fit(X, y)</span>
+<span class="sd">  &gt;&gt;&gt; X_test, _ = make_classification(n_samples=200, n_classes=2, random_state=7)</span>
+<span class="sd">  &gt;&gt;&gt; prevalences = ensemble.predict(X_test)</span>
+<span class="sd">  """</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+               <span class="n">classifiers</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+               <span class="n">quantifier</span><span class="p">:</span> <span class="n">BaseQuantifier</span><span class="p">,</span>
+               <span class="n">fusion</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"median"</span><span class="p">,</span>
+               <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+               <span class="n">parallel_backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"loky"</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">classifier</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">classifiers</span> <span class="o">=</span> <span class="n">classifiers</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">quantifier</span> <span class="o">=</span> <span class="n">quantifier</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">fusion</span> <span class="o">=</span> <span class="n">fusion</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span> <span class="o">=</span> <span class="n">parallel_backend</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">_validate_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_VALID_FUSION_OUTPUTS</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown fusion '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fusion</span><span class="si">}</span><span class="s2">'. Supported options are </span><span class="si">{</span><span class="n">_VALID_FUSION_OUTPUTS</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifiers</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"classifiers must be a non-empty list of estimators."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantifier</span><span class="p">,</span> <span class="s2">"classifier"</span><span class="p">):</span>
+      <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">quantifier</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> does not expose a 'classifier' parameter; "</span>
+        <span class="s2">"MCSQ requires a quantifier template whose base classifier can be substituted per member."</span>
+      <span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'MCSQ'</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Fits one independent quantifier member per classifier in `classifiers`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">      Training data.</span>
+<span class="sd">    y : array-like of shape (n_samples,)</span>
+<span class="sd">      Labels for the corresponding classes.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    self : object</span>
+<span class="sd">      Returns the fitted estimator instance itself.</span>
+<span class="sd">    """</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_validate_params</span><span class="p">()</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="n">fit_jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">delayed</span><span class="p">(</span><span class="n">_fit_mcsq_member_job</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantifier</span><span class="p">,</span> <span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifiers</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">quantifiers_</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">)(</span><span class="n">fit_jobs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="bp">self</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Estimates class prevalences for the test bag X.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">      The test bag with unlabelled instances.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prevalences : ndarray of shape (n_classes,)</span>
+<span class="sd">      The merged, normalized prevalence estimate.</span>
+<span class="sd">    """</span>
+    <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">predict_jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">delayed</span><span class="p">(</span><span class="n">_predict_member_job</span><span class="p">)(</span><span class="n">member</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span> <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantifiers_</span><span class="p">]</span>
+    <span class="n">prediction_stack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">)(</span><span class="n">predict_jobs</span><span class="p">))</span>
+
+    <span class="n">merged</span> <span class="o">=</span> <span class="n">_merge_predictions</span><span class="p">(</span><span class="n">prediction_stack</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">normalize_prevalence</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="quack.ensembles._mcq.MCSQ.fit" class="doc doc-heading">
+            <code class=" language-python"><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Fits one independent quantifier member per classifier in <code>classifiers</code>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>X</code>
+            </td>
+            <td>
+                  <code>array-like, sparse matrix</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Training data.</p>
+              </div>
+            </td>
+            <td>
+                  <code>array-like</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>y</code>
+            </td>
+            <td>
+                  <code>array-like of shape (n_samples,)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Labels for the corresponding classes.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>self</code></td>            <td>
+                  <code><span title="object">object</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Returns the fitted estimator instance itself.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>quack/ensembles/_mcq.py</code></summary>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'MCSQ'</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">"""Fits one independent quantifier member per classifier in `classifiers`.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  X : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">    Training data.</span>
+<span class="sd">  y : array-like of shape (n_samples,)</span>
+<span class="sd">    Labels for the corresponding classes.</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  self : object</span>
+<span class="sd">    Returns the fitted estimator instance itself.</span>
+<span class="sd">  """</span>
+  <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">_validate_params</span><span class="p">()</span>
+
+  <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+  <span class="n">fit_jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">delayed</span><span class="p">(</span><span class="n">_fit_mcsq_member_job</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantifier</span><span class="p">,</span> <span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifiers</span><span class="p">]</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">quantifiers_</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">)(</span><span class="n">fit_jobs</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="bp">self</span>
+</code></pre></div></td></tr></table></div></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="quack.ensembles._mcq.MCSQ.predict" class="doc doc-heading">
+            <code class=" language-python"><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Estimates class prevalences for the test bag X.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>X</code>
+            </td>
+            <td>
+                  <code>array-like, sparse matrix</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The test bag with unlabelled instances.</p>
+              </div>
+            </td>
+            <td>
+                  <code>array-like</code>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>prevalences</code></td>            <td>
+                  <code>ndarray of shape (n_classes,)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The merged, normalized prevalence estimate.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>quack/ensembles/_mcq.py</code></summary>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">"""Estimates class prevalences for the test bag X.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  X : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">    The test bag with unlabelled instances.</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  prevalences : ndarray of shape (n_classes,)</span>
+<span class="sd">    The merged, normalized prevalence estimate.</span>
+<span class="sd">  """</span>
+  <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+  <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+  <span class="n">predict_jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">delayed</span><span class="p">(</span><span class="n">_predict_member_job</span><span class="p">)(</span><span class="n">member</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span> <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantifiers_</span><span class="p">]</span>
+  <span class="n">prediction_stack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">)(</span><span class="n">predict_jobs</span><span class="p">))</span>
+
+  <span class="n">merged</span> <span class="o">=</span> <span class="n">_merge_predictions</span><span class="p">(</span><span class="n">prediction_stack</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">normalize_prevalence</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="multiple-classifiers-multiple-quantifiers-mcmq">Multiple Classifiers, Multiple Quantifiers (MCMQ)</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="quack.ensembles._mcq.MCMQ" class="doc doc-heading">
+            <code>quack.ensembles._mcq.MCMQ</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="quack.quantifiers.base.BaseQuantifier" href="../base/#quack.quantifiers.base.BaseQuantifier">BaseQuantifier</a></code></p>
+
+
+
+        <p>Multiple Classifiers with Multiple Quantifiers (MCMQ).</p>
+<p>Extends <code>MCSQ</code> to a full <code>c x q</code> grid: for each of the <code>c</code> classifiers,
+every one of the <code>q</code> quantifier templates is independently fitted with
+that classifier substituted in, and the <code>q</code> resulting predictions are
+first merged (within-classifier, via <code>fusion</code>) into one prevalence
+estimate per classifier; those <code>c</code> per-classifier estimates are then
+merged again (across classifiers, via the same <code>fusion</code>) into the
+final prediction. Unlike <code>quack.ensembles.FMCMQ</code>, no classifier-score
+fusion happens anywhere in the pipeline — every merge is done purely at
+the prevalence-output level.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>classifiers</code>
+            </td>
+            <td>
+                  <code>list of estimator objects</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The <code>c</code> classifiers.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>quantifiers</code>
+            </td>
+            <td>
+                  <code>list of BaseQuantifier</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The <code>q</code> quantifier templates, each cloned and fit once per
+classifier. Every template must expose a <code>classifier</code> parameter.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fusion</code>
+            </td>
+            <td>
+                  <code>(<span title="median">median</span>, <span title="mean">mean</span>)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>How predictions are combined, both within a classifier's <code>q</code>
+quantifiers and across the <code>c</code> classifiers.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;median&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>n_jobs</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of jobs to run in parallel across the <code>c</code> independent
+classifier groups (fitting/predicting), since none of them depend on
+each other. The <code>q</code> quantifiers within a single group are always fit
+sequentially, to avoid nested <code>joblib.Parallel</code> pools. <code>None</code> means
+sequential; <code>-1</code> uses all available processors.</p>
+              </div>
+            </td>
+            <td>
+                  <code>= None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>parallel_backend</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><code>joblib.Parallel</code> backend used for the per-classifier group jobs.</p>
+              </div>
+            </td>
+            <td>
+                  <code>= &#34;loky&#34;</code>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="quack.ensembles._mcq.MCMQ.classes_">classes_</span></code></td>
+            <td>
+                  <code>ndarray of shape (n_classes,)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The distinct class labels found during the training phase.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="quack.ensembles._mcq.MCMQ.n_classes_">n_classes_</span></code></td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The total number of unique classes.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="quack.ensembles._mcq.MCMQ.train_prevalence_">train_prevalence_</span></code></td>
+            <td>
+                  <code>ndarray of shape (n_classes,)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The prevalence of each class in the full training dataset.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="quack.ensembles._mcq.MCMQ.member_groups_">member_groups_</span></code></td>
+            <td>
+                  <code>list of list of BaseQuantifier</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><code>member_groups_[i]</code> holds the <code>q</code> fitted quantifiers built on top of
+<code>classifiers[i]</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+<details class="references" open>
+  <summary>References</summary>
+  <p>Z. Donyavi, A. B. S. Serapião and G. Batista, "MC-SQ and MC-MQ: Ensembles for
+Multi-Class Quantification," in IEEE Transactions on Knowledge and Data
+Engineering, vol. 36, no. 8, pp. 4007-4019, Aug. 2024.</p>
+</details>
+
+<p><span class="doc-section-title">Examples:</span></p>
+    <div class="codehilite"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">quack.quantifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span><span class="p">,</span> <span class="n">ACC</span><span class="p">,</span> <span class="n">PCC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">quack.ensembles</span><span class="w"> </span><span class="kn">import</span> <span class="n">MCMQ</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ensemble</span> <span class="o">=</span> <span class="n">MCMQ</span><span class="p">(</span>
+<span class="gp">... </span>  <span class="n">classifiers</span><span class="o">=</span><span class="p">[</span><span class="n">RandomForestClassifier</span><span class="p">(),</span> <span class="n">LogisticRegression</span><span class="p">()],</span>
+<span class="gp">... </span>  <span class="n">quantifiers</span><span class="o">=</span><span class="p">[</span><span class="n">CC</span><span class="p">(),</span> <span class="n">ACC</span><span class="p">(</span><span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span> <span class="n">PCC</span><span class="p">()],</span>
+<span class="gp">... </span>  <span class="n">fusion</span><span class="o">=</span><span class="s2">"median"</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ensemble</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prevalences</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>quack/ensembles/_mcq.py</code></summary>
+                <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MCMQ</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">"""Multiple Classifiers with Multiple Quantifiers (MCMQ).</span>
+
+<span class="sd">  Extends `MCSQ` to a full `c x q` grid: for each of the `c` classifiers,</span>
+<span class="sd">  every one of the `q` quantifier templates is independently fitted with</span>
+<span class="sd">  that classifier substituted in, and the `q` resulting predictions are</span>
+<span class="sd">  first merged (within-classifier, via `fusion`) into one prevalence</span>
+<span class="sd">  estimate per classifier; those `c` per-classifier estimates are then</span>
+<span class="sd">  merged again (across classifiers, via the same `fusion`) into the</span>
+<span class="sd">  final prediction. Unlike `quack.ensembles.FMCMQ`, no classifier-score</span>
+<span class="sd">  fusion happens anywhere in the pipeline — every merge is done purely at</span>
+<span class="sd">  the prevalence-output level.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  classifiers : list of estimator objects</span>
+<span class="sd">    The `c` classifiers.</span>
+<span class="sd">  quantifiers : list of BaseQuantifier</span>
+<span class="sd">    The `q` quantifier templates, each cloned and fit once per</span>
+<span class="sd">    classifier. Every template must expose a `classifier` parameter.</span>
+<span class="sd">  fusion : {'median', 'mean'}, default = 'median'</span>
+<span class="sd">    How predictions are combined, both within a classifier's `q`</span>
+<span class="sd">    quantifiers and across the `c` classifiers.</span>
+<span class="sd">  n_jobs : int, default = None</span>
+<span class="sd">    Number of jobs to run in parallel across the `c` independent</span>
+<span class="sd">    classifier groups (fitting/predicting), since none of them depend on</span>
+<span class="sd">    each other. The `q` quantifiers within a single group are always fit</span>
+<span class="sd">    sequentially, to avoid nested `joblib.Parallel` pools. `None` means</span>
+<span class="sd">    sequential; `-1` uses all available processors.</span>
+<span class="sd">  parallel_backend : str, default = "loky"</span>
+<span class="sd">    `joblib.Parallel` backend used for the per-classifier group jobs.</span>
+
+<span class="sd">  Attributes</span>
+<span class="sd">  ----------</span>
+<span class="sd">  classes_ : ndarray of shape (n_classes,)</span>
+<span class="sd">    The distinct class labels found during the training phase.</span>
+<span class="sd">  n_classes_ : int</span>
+<span class="sd">    The total number of unique classes.</span>
+<span class="sd">  train_prevalence_ : ndarray of shape (n_classes,)</span>
+<span class="sd">    The prevalence of each class in the full training dataset.</span>
+<span class="sd">  member_groups_ : list of list of BaseQuantifier</span>
+<span class="sd">    `member_groups_[i]` holds the `q` fitted quantifiers built on top of</span>
+<span class="sd">    `classifiers[i]`.</span>
+
+<span class="sd">  References</span>
+<span class="sd">  ----------</span>
+<span class="sd">  Z. Donyavi, A. B. S. Serapião and G. Batista, "MC-SQ and MC-MQ: Ensembles for</span>
+<span class="sd">  Multi-Class Quantification," in IEEE Transactions on Knowledge and Data</span>
+<span class="sd">  Engineering, vol. 36, no. 8, pp. 4007-4019, Aug. 2024.</span>
+
+<span class="sd">  Examples</span>
+<span class="sd">  --------</span>
+<span class="sd">  &gt;&gt;&gt; from sklearn.datasets import make_classification</span>
+<span class="sd">  &gt;&gt;&gt; from sklearn.ensemble import RandomForestClassifier</span>
+<span class="sd">  &gt;&gt;&gt; from sklearn.linear_model import LogisticRegression</span>
+<span class="sd">  &gt;&gt;&gt; from quack.quantifiers import CC, ACC, PCC</span>
+<span class="sd">  &gt;&gt;&gt; from quack.ensembles import MCMQ</span>
+<span class="sd">  &gt;&gt;&gt; X, y = make_classification(n_samples=1000, n_classes=2, random_state=0)</span>
+<span class="sd">  &gt;&gt;&gt; ensemble = MCMQ(</span>
+<span class="sd">  ...   classifiers=[RandomForestClassifier(), LogisticRegression()],</span>
+<span class="sd">  ...   quantifiers=[CC(), ACC(cv=5), PCC()],</span>
+<span class="sd">  ...   fusion="median",</span>
+<span class="sd">  ... )</span>
+<span class="sd">  &gt;&gt;&gt; ensemble.fit(X, y)</span>
+<span class="sd">  &gt;&gt;&gt; X_test, _ = make_classification(n_samples=200, n_classes=2, random_state=7)</span>
+<span class="sd">  &gt;&gt;&gt; prevalences = ensemble.predict(X_test)</span>
+<span class="sd">  """</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+               <span class="n">classifiers</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+               <span class="n">quantifiers</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+               <span class="n">fusion</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"median"</span><span class="p">,</span>
+               <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+               <span class="n">parallel_backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"loky"</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">classifier</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">classifiers</span> <span class="o">=</span> <span class="n">classifiers</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">quantifiers</span> <span class="o">=</span> <span class="n">quantifiers</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">fusion</span> <span class="o">=</span> <span class="n">fusion</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span> <span class="o">=</span> <span class="n">parallel_backend</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">_validate_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_VALID_FUSION_OUTPUTS</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown fusion '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fusion</span><span class="si">}</span><span class="s2">'. Supported options are </span><span class="si">{</span><span class="n">_VALID_FUSION_OUTPUTS</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifiers</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"classifiers must be a non-empty list of estimators."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantifiers</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"quantifiers must be a non-empty list of quantifier templates."</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">template</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantifiers</span><span class="p">:</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="s2">"classifier"</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+          <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">template</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> does not expose a 'classifier' parameter; "</span>
+          <span class="s2">"MCMQ requires every quantifier template's base classifier to be substitutable."</span>
+        <span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'MCMQ'</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Fits `q` quantifier members for each of the `c` classifiers.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">      Training data.</span>
+<span class="sd">    y : array-like of shape (n_samples,)</span>
+<span class="sd">      Labels for the corresponding classes.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    self : object</span>
+<span class="sd">      Returns the fitted estimator instance itself.</span>
+<span class="sd">    """</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_validate_params</span><span class="p">()</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="n">fit_jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">delayed</span><span class="p">(</span><span class="n">_fit_scmq_group_job</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantifiers</span><span class="p">,</span> <span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifiers</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">member_groups_</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">)(</span><span class="n">fit_jobs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="bp">self</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Estimates class prevalences for the test bag X.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">      The test bag with unlabelled instances.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prevalences : ndarray of shape (n_classes,)</span>
+<span class="sd">      The doubly-merged, normalized prevalence estimate.</span>
+<span class="sd">    """</span>
+    <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">predict_jobs</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="n">delayed</span><span class="p">(</span><span class="n">_predict_scmq_group_job</span><span class="p">)(</span><span class="n">members</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">members</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">member_groups_</span>
+    <span class="p">]</span>
+    <span class="n">group_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">)(</span><span class="n">predict_jobs</span><span class="p">))</span>
+
+    <span class="n">merged</span> <span class="o">=</span> <span class="n">_merge_predictions</span><span class="p">(</span><span class="n">group_predictions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">normalize_prevalence</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="quack.ensembles._mcq.MCMQ.fit" class="doc doc-heading">
+            <code class=" language-python"><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Fits <code>q</code> quantifier members for each of the <code>c</code> classifiers.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>X</code>
+            </td>
+            <td>
+                  <code>array-like, sparse matrix</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Training data.</p>
+              </div>
+            </td>
+            <td>
+                  <code>array-like</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>y</code>
+            </td>
+            <td>
+                  <code>array-like of shape (n_samples,)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Labels for the corresponding classes.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>self</code></td>            <td>
+                  <code><span title="object">object</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Returns the fitted estimator instance itself.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>quack/ensembles/_mcq.py</code></summary>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'MCMQ'</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">"""Fits `q` quantifier members for each of the `c` classifiers.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  X : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">    Training data.</span>
+<span class="sd">  y : array-like of shape (n_samples,)</span>
+<span class="sd">    Labels for the corresponding classes.</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  self : object</span>
+<span class="sd">    Returns the fitted estimator instance itself.</span>
+<span class="sd">  """</span>
+  <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">_validate_params</span><span class="p">()</span>
+
+  <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">train_prevalence_</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+  <span class="n">fit_jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">delayed</span><span class="p">(</span><span class="n">_fit_scmq_group_job</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantifiers</span><span class="p">,</span> <span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifiers</span><span class="p">]</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">member_groups_</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">)(</span><span class="n">fit_jobs</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="bp">self</span>
+</code></pre></div></td></tr></table></div></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="quack.ensembles._mcq.MCMQ.predict" class="doc doc-heading">
+            <code class=" language-python"><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Estimates class prevalences for the test bag X.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>X</code>
+            </td>
+            <td>
+                  <code>array-like, sparse matrix</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The test bag with unlabelled instances.</p>
+              </div>
+            </td>
+            <td>
+                  <code>array-like</code>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <div class="table-wrapper"><table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>prevalences</code></td>            <td>
+                  <code>ndarray of shape (n_classes,)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The doubly-merged, normalized prevalence estimate.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table></div>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>quack/ensembles/_mcq.py</code></summary>
+              <div class="codehilite"><div class="table-wrapper"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">"""Estimates class prevalences for the test bag X.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  X : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">    The test bag with unlabelled instances.</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  prevalences : ndarray of shape (n_classes,)</span>
+<span class="sd">    The doubly-merged, normalized prevalence estimate.</span>
+<span class="sd">  """</span>
+  <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+  <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+  <span class="n">predict_jobs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">delayed</span><span class="p">(</span><span class="n">_predict_scmq_group_job</span><span class="p">)(</span><span class="n">members</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">members</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">member_groups_</span>
+  <span class="p">]</span>
+  <span class="n">group_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">)(</span><span class="n">predict_jobs</span><span class="p">))</span>
+
+  <span class="n">merged</span> <span class="o">=</span> <span class="n">_merge_predictions</span><span class="p">(</span><span class="n">group_predictions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">normalize_prevalence</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
 </div>
   </div>
-  
-  <script>
-    document.querySelectorAll('article h2, article h3').forEach((header) => {
-      toc.observer.observe(header);
-    });
-  </script>
 </article>
-                                <div class="mx-auto flex flex-wrap h-16 w-full max-w-2xl items-center gap-2 px-4 md:px-0">
+                                <div id="bottom-navigation" class="mx-auto flex h-16 w-full max-w-2xl items-center justify-between gap-2 px-4 md:px-0">
     
-    <a data-slot="button"
-        class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5 shadow-none"
-        href="../quantifiers/">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="tabler-icon tabler-icon-arrow-left ">
-            <path d="M5 12l14 0"></path>
-            <path d="M5 12l6 6"></path>
-            <path d="M5 12l6 -6"></path>
-        </svg>
-        <span class="max-[500px]:hidden">Quantifiers</span>
-    </a>
+    <a class="button secondary" href="../quantifiers/">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="tabler-icon tabler-icon-arrow-left">
+    <path d="M5 12l14 0"></path>
+    <path d="M5 12l6 6"></path>
+    <path d="M5 12l6 -6"></path>
+</svg>
+    <span class="max-[500px]:hidden truncate">Quantifiers</span>
+</a>
     
     
-    <a data-slot="button"
-        class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5 ml-auto shadow-none"
-        href="../bag_generator/">
-        <span class="max-[500px]:hidden">Bag Generator</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="tabler-icon tabler-icon-arrow-right ">
-            <path d="M5 12l14 0"></path>
-            <path d="M13 18l6 -6"></path>
-            <path d="M13 6l6 6"></path>
-        </svg>
-    </a>
+    <a class="button secondary" href="../bag_generator/">
+    <span class="max-[500px]:hidden truncate">Bag Generator</span>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="tabler-icon tabler-icon-arrow-right">
+    <path d="M5 12l14 0"></path>
+    <path d="M13 18l6 -6"></path>
+    <path d="M13 6l6 6"></path>
+</svg>
+</a>
     
 </div>
                                 
@@ -2251,6 +3782,12 @@ Fusion, 45, 1-15.</p>
                             
                         </a>
                         
+                        <a class="text-2xl font-medium" href="../../tutorials/complex-datasets/">
+                            
+                            Complex Scenario Datasets
+                            
+                        </a>
+                        
                         <a class="text-2xl font-medium" href="../../tutorials/visualization/">
                             
                             Visualization
@@ -2308,6 +3845,12 @@ Fusion, 45, 1-15.</p>
                             
                         </a>
                         
+                        <a class="text-2xl font-medium" href="../utils/">
+                            
+                            Utils
+                            
+                        </a>
+                        
                     </div>
                     
                 </div>
@@ -2331,23 +3874,37 @@ Fusion, 45, 1-15.</p>
         
         
         
-        <a href="#quack.ensembles._eoq.EoQ"
-            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="2" onClick="deferSetActiveTocLink('#quack.ensembles._eoq.EoQ');">
+        <a href="#ensemble-of-quantifiers-eoq" data-active="false" data-depth="2">
+            Ensemble of Quantifiers (EoQ)
+        </a>
+        
+        
+        <a href="#quack.ensembles._eoq.EoQ" data-active="false" data-depth="3">
             EoQ
         </a>
         
         
-        <a href="#quack.ensembles._eoq.EoQ.fit"
-            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.ensembles._eoq.EoQ.fit');">
-            fit
+
+        
+        <a href="#multiple-classifiers-single-quantifier-mcsq" data-active="false" data-depth="2">
+            Multiple Classifiers, Single Quantifier (MCSQ)
         </a>
         
-        <a href="#quack.ensembles._eoq.EoQ.predict"
-            class="text-muted-foreground hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6"
-            data-active="false" data-depth="3" onClick="deferSetActiveTocLink('#quack.ensembles._eoq.EoQ.predict');">
-            predict
+        
+        <a href="#quack.ensembles._mcq.MCSQ" data-active="false" data-depth="3">
+            MCSQ
+        </a>
+        
+        
+
+        
+        <a href="#multiple-classifiers-multiple-quantifiers-mcmq" data-active="false" data-depth="2">
+            Multiple Classifiers, Multiple Quantifiers (MCMQ)
+        </a>
+        
+        
+        <a href="#quack.ensembles._mcq.MCMQ" data-active="false" data-depth="3">
+            MCMQ
         </a>
         
         
@@ -2364,7 +3921,6 @@ Fusion, 45, 1-15.</p>
                                 
                                 
                             </div>
-
                         </div>
                     </div>
                 </div>
